@@ -74,11 +74,11 @@ composer_normalize_lint: $(COMPOSER_NORMALIZE_BIN)
 	$(COMPOSER_NORMALIZE) --dry-run
 
 .PHONY: php_cs_fixer
-php_cs_fixer: $(PHP_CS_FIXER_BIN) .build/php-cs-fixer/
+php_cs_fixer: $(PHP_CS_FIXER_BIN) .build/php-cs-fixer
 	$(PHP_CS_FIXER)
 
 .PHONY: php_cs_fixer_lint
-php_cs_fixer_lint: $(PHP_CS_FIXER_BIN) .build/php-cs-fixer/
+php_cs_fixer_lint: $(PHP_CS_FIXER_BIN) .build/php-cs-fixer
 	$(PHP_CS_FIXER) --dry-run
 
 .PHONY: yaml_lint
