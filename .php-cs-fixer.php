@@ -2,42 +2,31 @@
 
 declare(strict_types=1);
 
-/**
- * Copyright (c) 2017-2022 Andreas Möller
- *
- * For the full copyright and license information, please view
- * the LICENSE.md file that was distributed with this source code.
- *
- * @see https://github.com/ergebnis/php-package-template
- */
+require_once __DIR__.'/vendor/theofidry/php-cs-fixer-config/src/FidryConfig.php';
 
-use Ergebnis\License;
-use Ergebnis\PhpCsFixer;
+use Fidry\PhpCsFixerConfig\FidryConfig;
+use PhpCsFixer\Finder;
 
-$license = License\Type\MIT::markdown(
-    __DIR__ . '/LICENSE.md',
-    License\Range::since(
-        License\Year::fromString('2017'),
-        new \DateTimeZone('UTC'),
-    ),
-    License\Holder::fromString('Andreas Möller'),
-    License\Url::fromString('https://github.com/ergebnis/php-package-template'),
-);
-
-$license->save();
-
-$config = PhpCsFixer\Config\Factory::fromRuleSet(new PhpCsFixer\Config\RuleSet\Php74($license->header()));
-
-$config->getFinder()
-    ->exclude([
-        '.build/',
-        '.github/',
-        '.notes/',
-    ])
-    ->ignoreDotFiles(false)
+$finder = Finder::create()
     ->in(__DIR__)
-    ->name('.php-cs-fixer.php');
+    ->exclude([
+        '.build',
+        '.github',
+        '.phive',
+        'tools',
+    ]);
 
+$config = new FidryConfig(
+    <<<'EOF'
+        This file is part of the Fidry CPUCounter Config package.
+
+        (c) Théo FIDRY <theo.fidry@gmail.com>
+
+        For the full copyright and license information, please view the LICENSE
+        file that was distributed with this source code.
+        EOF,
+    74_000,
+);
 $config->setCacheFile(__DIR__ . '/.build/php-cs-fixer/.php-cs-fixer.cache');
 
-return $config;
+return $config->setFinder($finder);
