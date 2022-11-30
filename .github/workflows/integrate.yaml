@@ -25,8 +25,11 @@ jobs:
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
-            -   name: "Correct the PHIVE link"
-                run: "ln -sf $(which phive) ./tools/phive"
+            -   name: "Install ComposerNormalize"
+                run: "phive install composer-normalize"
+
+            -   name: "Install PHP-CS-Fixer"
+                run: "phive install php-cs-fixer"
 
             -   name: "Run the CS linter"
                 run: "make cs_lint"
@@ -47,9 +50,10 @@ jobs:
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
 
-            -   name: "Correct the PHIVE link"
-                run: "ln -sf $(which phive) ./tools/phive"
+            -   name: "Install PHPStan"
+                run: "phive install phpstan"
 
             -   name: "Run Auto-Review tests"
                 run: "make autoreview"
@@ -92,10 +96,10 @@ jobs:
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
-                    tools: "phive"
+                    tools: "infection"
 
-            -   name: "Correct the PHIVE link"
-                run: "ln -sf $(which phive) ./tools/phive"
+            -   name: "Install Infection"
+                run: "phive install infection"
 
             -   name: "Run PHPUnit with coverage"
                 run: "make phpunit_coverage_infection"

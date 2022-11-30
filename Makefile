@@ -89,7 +89,7 @@ yaml_lint:
 
 .PHONY: autoreview
 autoreview:	## Runs the AutoReview tests
-autoreview: composer_validate
+autoreview: composer_validate phpstan
 
 .PHONY: composer_validate phpstan
 composer_validate:
