@@ -17,7 +17,6 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "^2.28.3",
         "ergebnis/phpstan-rules": "^1.0.0",
         "infection/infection": "~0.26.16",
         "phpstan/extension-installer": "^1.2.0",

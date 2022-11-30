@@ -26,6 +26,9 @@ PHIVE = $(PHIVE_BIN)
 PHP_CS_FIXER_BIN = tools/php-cs-fixer
 PHP_CS_FIXER = $(PHP_CS_FIXER_BIN) fix --ansi --verbose --config=.php-cs-fixer.php
 
+COMPOSER_NORMALIZE_BIN = tools/composer-normalize
+COMPOSER_NORMALIZE = $(COMPOSER_NORMALIZE_BIN) normalize
+
 YAMLLINT = yamllint
 
 PHPSTAN_BIN = vendor/bin/phpstan
@@ -63,12 +66,12 @@ gitignore_sort:
 	LC_ALL=C sort -u .gitignore -o .gitignore
 
 .PHONY: composer_normalize
-composer_normalize: vendor
-	composer normalize
+composer_normalize: $(COMPOSER_NORMALIZE_BIN)
+	$(COMPOSER_NORMALIZE)
 
 .PHONY: composer_normalize_lint
-composer_normalize_lint: vendor
-	composer normalize --dry-run
+composer_normalize_lint: $(COMPOSER_NORMALIZE_BIN)
+	$(COMPOSER_NORMALIZE) --dry-run
 
 .PHONY: php_cs_fixer
 php_cs_fixer: $(PHP_CS_FIXER_BIN)
@@ -153,7 +156,8 @@ $(COVERAGE_INFECTION): $(PHPUNIT_BIN) $(SRC_TESTS_FILES) phpunit.xml.dist
 	$(PHPUNIT_COVERAGE_INFECTION)
 	touch -c $@
 
-$(PHP_CS_FIXER_BIN): $(PHIVE_BIN)
+# PHP-CS-Fixer itself does not depend on the vendor but the config file yes
+$(PHP_CS_FIXER_BIN): $(PHIVE_BIN) vendor
 	$(PHIVE) install php-cs-fixer
 	touch -c $@
 
@@ -166,4 +170,8 @@ $(PHIVE_BIN):
 	touch -c $@
 
 $(PHPSTAN_BIN): vendor
+	touch -c $@
+
+$(COMPOSER_NORMALIZE_BIN): $(PHIVE_BIN)
+	$(PHIVE) install composer-normalize
 	touch -c $@
