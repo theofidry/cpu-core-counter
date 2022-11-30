@@ -167,7 +167,7 @@ $(INFECTION_BIN): $(PHIVE_BIN)
 
 $(PHIVE_BIN):
 	./.phive/install-phive
-	touch -c $@
+	# Do not touch there: would mess up with the CI
 
 $(PHPSTAN_BIN): vendor
 	touch -c $@

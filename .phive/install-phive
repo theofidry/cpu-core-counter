@@ -10,3 +10,4 @@ gpg --verify phive.phar.asc phive.phar
 rm phive.phar.asc
 chmod +x phive.phar
 mv phive.phar tools/phive
+touch -c tools/phive

@@ -31,6 +31,9 @@ jobs:
             -   name: "Install PHP-CS-Fixer"
                 run: "phive install php-cs-fixer --trust-gpg-keys E82B2FB314E9906E"
 
+            -   name: "Prevent the CI to install PHIVE"
+                run: "echo '#!/usr/bin/env sh' > .phive/install-phive"
+
             -   name: "Run the CS linter"
                 run: "make cs_lint"
 
@@ -97,6 +100,9 @@ jobs:
 
             -   name: "Install Infection"
                 run: "phive install infection --trust-gpg-keys C5095986493B4AA0"
+
+            -   name: "Prevent the CI to install PHIVE"
+                run: "echo '#!/usr/bin/env sh' > .phive/install-phive"
 
             -   name: "Run PHPUnit with coverage"
                 run: "make phpunit_coverage_infection"
