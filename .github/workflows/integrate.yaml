@@ -34,6 +34,9 @@ jobs:
             -   name: "Prevent the CI to install PHIVE"
                 run: "echo '#!/usr/bin/env sh' > .phive/install-phive"
 
+            -   name: "Correct the PHIVE link"
+                run: "ln -sf $(which phive) ./tools/phive && touch -c ./tools/phive"
+
             -   name: "Run the CS linter"
                 run: "make cs_lint"
 
@@ -103,6 +106,9 @@ jobs:
 
             -   name: "Prevent the CI to install PHIVE"
                 run: "echo '#!/usr/bin/env sh' > .phive/install-phive"
+
+            -   name: "Correct the PHIVE link"
+                run: "ln -sf $(which phive) ./tools/phive && touch -c ./tools/phive"
 
             -   name: "Run PHPUnit with coverage"
                 run: "make phpunit_coverage_infection"
