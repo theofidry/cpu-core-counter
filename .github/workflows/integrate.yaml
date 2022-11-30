@@ -26,10 +26,10 @@ jobs:
                     tools: "phive"
 
             -   name: "Install ComposerNormalize"
-                run: "phive install composer-normalize"
+                run: "phive install composer-normalize --trust-gpg-keys"
 
             -   name: "Install PHP-CS-Fixer"
-                run: "phive install php-cs-fixer"
+                run: "phive install php-cs-fixer --trust-gpg-keys"
 
             -   name: "Run the CS linter"
                 run: "make cs_lint"
@@ -53,7 +53,7 @@ jobs:
                     tools: "phive"
 
             -   name: "Install PHPStan"
-                run: "phive install phpstan"
+                run: "phive install phpstan --trust-gpg-keys"
 
             -   name: "Run Auto-Review tests"
                 run: "make autoreview"
@@ -99,7 +99,7 @@ jobs:
                     tools: "infection"
 
             -   name: "Install Infection"
-                run: "phive install infection"
+                run: "phive install infection --trust-gpg-keys"
 
             -   name: "Run PHPUnit with coverage"
                 run: "make phpunit_coverage_infection"
