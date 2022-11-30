@@ -26,7 +26,7 @@ jobs:
                     tools: "phive"
 
             -   name: "Correct the PHIVE link"
-                run: "ln -sf $(which phive) ./tools/phive && touch -c ./tools/phive"
+                run: "ln -sf $(which phive) ./tools/phive"
 
             -   name: "Run the CS linter"
                 run: "make cs_lint"
@@ -49,7 +49,7 @@ jobs:
                     php-version: "${{ matrix.php-version }}"
 
             -   name: "Correct the PHIVE link"
-                run: "ln -sf $(which phive) ./tools/phive && touch -c ./tools/phive"
+                run: "ln -sf $(which phive) ./tools/phive"
 
             -   name: "Run Auto-Review tests"
                 run: "make autoreview"
@@ -95,7 +95,7 @@ jobs:
                     tools: "phive"
 
             -   name: "Correct the PHIVE link"
-                run: "ln -sf $(which phive) ./tools/phive && touch -c ./tools/phive"
+                run: "ln -sf $(which phive) ./tools/phive"
 
             -   name: "Run PHPUnit with coverage"
                 run: "make phpunit_coverage_infection"
