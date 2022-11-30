@@ -8,16 +8,16 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 [*.json]
-indent_size = 2
+indent_size = 4
 
 [*.md]
-indent_size = 2
+indent_size = 4
 
 [*.neon]
 indent_style = tab
 
 [*.{yaml,yml}]
-indent_size = 2
+indent_size = 4
 
 [Makefile]
 indent_style = tab
