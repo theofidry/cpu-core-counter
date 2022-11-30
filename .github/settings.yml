@@ -1,0 +1,92 @@
+# https://github.com/probot/settings
+
+branches:
+  - name: "main"
+
+    # https://docs.github.com/en/rest/reference/repos#delete-branch-protection
+    # https://docs.github.com/en/rest/reference/repos#update-branch-protection
+
+    protection:
+      enforce_admins: false
+      required_pull_request_reviews:
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: true
+        required_approving_review_count: 1
+      required_status_checks:
+        checks:
+          - context: "Code Coverage (8.0, locked)"
+          - context: "Coding Standards (8.0, locked)"
+          - context: "Dependency Analysis (8.0, locked)"
+          - context: "Mutation Tests (8.0, locked)"
+          - context: "Security Analysis (8.0, locked)"
+          - context: "Static Code Analysis (8.0, locked)"
+          - context: "Tests (8.0, highest)"
+          - context: "Tests (8.0, locked)"
+          - context: "Tests (8.0, lowest)"
+          - context: "Tests (8.1, highest)"
+          - context: "Tests (8.1, locked)"
+          - context: "Tests (8.1, lowest)"
+        strict: false
+      restrictions:
+
+        # https://docs.github.com/en/rest/reference/repos#list-branches--parameters
+
+        # Note: User, app, and team restrictions are only available for organization-owned repositories.
+        # Set to null to disable when using this configuration for a repository on a personal account.
+
+        apps: []
+        teams: []
+        users:
+          - "ergebnis-bot"
+
+# https://docs.github.com/en/rest/reference/issues#create-a-label
+# https://docs.github.com/en/rest/reference/issues#update-a-label
+
+labels:
+  - name: "bug"
+    color: "ee0701"
+    description: ""
+
+  - name: "dependency"
+    color: "0366d6"
+    description: ""
+
+  - name: "enhancement"
+    color: "0e8a16"
+    description: ""
+
+  - name: "question"
+    color: "cc317c"
+    description: ""
+
+  - name: "security"
+    color: "ee0701"
+    description: ""
+
+  - name: "stale"
+    color: "eeeeee"
+    description: ""
+
+# https://docs.github.com/en/rest/reference/repos#update-a-repository
+
+repository:
+  allow_merge_commit: true
+  allow_rebase_merge: false
+  allow_squash_merge: false
+  archived: false
+  default_branch: "main"
+  delete_branch_on_merge: true
+  description: ":octocat: + :ledger: Provides a GitHub repository template for a PHP package, using GitHub Actions."
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true
+  has_downloads: true
+  has_issues: true
+  has_pages: false
+  has_projects: false
+  has_wiki: false
+  name: "php-package-template"
+  private: false
+
+  # https://docs.github.com/en/rest/reference/repos#replace-all-repository-topics
+
+  topics: "php, package, template"
