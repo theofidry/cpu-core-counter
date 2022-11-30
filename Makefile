@@ -74,11 +74,11 @@ composer_normalize_lint: $(COMPOSER_NORMALIZE_BIN)
 	$(COMPOSER_NORMALIZE) --dry-run
 
 .PHONY: php_cs_fixer
-php_cs_fixer: $(PHP_CS_FIXER_BIN)
+php_cs_fixer: $(PHP_CS_FIXER_BIN) .build/php-cs-fixer
 	$(PHP_CS_FIXER)
 
 .PHONY: php_cs_fixer_lint
-php_cs_fixer_lint: $(PHP_CS_FIXER_BIN)
+php_cs_fixer_lint: $(PHP_CS_FIXER_BIN) .build/php-cs-fixer
 	$(PHP_CS_FIXER) --dry-run
 
 .PHONY: yaml_lint
@@ -89,7 +89,7 @@ yaml_lint:
 
 .PHONY: autoreview
 autoreview:	## Runs the AutoReview tests
-autoreview: composer_validate
+autoreview: composer_validate phpstan
 
 .PHONY: composer_validate phpstan
 composer_validate:
@@ -167,7 +167,7 @@ $(INFECTION_BIN): $(PHIVE_BIN)
 
 $(PHIVE_BIN):
 	./.phive/install-phive
-	touch -c $@
+	# Do not touch there: would mess up with the CI
 
 $(PHPSTAN_BIN): vendor
 	touch -c $@
@@ -175,3 +175,6 @@ $(PHPSTAN_BIN): vendor
 $(COMPOSER_NORMALIZE_BIN): $(PHIVE_BIN)
 	$(PHIVE) install composer-normalize
 	touch -c $@
+
+.build/php-cs-fixer:
+	mkdir -p .build/php-cs-fixer/

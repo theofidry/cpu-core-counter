@@ -23,8 +23,21 @@ jobs:
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
 
-            -   name: "Set up problem matchers for PHP"
+            -   name: "Install ComposerNormalize"
+                run: "phive install composer-normalize --trust-gpg-keys C00543248C87FB13"
+
+            -   name: "Install PHP-CS-Fixer"
+                run: "phive install php-cs-fixer --trust-gpg-keys E82B2FB314E9906E"
+
+            -   name: "Prevent the CI to install PHIVE"
+                run: "echo '#!/usr/bin/env sh' > .phive/install-phive"
+
+            -   name: "Correct the PHIVE link"
+                run: "ln -sf $(which phive) ./tools/phive"
+
+            -   name: "Run the CS linter"
                 run: "make cs_lint"
 
     auto-review:
@@ -43,8 +56,9 @@ jobs:
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
 
-            -   name: "Run phpstan/phpstan"
+            -   name: "Run Auto-Review tests"
                 run: "make autoreview"
 
     tests:
@@ -66,7 +80,7 @@ jobs:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
 
-            -   name: "Runs the unit tests"
+            -   name: "Run the PHPUnit tests"
                 run: "make phpunit"
 
     infection:
@@ -85,9 +99,19 @@ jobs:
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
 
-            -   name: "Runs PHPUnit with coverage"
+            -   name: "Install Infection"
+                run: "phive install infection --trust-gpg-keys C5095986493B4AA0"
+
+            -   name: "Prevent the CI to install PHIVE"
+                run: "echo '#!/usr/bin/env sh' > .phive/install-phive"
+
+            -   name: "Correct the PHIVE link"
+                run: "ln -sf $(which phive) ./tools/phive"
+
+            -   name: "Run PHPUnit with coverage"
                 run: "make phpunit_coverage_infection"
 
-            -   name: "Runs Infection"
+            -   name: "Run Infection"
                 run: "make infection"
