@@ -28,7 +28,7 @@ jobs:
                 run: "make cs_lint"
 
     auto-review:
-        name: "Auto-Review with PHP ${{ matrix.php-version  }}"
+        name: "Auto-Review"
         runs-on: "ubuntu-latest"
         strategy:
             matrix:
@@ -48,7 +48,7 @@ jobs:
                 run: "make autoreview"
 
     tests:
-        name: "Tests with PHP ${{ matrix.php-version  }}"
+        name: "Tests"
         runs-on: "ubuntu-latest"
         strategy:
             matrix:
@@ -70,7 +70,7 @@ jobs:
                 run: "make phpunit"
 
     infection:
-        name: "Infection with PHP ${{ matrix.php-version  }}"
+        name: "Infection"
         runs-on: "ubuntu-latest"
         strategy:
             matrix:
