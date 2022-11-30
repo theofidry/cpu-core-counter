@@ -1,10 +1,11 @@
 {
-    "name": "fidry/cpu-counter",
-    "description": "TODO",
+    "name": "fidry/cpu-core-counter",
+    "description": "Tiny utility to get the number of CPU cores.",
     "license": "MIT",
     "type": "library",
     "keywords": [
-        "TODO"
+        "cpu",
+        "core"
     ],
     "authors": [
         {
