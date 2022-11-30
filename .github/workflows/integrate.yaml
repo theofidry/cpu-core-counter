@@ -23,8 +23,12 @@ jobs:
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
 
-            -   name: "Set up problem matchers for PHP"
+            -   name: "Correct the PHIVE link"
+                run: "ln -sf $(which phive) ./tools/phive && touch -c ./tools/phive"
+
+            -   name: "Run the CS linter"
                 run: "make cs_lint"
 
     auto-review:
@@ -44,7 +48,10 @@ jobs:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
 
-            -   name: "Run phpstan/phpstan"
+            -   name: "Correct the PHIVE link"
+                run: "ln -sf $(which phive) ./tools/phive && touch -c ./tools/phive"
+
+            -   name: "Run Auto-Review tests"
                 run: "make autoreview"
 
     tests:
@@ -66,7 +73,7 @@ jobs:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
 
-            -   name: "Runs the unit tests"
+            -   name: "Run the PHPUnit tests"
                 run: "make phpunit"
 
     infection:
@@ -85,9 +92,13 @@ jobs:
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
 
-            -   name: "Runs PHPUnit with coverage"
+            -   name: "Correct the PHIVE link"
+                run: "ln -sf $(which phive) ./tools/phive && touch -c ./tools/phive"
+
+            -   name: "Run PHPUnit with coverage"
                 run: "make phpunit_coverage_infection"
 
-            -   name: "Runs Infection"
+            -   name: "Run Infection"
                 run: "make infection"
