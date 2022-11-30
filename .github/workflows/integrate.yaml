@@ -99,7 +99,7 @@ jobs:
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
-                    tools: "infection"
+                    tools: "phive"
 
             -   name: "Install Infection"
                 run: "phive install infection --trust-gpg-keys C5095986493B4AA0"
