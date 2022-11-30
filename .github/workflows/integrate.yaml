@@ -28,12 +28,12 @@ jobs:
                 run: "make cs_lint"
 
     auto-review:
-        name: "Auto-Review with PHP ${{ matrix.php-version  }}"
+        name: "Auto-Review"
         runs-on: "ubuntu-latest"
         strategy:
             matrix:
                 php-version:
-                    - "8.0"
+                    - "8.1"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@v3.1.0"
@@ -48,11 +48,12 @@ jobs:
                 run: "make autoreview"
 
     tests:
-        name: "Tests with PHP ${{ matrix.php-version  }}"
+        name: "Tests"
         runs-on: "ubuntu-latest"
         strategy:
             matrix:
                 php-version:
+                    - "7.4"
                     - "8.0"
                     - "8.1"
         steps:
@@ -69,12 +70,12 @@ jobs:
                 run: "make phpunit"
 
     infection:
-        name: "Infection with PHP ${{ matrix.php-version  }}"
+        name: "Infection"
         runs-on: "ubuntu-latest"
         strategy:
             matrix:
                 php-version:
-                    - "8.0"
+                    - "8.1"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@v3.1.0"
