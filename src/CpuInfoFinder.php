@@ -56,6 +56,8 @@ final class CpuInfoFinder
     }
 
     /**
+     * @internal
+     *
      * @return positive-int|null
      */
     public static function countCpuCores(string $cpuInfo): ?int
