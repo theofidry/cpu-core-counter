@@ -26,14 +26,10 @@ use function popen;
  */
 final class HwFinder implements CpuCoreFinder
 {
-    private function __construct()
-    {
-    }
-
     /**
      * @return positive-int|null
      */
-    public static function find(): ?int
+    public function find(): ?int
     {
         $process = popen('sysctl -n hw.ncpu', 'rb');
 

@@ -25,14 +25,10 @@ use function popen;
  */
 final class WindowsWmicFinder implements CpuCoreFinder
 {
-    private function __construct()
-    {
-    }
-
     /**
      * @return positive-int|null
      */
-    public static function find(): ?int
+    public function find(): ?int
     {
         // Windows
         $process = popen('wmic cpu get NumberOfLogicalProcessors', 'rb');
