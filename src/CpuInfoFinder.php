@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCounter;
 
-use function count;
 use function file_get_contents;
 use function is_file;
+use function mb_substr_count;
 
 /**
  * Find the number of CPU cores looking up at the cpuinfo file which is available
@@ -58,9 +58,7 @@ final class CpuInfoFinder
      */
     public static function countCpuCores(string $cpuInfo): ?int
     {
-        preg_match_all('/^processor/m', $cpuInfo, $matches);
-
-        $processorCount = count($matches[0]);
+        $processorCount = mb_substr_count($cpuInfo, 'processor');
 
         return $processorCount > 0 ? $processorCount : null;
     }
