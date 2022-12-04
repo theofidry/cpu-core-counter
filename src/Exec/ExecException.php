@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Fidry\CpuCounter\Exec;
 
 use ErrorException;
+use function error_get_last;
 
 // see https://github.com/thecodingmachine/safe/blob/master/generated/Exceptions/ExecException.php
-class ExecException extends ErrorException
+final class ExecException extends ErrorException
 {
     public static function createFromPhpError(): self
     {

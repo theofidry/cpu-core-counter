@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCounter\Exec;
 
+use function error_clear_last;
 use function shell_exec;
 
 /**
