@@ -33,12 +33,21 @@ final class CpuCoreCounter
      */
     public function getCount(): int
     {
-        if (isset($this->count)) {
-            return $this->count;
+        // Memoize result
+        if (!isset($this->count)) {
+            $this->count = self::findCount();
         }
 
+        return $this->count;
+    }
+
+    /**
+     * @return positive-int
+     */
+    private static function findCount(): int
+    {
         if (!function_exists('proc_open')) {
-            return $this->count = 1;
+            return 1;
         }
 
         // from brianium/paratest
@@ -49,7 +58,7 @@ final class CpuCoreCounter
             if (false !== $cpuinfo) {
                 preg_match_all('/^processor/m', $cpuinfo, $matches);
 
-                return $this->count = count($matches[0]);
+                return count($matches[0]);
             }
         }
 
@@ -62,7 +71,7 @@ final class CpuCoreCounter
                 $cores = (int) fgets($process);
                 pclose($process);
 
-                return $this->count = $cores;
+                return $cores;
             }
         }
 
@@ -73,9 +82,9 @@ final class CpuCoreCounter
             $cores = (int) fgets($process);
             pclose($process);
 
-            return $this->count = $cores;
+            return $cores;
         }
 
-        return $this->count = 2;
+        return 2;
     }
 }
