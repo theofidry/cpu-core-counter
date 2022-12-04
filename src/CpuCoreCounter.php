@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Fidry\CpuCounter;
 
 use function function_exists;
-use const DIRECTORY_SEPARATOR;
 
 final class CpuCoreCounter
 {
@@ -76,16 +75,10 @@ final class CpuCoreCounter
     public static function getDefaultFinders(): array
     {
         /** @var list<class-string<CpuCoreFinder>> $finders */
-        $finders = [
+        return [
             new CpuInfoFinder(),
+            new WindowsWmicFinder(),
+            new HwFinder(),
         ];
-
-        if (DIRECTORY_SEPARATOR === '\\') {
-            $finders[] = new WindowsWmicFinder();
-        }
-
-        $finders[] = new HwFinder();
-
-        return $finders;
     }
 }
