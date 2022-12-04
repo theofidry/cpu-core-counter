@@ -1,21 +1,25 @@
 <?php
 
+/*
+ * This file is part of the Fidry CPUCounter Config package.
+ *
+ * (c) Théo FIDRY <theo.fidry@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Fidry\CpuCounter;
 
-use Fidry\CpuCounter\Exec\ExecException;
-use Fidry\CpuCounter\Exec\ShellExec;
-use function count;
 use function fgets;
-use function file_get_contents;
 use function filter_var;
-use function is_file;
+use function function_exists;
 use function is_int;
 use function is_resource;
 use function pclose;
 use function popen;
-use function preg_match_all;
 use function trim;
 use const FILTER_VALIDATE_INT;
 
@@ -25,17 +29,17 @@ use const FILTER_VALIDATE_INT;
  * @see https://github.com/paratestphp/paratest/blob/c163539818fd96308ca8dc60f46088461e366ed4/src/Runners/PHPUnit/Options.php#L903-L909
  * @see https://opensource.apple.com/source/xnu/xnu-792.2.4/libkern/libkern/sysctl.h.auto.html
  */
-final class HwFinder
+final class HwFinder implements CpuCoreFinder
 {
-    private function __construct()
-    {
-    }
-
     /**
      * @return positive-int|null
      */
-    public static function find(): ?int
+    public function find(): ?int
     {
+        if (!function_exists('popen')) {
+            return null;
+        }
+
         // -n to show only the variable value
         // Use hw.logicalcpu instead of deprecated hw.ncpu; see https://github.com/php/php-src/pull/5541
         $process = popen('sysctl -n hw.logicalcpu', 'rb');
@@ -44,13 +48,17 @@ final class HwFinder
             return null;
         }
 
-        $cores = self::countCpuCores(fgets($process));
+        $processResult = fgets($process);
         pclose($process);
 
-        return $cores;
+        return false === $processResult
+            ? null
+            : self::countCpuCores($processResult);
     }
 
     /**
+     * @internal
+     *
      * @return positive-int|null
      */
     public static function countCpuCores(string $process): ?int

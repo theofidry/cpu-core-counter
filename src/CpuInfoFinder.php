@@ -1,15 +1,21 @@
 <?php
 
+/*
+ * This file is part of the Fidry CPUCounter Config package.
+ *
+ * (c) Théo FIDRY <theo.fidry@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Fidry\CpuCounter;
 
-use function count;
 use function file_get_contents;
 use function is_file;
-use function is_int;
-use function preg_match_all;
-use function substr_count;
+use function mb_substr_count;
 
 /**
  * Find the number of CPU cores looking up at the cpuinfo file which is available
@@ -21,10 +27,6 @@ use function substr_count;
 final class CpuInfoFinder
 {
     private const CPU_INFO_PATH = '/proc/cpuinfo';
-
-    private function __construct()
-    {
-    }
 
     /**
      * @return positive-int|null
@@ -50,11 +52,13 @@ final class CpuInfoFinder
     }
 
     /**
+     * @internal
+     *
      * @return positive-int|null
      */
     public static function countCpuCores(string $cpuInfo): ?int
     {
-        $processorCount = substr_count($cpuInfo, 'processor');
+        $processorCount = mb_substr_count($cpuInfo, 'processor');
 
         return $processorCount > 0 ? $processorCount : null;
     }
