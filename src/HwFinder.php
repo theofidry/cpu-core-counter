@@ -41,7 +41,8 @@ final class HwFinder implements CpuCoreFinder
         }
 
         // -n to show only the variable value
-        $process = popen('sysctl -n hw.ncpu', 'rb');
+        // Use hw.logicalcpu instead of deprecated hw.ncpu; see https://github.com/php/php-src/pull/5541
+        $process = popen('sysctl -n hw.logicalcpu', 'rb');
 
         if (!is_resource($process)) {
             return null;
