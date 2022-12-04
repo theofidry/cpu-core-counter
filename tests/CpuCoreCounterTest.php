@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @internal
  */
-final class CpuCounterTest extends TestCase
+final class CpuCoreCounterTest extends TestCase
 {
     public function test_it_can_get_the_number_of_cpu_cores(): void
     {
