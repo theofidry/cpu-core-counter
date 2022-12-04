@@ -44,9 +44,24 @@ final class WindowsWmicTest extends TestCase
             null,
         ];
 
+        yield 'whitespace' => [
+            <<<'EOF'
+
+                EOF,
+            null,
+        ];
+
         yield 'example from a Windows machine' => [
             <<<'EOF'
                 3
+
+                EOF,
+            3,
+        ];
+
+        yield 'example from a Windows machine with extra spaces' => [
+            <<<'EOF'
+                 3
 
                 EOF,
             3,

@@ -21,7 +21,6 @@ use function is_int;
 use function is_resource;
 use function pclose;
 use function popen;
-use function trim;
 use const FILTER_VALIDATE_INT;
 
 /**
@@ -64,7 +63,7 @@ final class WindowsWmicFinder implements CpuCoreFinder
      */
     public static function countCpuCores(string $process): ?int
     {
-        $cpuCount = filter_var(trim($process), FILTER_VALIDATE_INT);
+        $cpuCount = filter_var($process, FILTER_VALIDATE_INT);
 
         return is_int($cpuCount) && $cpuCount > 0 ? $cpuCount : null;
     }

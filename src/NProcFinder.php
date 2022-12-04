@@ -65,7 +65,7 @@ final class NProcFinder implements CpuCoreFinder
      */
     public static function countCpuCores(string $nproc): ?int
     {
-        $cpuCount = filter_var(trim($nproc), FILTER_VALIDATE_INT);
+        $cpuCount = filter_var($nproc, FILTER_VALIDATE_INT);
 
         return is_int($cpuCount) && $cpuCount > 0 ? $cpuCount : null;
     }
