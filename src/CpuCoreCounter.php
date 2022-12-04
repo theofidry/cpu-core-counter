@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCounter;
 
-use function function_exists;
-
 final class CpuCoreCounter
 {
     /**
@@ -54,10 +52,6 @@ final class CpuCoreCounter
      */
     private function findCount(): int
     {
-        if (!function_exists('proc_open')) {
-            return 1;
-        }
-
         foreach ($this->finders as $finder) {
             $cores = $finder->find();
 
