@@ -39,12 +39,22 @@ final class WindowsWmicFinder implements CpuCoreFinder
 
         if (is_resource($process)) {
             fgets($process);
-            $cores = (int) fgets($process);
+            $cores = self::countCpuCores(fgets($process));
             pclose($process);
 
             return $cores;
         }
 
         return null;
+    }
+
+    /**
+     * @internal
+     *
+     * @return positive-int|null
+     */
+    public static function countCpuCores(string $process): ?int
+    {
+        return (int) $process;
     }
 }
