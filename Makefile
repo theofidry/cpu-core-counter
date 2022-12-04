@@ -91,7 +91,7 @@ yaml_lint:
 autoreview:	## Runs the AutoReview tests
 autoreview: composer_validate phpstan
 
-.PHONY: composer_validate phpstan
+.PHONY: composer_validate
 composer_validate:
 	composer validate --strict
 
@@ -141,6 +141,7 @@ security: composer_audit
 
 .PHONY: composer_audit
 composer_audit: ## Runs a security analysis with Composer
+composer_audit:
 	composer audit
 
 
