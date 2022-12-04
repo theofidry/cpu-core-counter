@@ -16,6 +16,7 @@ namespace Fidry\CpuCounter;
 use Fidry\CpuCounter\Exec\ExecException;
 use Fidry\CpuCounter\Exec\ShellExec;
 use function filter_var;
+use function function_exists;
 use function is_int;
 use function trim;
 use const FILTER_VALIDATE_INT;
@@ -31,6 +32,10 @@ final class NProcFinder implements CpuCoreFinder
      */
     public function find(): ?int
     {
+        if (!function_exists('shell_exec')) {
+            return null;
+        }
+
         if (!self::supportsNproc()) {
             return null;
         }
