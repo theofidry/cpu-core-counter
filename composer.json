@@ -18,7 +18,6 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "ergebnis/phpstan-rules": "^1.0.0",
         "phpstan/extension-installer": "^1.2.0",
         "phpstan/phpstan": "^1.9.2",
         "phpstan/phpstan-deprecation-rules": "^1.0.0",
