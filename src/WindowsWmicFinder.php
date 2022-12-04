@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCounter;
 
+use function defined;
 use function fgets;
 use function filter_var;
+use function function_exists;
 use function is_int;
 use function is_resource;
 use function pclose;
@@ -34,18 +36,25 @@ final class WindowsWmicFinder implements CpuCoreFinder
      */
     public function find(): ?int
     {
-        // Windows
-        $process = popen('wmic cpu get NumberOfLogicalProcessors', 'rb');
-
-        if (is_resource($process)) {
-            fgets($process);
-            $cores = self::countCpuCores(fgets($process));
-            pclose($process);
-
-            return $cores;
+        if (!function_exists('popen')
+            || !defined('PHP_WINDOWS_VERSION_MAJOR')
+        ) {
+            return null;
         }
 
-        return null;
+        // -n to show only the variable value
+        $process = popen('wmic cpu get NumberOfLogicalProcessors', 'rb');
+
+        if (!is_resource($process)) {
+            return null;
+        }
+
+        $processResult = fgets($process);
+        pclose($process);
+
+        return false === $processResult
+            ? null
+            : self::countCpuCores($processResult);
     }
 
     /**
