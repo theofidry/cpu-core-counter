@@ -13,7 +13,43 @@ composer require fidry/cpu-core-counter
 use Fidry\CpuCounter\CpuCoreCounter;
 
 $counter = new CpuCoreCounter();
-$counter->getCount();   // e.g. 8 
+
+try {
+    $counter->getCount();   // e.g. 8
+} catch (NumberOfCpuCoreNotFound) {
+    return 1;   // Fallback value
+}
+
+```
+
+
+## Advanced usage
+
+### Changing the finders
+
+When creating `CpuCoreCounter`, you may want to change the order of the finders
+used or disable a specific finder. You can easily do so by passing the finders
+you want
+
+```php
+// Remove WindowsWmicFinder 
+$finders = array_filter(
+    CpuCoreCounter::getDefaultFinders(),
+    static fn (CpuCoreFinder $finder) => !($finder instanceof WindowsWmicFinder)
+);
+
+$cores = (new CpuCoreCounter($finders))->getCount();
+```
+
+```php
+// Use CPUInfo first & don't use Nproc
+use Fidry\CpuCounter\CpuInfoFinder;use Fidry\CpuCounter\HwFinder;use Fidry\CpuCounter\WindowsWmicFinder;$finders = [
+    new CpuInfoFinder(),
+    new WindowsWmicFinder(),
+    new HwFinder(),
+];
+
+$cores = (new CpuCoreCounter($finders))->getCount();
 ```
 
 
