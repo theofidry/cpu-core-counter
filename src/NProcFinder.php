@@ -24,16 +24,12 @@ use const FILTER_VALIDATE_INT;
  * @see https://github.com/infection/infection/blob/fbd8c44/src/Resource/Processor/CpuCoresCountProvider.php#L69-L82
  * @see https://unix.stackexchange.com/questions/146051/number-of-processors-in-proc-cpuinfo
  */
-final class NProcFinder
+final class NProcFinder implements CpuCoreFinder
 {
-    private function __construct()
-    {
-    }
-
     /**
      * @return positive-int|null
      */
-    public static function find(): ?int
+    public function find(): ?int
     {
         if (!self::supportsNproc()) {
             return null;

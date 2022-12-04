@@ -76,9 +76,10 @@ final class CpuCoreCounter
     {
         /** @var list<class-string<CpuCoreFinder>> $finders */
         return [
-            new CpuInfoFinder(),
+            new NProcFinder(),
             new WindowsWmicFinder(),
             new HwFinder(),
+            new CpuInfoFinder(),
         ];
     }
 }
