@@ -13,15 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCounter;
 
-use function count;
-use function fgets;
-use function file_get_contents;
 use function function_exists;
-use function is_file;
-use function is_resource;
-use function pclose;
-use function popen;
-use function preg_match_all;
 use const DIRECTORY_SEPARATOR;
 
 final class CpuCoreCounter
@@ -35,7 +27,7 @@ final class CpuCoreCounter
     {
         // Memoize result
         if (!isset($this->count)) {
-            $this->count = $this->findCount();
+            $this->count = self::findCount();
         }
 
         return $this->count;
@@ -44,10 +36,10 @@ final class CpuCoreCounter
     /**
      * @return positive-int
      */
-    private function findCount(): int
+    private static function findCount(): int
     {
         if (!function_exists('proc_open')) {
-            return $this->count = 1;
+            return 1;
         }
 
         /** @var list<class-string<CpuCoreFinder>> $finders */
@@ -69,6 +61,6 @@ final class CpuCoreCounter
             }
         }
 
-        return 1;
+        return 2;
     }
 }

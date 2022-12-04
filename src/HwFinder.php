@@ -1,23 +1,22 @@
 <?php
 
+/*
+ * This file is part of the Fidry CPUCounter Config package.
+ *
+ * (c) Théo FIDRY <theo.fidry@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Fidry\CpuCounter;
 
-use Fidry\CpuCounter\Exec\ExecException;
-use Fidry\CpuCounter\Exec\ShellExec;
-use function count;
 use function fgets;
-use function file_get_contents;
-use function filter_var;
-use function is_file;
-use function is_int;
 use function is_resource;
 use function pclose;
 use function popen;
-use function preg_match_all;
-use function trim;
-use const FILTER_VALIDATE_INT;
 
 /**
  * Find the number of CPU cores for Linux, BSD and OSX.
