@@ -20,6 +20,9 @@ final class CpuCoreCounter
      */
     private array $finders;
 
+    /**
+     * @var positive-int
+     */
     private int $count;
 
     /**
@@ -68,7 +71,6 @@ final class CpuCoreCounter
      */
     public static function getDefaultFinders(): array
     {
-        /** @var list<class-string<CpuCoreFinder>> $finders */
         return [
             new NProcFinder(),
             new WindowsWmicFinder(),

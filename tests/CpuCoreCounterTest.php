@@ -15,6 +15,7 @@ namespace Fidry\CpuCounter\Test;
 
 use Exception;
 use Fidry\CpuCounter\CpuCoreCounter;
+use Fidry\CpuCounter\CpuCoreFinder;
 use Fidry\CpuCounter\NumberOfCpuCoreNotFound;
 use PHPUnit\Framework\TestCase;
 use function get_class;
@@ -37,8 +38,8 @@ final class CpuCoreCounterTest extends TestCase
     /**
      * @dataProvider cpuCoreFinderProvider
      *
-     * @param list<CpuCoreCounter> $finders
-     * @param int|Exception        $expected
+     * @param list<CpuCoreFinder> $finders
+     * @param int|Exception       $expected
      */
     public function test_it_can_get_the_number_of_cpu_cores_based_on_the_registered_finders(
         array $finders,
@@ -55,7 +56,7 @@ final class CpuCoreCounterTest extends TestCase
         }
 
         // Sanity check
-        self::assertTrue($expected instanceof Exception);
+        self::assertInstanceOf(Exception::class, $expected);
 
         $this->expectException(get_class($expected));
         $this->expectExceptionMessage($expected->getMessage());

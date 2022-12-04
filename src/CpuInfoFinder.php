@@ -24,14 +24,14 @@ use function mb_substr_count;
  * @see https://github.com/paratestphp/paratest/blob/c163539818fd96308ca8dc60f46088461e366ed4/src/Runners/PHPUnit/Options.php#L903-L909
  * @see https://unix.stackexchange.com/questions/146051/number-of-processors-in-proc-cpuinfo
  */
-final class CpuInfoFinder
+final class CpuInfoFinder implements CpuCoreFinder
 {
     private const CPU_INFO_PATH = '/proc/cpuinfo';
 
     /**
      * @return positive-int|null
      */
-    public static function find(): ?int
+    public function find(): ?int
     {
         $cpuInfo = self::getCpuInfo();
 

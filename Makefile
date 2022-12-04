@@ -96,10 +96,17 @@ composer_validate:
 	composer validate --strict
 
 .PHONY: phpstan
-phpstan: $(PHPSTAN_BIN)
-	mkdir -p .build/phpstan
-	$(PHPSTAN) clear-result-cache --configuration=phpstan.neon
-	$(PHPSTAN) --configuration=phpstan.neon --memory-limit=-1
+phpstan: phpstan_src phpstan_tests
+
+.PHONY: phpstan_src
+phpstan_src: $(PHPSTAN_BIN) .build/phpstan/src
+	$(PHPSTAN) clear-result-cache --configuration=phpstan.src.neon
+	$(PHPSTAN) --configuration=phpstan.src.neon --memory-limit=-1
+
+.PHONY: phpstan_tests
+phpstan_tests: $(PHPSTAN_BIN) .build/phpstan/tests
+	$(PHPSTAN) clear-result-cache --configuration=phpstan.tests.neon
+	$(PHPSTAN) --configuration=phpstan.tests.neon --memory-limit=-1
 
 
 .PHONY: test
@@ -178,3 +185,9 @@ $(COMPOSER_NORMALIZE_BIN): $(PHIVE_BIN)
 
 .build/php-cs-fixer:
 	mkdir -p .build/php-cs-fixer/
+
+.build/phpstan/src:
+	mkdir -p .build/phpstan/src
+
+.build/phpstan/tests:
+	mkdir -p .build/phpstan/tests

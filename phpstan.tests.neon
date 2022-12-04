@@ -1,0 +1,17 @@
+parameters:
+	checkMissingIterableValueType: false
+	inferPrivatePropertyTypeFromConstructor: true
+
+	level: 6
+
+	paths:
+		- src
+		- tests
+
+	tmpDir: .build/phpstan/tests/
+
+	ignoreErrors:
+
+		# This is a sanity check
+		- path: tests/CpuCoreCounterTest.php
+		  message: '#assertInstanceOf\(\) with .Exception. and Exception will always evaluate to true.#'
