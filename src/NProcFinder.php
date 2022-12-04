@@ -1,24 +1,26 @@
 <?php
 
+/*
+ * This file is part of the Fidry CPUCounter Config package.
+ *
+ * (c) Théo FIDRY <theo.fidry@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Fidry\CpuCounter;
 
 use Fidry\CpuCounter\Exec\ExecException;
 use Fidry\CpuCounter\Exec\ShellExec;
-use function count;
-use function file_get_contents;
 use function filter_var;
-use function is_file;
 use function is_int;
-use function preg_match_all;
 use function trim;
 use const FILTER_VALIDATE_INT;
 
 /**
- * Find the number of CPU cores looking up at the cpuinfo file which is available
- * on Linux systems and Windows systems with a Linux sub-system.
- *
  * @see https://github.com/infection/infection/blob/fbd8c44/src/Resource/Processor/CpuCoresCountProvider.php#L69-L82
  * @see https://unix.stackexchange.com/questions/146051/number-of-processors-in-proc-cpuinfo
  */
@@ -54,7 +56,7 @@ final class NProcFinder
             return false;
         }
 
-        return trim($commandNproc) !== '';
+        return '' !== trim($commandNproc);
     }
 
     /**

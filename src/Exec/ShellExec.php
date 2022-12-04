@@ -1,11 +1,18 @@
 <?php
 
+/*
+ * This file is part of the Fidry CPUCounter Config package.
+ *
+ * (c) Théo FIDRY <theo.fidry@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Fidry\CpuCounter\Exec;
 
-use Fidry\CpuCounter\Exec\ExecException;
-use Fidry\CpuCounter\Exec\ExecException;
 use function shell_exec;
 
 /**
@@ -29,7 +36,7 @@ final class ShellExec
 
         $safeResult = shell_exec($command);
 
-        if ($safeResult === null || $safeResult === false) {
+        if (null === $safeResult || false === $safeResult) {
             throw ExecException::createFromPhpError();
         }
 
