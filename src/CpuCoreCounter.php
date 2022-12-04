@@ -26,7 +26,7 @@ final class CpuCoreCounter
     private int $count;
 
     /**
-     * @param list<CpuCoreFinder> $finders
+     * @param list<CpuCoreFinder>|null $finders
      */
     public function __construct(?array $finders = null)
     {
@@ -34,6 +34,8 @@ final class CpuCoreCounter
     }
 
     /**
+     * @throws NumberOfCpuCoreNotFound
+     *
      * @return positive-int
      */
     public function getCount(): int
@@ -47,6 +49,8 @@ final class CpuCoreCounter
     }
 
     /**
+     * @throws NumberOfCpuCoreNotFound
+     *
      * @return positive-int
      */
     private function findCount(): int
@@ -63,7 +67,7 @@ final class CpuCoreCounter
             }
         }
 
-        return 2;
+        throw NumberOfCpuCoreNotFound::create();
     }
 
     /**
