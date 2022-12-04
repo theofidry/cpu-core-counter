@@ -28,10 +28,6 @@ final class CpuInfoFinder
 {
     private const CPU_INFO_PATH = '/proc/cpuinfo';
 
-    private function __construct()
-    {
-    }
-
     /**
      * @return positive-int|null
      */

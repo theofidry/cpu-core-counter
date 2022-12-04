@@ -18,5 +18,5 @@ interface CpuCoreFinder
     /**
      * @return positive-int|null
      */
-    public static function find(): ?int;
+    public function find(): ?int;
 }

@@ -18,7 +18,20 @@ use const DIRECTORY_SEPARATOR;
 
 final class CpuCoreCounter
 {
+    /**
+     * @var list<CpuCoreFinder>
+     */
+    private array $finders;
+
     private int $count;
+
+    /**
+     * @param list<CpuCoreFinder> $finders
+     */
+    public function __construct(?array $finders = null)
+    {
+        $this->finders = $finders ?? self::getDefaultFinders();
+    }
 
     /**
      * @return positive-int
@@ -27,7 +40,7 @@ final class CpuCoreCounter
     {
         // Memoize result
         if (!isset($this->count)) {
-            $this->count = self::findCount();
+            $this->count = $this->findCount();
         }
 
         return $this->count;
@@ -36,25 +49,14 @@ final class CpuCoreCounter
     /**
      * @return positive-int
      */
-    private static function findCount(): int
+    private function findCount(): int
     {
         if (!function_exists('proc_open')) {
             return 1;
         }
 
-        /** @var list<class-string<CpuCoreFinder>> $finders */
-        $finders = [
-            CpuInfoFinder::class,
-        ];
-
-        if (DIRECTORY_SEPARATOR === '\\') {
-            $finders[] = WindowsWmicFinder::class;
-        }
-
-        $finders[] = HwFinder::class;
-
-        foreach ($finders as $finder) {
-            $cores = $finder::find();
+        foreach ($this->finders as $finder) {
+            $cores = $finder->find();
 
             if (null !== $cores) {
                 return $cores;
@@ -62,5 +64,24 @@ final class CpuCoreCounter
         }
 
         return 2;
+    }
+
+    /**
+     * @return list<CpuCoreFinder>
+     */
+    private static function getDefaultFinders(): array
+    {
+        /** @var list<class-string<CpuCoreFinder>> $finders */
+        $finders = [
+            new CpuInfoFinder(),
+        ];
+
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $finders[] = new WindowsWmicFinder();
+        }
+
+        $finders[] = new HwFinder();
+
+        return $finders;
     }
 }
