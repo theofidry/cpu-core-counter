@@ -69,7 +69,7 @@ final class CpuCoreCounter
     /**
      * @return list<CpuCoreFinder>
      */
-    private static function getDefaultFinders(): array
+    public static function getDefaultFinders(): array
     {
         /** @var list<class-string<CpuCoreFinder>> $finders */
         $finders = [
