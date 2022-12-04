@@ -21,6 +21,8 @@ final class CpuCoreCounter
     private int $count;
 
     /**
+     * @throws NumberOfCpuCoreNotFound
+     *
      * @return positive-int
      */
     public function getCount(): int
@@ -34,6 +36,8 @@ final class CpuCoreCounter
     }
 
     /**
+     * @throws NumberOfCpuCoreNotFound
+     *
      * @return positive-int
      */
     private static function findCount(): int
@@ -61,6 +65,6 @@ final class CpuCoreCounter
             }
         }
 
-        return 2;
+        throw NumberOfCpuCoreNotFound::create();
     }
 }
