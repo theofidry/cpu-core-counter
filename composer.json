@@ -14,8 +14,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
-        "webmozart/assert": "^1.11"
+        "php": "^7.4 || ^8.0"
     },
     "require-dev": {
         "fidry/makefile": "^0.2.0",
