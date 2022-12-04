@@ -13,15 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCounter;
 
-use function count;
-use function fgets;
-use function file_get_contents;
 use function function_exists;
-use function is_file;
-use function is_resource;
-use function pclose;
-use function popen;
-use function preg_match_all;
 use const DIRECTORY_SEPARATOR;
 
 final class CpuCoreCounter
@@ -50,39 +42,23 @@ final class CpuCoreCounter
             return 1;
         }
 
-        // from brianium/paratest
-        if (is_file('/proc/cpuinfo')) {
-            // Linux (and potentially Windows with linux sub systems)
-            $cpuinfo = file_get_contents('/proc/cpuinfo');
-
-            if (false !== $cpuinfo) {
-                preg_match_all('/^processor/m', $cpuinfo, $matches);
-
-                return count($matches[0]);
-            }
-        }
+        /** @var list<class-string<CpuCoreFinder>> $finders */
+        $finders = [
+            CpuInfoFinder::class,
+        ];
 
         if (DIRECTORY_SEPARATOR === '\\') {
-            // Windows
-            $process = popen('wmic cpu get NumberOfLogicalProcessors', 'rb');
-
-            if (is_resource($process)) {
-                fgets($process);
-                $cores = (int) fgets($process);
-                pclose($process);
-
-                return $cores;
-            }
+            $finders[] = WindowsWmicFinder::class;
         }
 
-        $process = popen('sysctl -n hw.ncpu', 'rb');
+        $finders[] = HwFinder::class;
 
-        if (is_resource($process)) {
-            // *nix (Linux, BSD and Mac)
-            $cores = (int) fgets($process);
-            pclose($process);
+        foreach ($finders as $finder) {
+            $cores = $finder::find();
 
-            return $cores;
+            if (null !== $cores) {
+                return $cores;
+            }
         }
 
         return 2;
