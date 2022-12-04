@@ -33,6 +33,18 @@ final class CpuCoreCounter
      */
     public function getCount(): int
     {
+        // Memoize result
+        if (!isset($this->count)) {
+            $this->count = $this->findCount();
+        }
+
+        return $this->count;
+    }
+
+    private static function
+
+    private function findCount(): int
+    {
         if (isset($this->count)) {
             return $this->count;
         }
@@ -41,40 +53,20 @@ final class CpuCoreCounter
             return $this->count = 1;
         }
 
+        // TODO: use Nproc over CPUInfo
+
         // from brianium/paratest
         if (is_file('/proc/cpuinfo')) {
-            // Linux (and potentially Windows with linux sub systems)
-            $cpuinfo = file_get_contents('/proc/cpuinfo');
-
-            if (false !== $cpuinfo) {
-                preg_match_all('/^processor/m', $cpuinfo, $matches);
-
-                return $this->count = count($matches[0]);
-            }
+            // TODO: CpuInfoFinder
         }
+
+        // From Psalm: Hw should be fore CPUInfo
 
         if (DIRECTORY_SEPARATOR === '\\') {
-            // Windows
-            $process = popen('wmic cpu get NumberOfLogicalProcessors', 'rb');
-
-            if (is_resource($process)) {
-                fgets($process);
-                $cores = (int) fgets($process);
-                pclose($process);
-
-                return $this->count = $cores;
-            }
+           // TODO Windows
         }
 
-        $process = popen('sysctl -n hw.ncpu', 'rb');
-
-        if (is_resource($process)) {
-            // *nix (Linux, BSD and Mac)
-            $cores = (int) fgets($process);
-            pclose($process);
-
-            return $this->count = $cores;
-        }
+        // TODO: Hw
 
         return $this->count = 2;
     }
