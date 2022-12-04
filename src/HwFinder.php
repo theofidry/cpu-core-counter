@@ -39,12 +39,22 @@ final class HwFinder implements CpuCoreFinder
 
         if (is_resource($process)) {
             // *nix (Linux, BSD and Mac)
-            $cores = (int) fgets($process);
+            $cores = self::countCpuCores(fgets($process));
             pclose($process);
 
             return $cores;
         }
 
         return null;
+    }
+
+    /**
+     * @internal
+     *
+     * @return positive-int|null
+     */
+    public static function countCpuCores(string $process): ?int
+    {
+        return (int) $process;
     }
 }
