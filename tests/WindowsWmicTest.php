@@ -37,12 +37,27 @@ final class WindowsWmicTest extends TestCase
 
     public static function wmicProvider(): iterable
     {
+        yield 'empty' => [
+            <<<'EOF'
+
+                EOF,
+            null,
+        ];
+
         yield 'example from a Windows machine' => [
             <<<'EOF'
                 3
 
                 EOF,
             3,
+        ];
+
+        yield 'no processor' => [
+            <<<'EOF'
+                0
+
+                EOF,
+            null,
         ];
     }
 }

@@ -14,9 +14,13 @@ declare(strict_types=1);
 namespace Fidry\CpuCounter;
 
 use function fgets;
+use function filter_var;
+use function is_int;
 use function is_resource;
 use function pclose;
 use function popen;
+use function trim;
+use const FILTER_VALIDATE_INT;
 
 /**
  * Find the number of CPU cores for Windows.
@@ -51,6 +55,8 @@ final class WindowsWmicFinder implements CpuCoreFinder
      */
     public static function countCpuCores(string $process): ?int
     {
-        return (int) $process;
+        $cpuCount = filter_var(trim($process), FILTER_VALIDATE_INT);
+
+        return is_int($cpuCount) && $cpuCount > 0 ? $cpuCount : null;
     }
 }

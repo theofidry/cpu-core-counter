@@ -37,6 +37,13 @@ final class HwFinderTest extends TestCase
 
     public static function processProvider(): iterable
     {
+        yield 'empty' => [
+            <<<'EOF'
+
+                EOF,
+            null,
+        ];
+
         // MyMachine™
         yield 'example from an OSX machine' => [
             <<<'EOF'
@@ -44,6 +51,14 @@ final class HwFinderTest extends TestCase
 
                 EOF,
             3,
+        ];
+
+        yield 'no processor' => [
+            <<<'EOF'
+                0
+
+                EOF,
+            null,
         ];
     }
 }
