@@ -16,6 +16,7 @@ namespace Fidry\CpuCounter;
 use Fidry\CpuCounter\Exec\ExecException;
 use Fidry\CpuCounter\Exec\ShellExec;
 use function filter_var;
+use function function_exists;
 use function is_int;
 use function trim;
 use const FILTER_VALIDATE_INT;
@@ -24,17 +25,17 @@ use const FILTER_VALIDATE_INT;
  * @see https://github.com/infection/infection/blob/fbd8c44/src/Resource/Processor/CpuCoresCountProvider.php#L69-L82
  * @see https://unix.stackexchange.com/questions/146051/number-of-processors-in-proc-cpuinfo
  */
-final class NProcFinder
+final class NProcFinder implements CpuCoreFinder
 {
-    private function __construct()
-    {
-    }
-
     /**
      * @return positive-int|null
      */
-    public static function find(): ?int
+    public function find(): ?int
     {
+        if (!function_exists('shell_exec')) {
+            return null;
+        }
+
         if (!self::supportsNproc()) {
             return null;
         }
