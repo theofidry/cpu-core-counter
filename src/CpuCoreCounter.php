@@ -26,7 +26,7 @@ final class CpuCoreCounter
     private int $count;
 
     /**
-     * @param list<CpuCoreFinder> $finders
+     * @param list<CpuCoreFinder>|null $finders
      */
     public function __construct(?array $finders = null)
     {

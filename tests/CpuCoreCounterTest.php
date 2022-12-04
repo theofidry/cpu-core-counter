@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCounter\Test;
 
+use Exception;
 use Fidry\CpuCounter\CpuCoreCounter;
+use Fidry\CpuCounter\NumberOfCpuCoreNotFound;
 use PHPUnit\Framework\TestCase;
+use function get_class;
+use function is_int;
 
 /**
  * @covers \Fidry\CpuCounter\CpuCoreCounter
@@ -34,23 +38,38 @@ final class CpuCoreCounterTest extends TestCase
      * @dataProvider cpuCoreFinderProvider
      *
      * @param list<CpuCoreCounter> $finders
+     * @param int|Exception        $expected
      */
     public function test_it_can_get_the_number_of_cpu_cores_based_on_the_registered_finders(
         array $finders,
-        int $expected
+        $expected
     ): void {
         $counter = new CpuCoreCounter($finders);
 
-        $actual = $counter->getCount();
+        if (is_int($expected)) {
+            $actual = $counter->getCount();
 
-        self::assertSame($expected, $actual);
+            self::assertSame($expected, $actual);
+
+            return;
+        }
+
+        // Sanity check
+        self::assertTrue($expected instanceof Exception);
+
+        $this->expectException(get_class($expected));
+        $this->expectExceptionMessage($expected->getMessage());
+
+        $counter->getCount();
     }
 
     public static function cpuCoreFinderProvider(): iterable
     {
+        $defaultException = NumberOfCpuCoreNotFound::create();
+
         yield 'no finder' => [
             [],
-            2,
+            $defaultException,
         ];
 
         yield 'single finder finds a value' => [
@@ -64,7 +83,7 @@ final class CpuCoreCounterTest extends TestCase
             [
                 new DummyCpuCoreFinder(null),
             ],
-            2,
+            $defaultException,
         ];
 
         yield 'multiple finders find a value' => [
