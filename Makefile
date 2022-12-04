@@ -13,7 +13,8 @@ COVERAGE_INFECTION = $(COVERAGE_XML) $(COVERAGE_JUNIT)
 TARGET_MSI = 100
 
 INFECTION_BIN = tools/infection
-INFECTION = $(INFECTION_BIN) --skip-initial-tests --coverage=$(COVERAGE_DIR) --show-mutations --ansi
+INFECTION = $(INFECTION_BIN) --skip-initial-tests --coverage=$(COVERAGE_DIR) --only-covered --show-mutations --ansi
+INFECTION_WITH_INITIAL_TESTS = $(INFECTION_BIN) --only-covered --show-mutations --ansi
 
 PHPUNIT_BIN = vendor/bin/phpunit
 PHPUNIT = php -d zend.enable_gc=0 $(PHPUNIT_BIN)
@@ -132,7 +133,11 @@ phpunit_coverage_html: $(PHPUNIT_BIN) vendor
 
 .PHONY: infection
 infection: ## Runs infection
-infection: $(INFECTION_BIN) $(COVERAGE_INFECTION) vendor
+infection: $(INFECTION_BIN) vendor
+	$(INFECTION_WITH_INITIAL_TESTS)
+
+.PHONY: _infection
+_infection: $(INFECTION_BIN) $(COVERAGE_XML) $(COVERAGE_JUNIT) vendor
 	$(INFECTION)
 
 .PHONY: security
@@ -160,9 +165,15 @@ vendor: composer.json
 $(PHPUNIT_BIN): vendor
 	touch -c $@
 
-$(COVERAGE_INFECTION): $(PHPUNIT_BIN) $(SRC_TESTS_FILES) phpunit.xml.dist
+$(COVERAGE_XML): $(PHPUNIT_BIN) $(SRC_TESTS_FILES) phpunit.xml.dist
 	$(PHPUNIT_COVERAGE_INFECTION)
 	touch -c $@
+	touch -c $(COVERAGE_JUNIT)
+
+$(COVERAGE_JUNIT): $(PHPUNIT_BIN) $(SRC_TESTS_FILES) phpunit.xml.dist
+	$(PHPUNIT_COVERAGE_INFECTION)
+	touch -c $@
+	touch -c $(COVERAGE_XML)
 
 # PHP-CS-Fixer itself does not depend on the vendor but the config file yes
 $(PHP_CS_FIXER_BIN): $(PHIVE_BIN) vendor

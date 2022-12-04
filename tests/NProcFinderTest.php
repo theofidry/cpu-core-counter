@@ -44,10 +44,24 @@ final class NProcFinderTest extends TestCase
             null,
         ];
 
+        yield 'whitespace' => [
+            <<<'EOF'
+
+                EOF,
+            null,
+        ];
+
         // $ docker run  --tty --rm --platform linux/amd64 alpine:3.14 nproc --all
         yield 'example from an alpine Docker image' => [
             <<<'EOF'
                 3
+
+                EOF,
+            3,
+        ];
+        yield 'example with extra spaces' => [
+            <<<'EOF'
+                 3
 
                 EOF,
             3,

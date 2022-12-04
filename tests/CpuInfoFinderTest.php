@@ -44,6 +44,13 @@ final class CpuInfoFinderTest extends TestCase
             null,
         ];
 
+        yield 'whitespace' => [
+            <<<'EOF'
+
+                EOF,
+            null,
+        ];
+
         // $ docker run  --tty --rm --platform linux/amd64 alpine:3.14 cat /proc/cpuinfo
         yield 'example from an alpine Docker image' => [
             <<<'EOF'

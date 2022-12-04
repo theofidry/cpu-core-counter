@@ -1,5 +1,5 @@
 {
-    "$schema": "./vendor/infection/infection/resources/schema.json",
+    "$schema": "./tools/infection/resources/schema.json",
     "ignoreMsiWithNoMutations": true,
     "logs": {
         "text": ".build/infection/infection-log.txt"
@@ -11,5 +11,15 @@
             "src"
         ]
     },
-    "timeout": 10
+    "timeout": 10,
+
+    "mutators": {
+        "@default": true,
+        "ArrayItemRemoval": {
+            "ignore": [
+                "Fidry\\CpuCounter\\CpuCoreCounter::getDefaultFinders"
+            ]
+        },
+        "PublicVisibility": false
+    }
 }

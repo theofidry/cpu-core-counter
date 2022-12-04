@@ -44,10 +44,24 @@ final class HwFinderTest extends TestCase
             null,
         ];
 
+        yield 'whitespace' => [
+            <<<'EOF'
+
+                EOF,
+            null,
+        ];
+
         // MyMachine™
         yield 'example from an OSX machine' => [
             <<<'EOF'
                 3
+
+                EOF,
+            3,
+        ];
+        yield 'example with extra spaces' => [
+            <<<'EOF'
+                 3
 
                 EOF,
             3,
