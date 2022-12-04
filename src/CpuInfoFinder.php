@@ -18,10 +18,8 @@ use function substr_count;
  * @see https://github.com/paratestphp/paratest/blob/c163539818fd96308ca8dc60f46088461e366ed4/src/Runners/PHPUnit/Options.php#L903-L909
  * @see https://unix.stackexchange.com/questions/146051/number-of-processors-in-proc-cpuinfo
  */
-final class CpuInfoFinder
+final class CpuInfoFinder implements CpuCoreFinder
 {
-    private const CPU_INFO_PATH = '/proc/cpuinfo';
-
     private function __construct()
     {
     }
@@ -31,31 +29,18 @@ final class CpuInfoFinder
      */
     public static function find(): ?int
     {
-        $cpuInfo = self::getCpuInfo();
+        // from brianium/paratest
+        if (is_file('/proc/cpuinfo')) {
+            // Linux (and potentially Windows with linux sub systems)
+            $cpuinfo = file_get_contents('/proc/cpuinfo');
 
-        return null === $cpuInfo ? null : self::countCpuCores($cpuInfo);
-    }
+            if (false !== $cpuinfo) {
+                preg_match_all('/^processor/m', $cpuinfo, $matches);
 
-    private static function getCpuInfo(): ?string
-    {
-        if (!is_file(self::CPU_INFO_PATH)) {
-            return null;
+                return count($matches[0]);
+            }
         }
 
-        $cpuInfo = file_get_contents(self::CPU_INFO_PATH);
-
-        return false === $cpuInfo
-            ? null
-            : $cpuInfo;
-    }
-
-    /**
-     * @return positive-int|null
-     */
-    public static function countCpuCores(string $cpuInfo): ?int
-    {
-        $processorCount = substr_count($cpuInfo, 'processor');
-
-        return $processorCount > 0 ? $processorCount : null;
+        return null;
     }
 }

@@ -25,7 +25,7 @@ use const FILTER_VALIDATE_INT;
  * @see https://github.com/paratestphp/paratest/blob/c163539818fd96308ca8dc60f46088461e366ed4/src/Runners/PHPUnit/Options.php#L903-L909
  * @see https://opensource.apple.com/source/xnu/xnu-792.2.4/libkern/libkern/sysctl.h.auto.html
  */
-final class HwFinder
+final class HwFinder implements CpuCoreFinder
 {
     private function __construct()
     {
@@ -36,27 +36,16 @@ final class HwFinder
      */
     public static function find(): ?int
     {
-        // -n to show only the variable value
-        // Use hw.logicalcpu instead of deprecated hw.ncpu; see https://github.com/php/php-src/pull/5541
-        $process = popen('sysctl -n hw.logicalcpu', 'rb');
+        $process = popen('sysctl -n hw.ncpu', 'rb');
 
-        if (!is_resource($process)) {
-            return null;
+        if (is_resource($process)) {
+            // *nix (Linux, BSD and Mac)
+            $cores = (int) fgets($process);
+            pclose($process);
+
+            return $cores;
         }
 
-        $cores = self::countCpuCores(fgets($process));
-        pclose($process);
-
-        return $cores;
-    }
-
-    /**
-     * @return positive-int|null
-     */
-    public static function countCpuCores(string $process): ?int
-    {
-        $cpuCount = filter_var(trim($process), FILTER_VALIDATE_INT);
-
-        return is_int($cpuCount) && $cpuCount > 0 ? $cpuCount : null;
+        return null;
     }
 }

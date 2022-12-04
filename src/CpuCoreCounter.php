@@ -41,33 +41,34 @@ final class CpuCoreCounter
         return $this->count;
     }
 
-    private static function
-
+    /**
+     * @return positive-int
+     */
     private function findCount(): int
     {
-        if (isset($this->count)) {
-            return $this->count;
-        }
-
         if (!function_exists('proc_open')) {
             return $this->count = 1;
         }
 
-        // TODO: use Nproc over CPUInfo
-
-        // from brianium/paratest
-        if (is_file('/proc/cpuinfo')) {
-            // TODO: CpuInfoFinder
-        }
-
-        // From Psalm: Hw should be fore CPUInfo
+        /** @var list<class-string<CpuCoreFinder>> $finders */
+        $finders = [
+            CpuInfoFinder::class,
+        ];
 
         if (DIRECTORY_SEPARATOR === '\\') {
-           // TODO Windows
+            $finders[] = WindowsWmicFinder::class;
         }
 
-        // TODO: Hw
+        $finders[] = HwFinder::class;
 
-        return $this->count = 2;
+        foreach ($finders as $finder) {
+            $cores = $finder::find();
+
+            if (null !== $cores) {
+                return $cores;
+            }
+        }
+
+        return 1;
     }
 }

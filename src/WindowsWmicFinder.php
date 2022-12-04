@@ -24,7 +24,7 @@ use const FILTER_VALIDATE_INT;
  *
  * @see https://github.com/paratestphp/paratest/blob/c163539818fd96308ca8dc60f46088461e366ed4/src/Runners/PHPUnit/Options.php#L912-L916
  */
-final class WindowsWmicFinder
+final class WindowsWmicFinder implements CpuCoreFinder
 {
     private function __construct()
     {
@@ -35,27 +35,17 @@ final class WindowsWmicFinder
      */
     public static function find(): ?int
     {
-        // -n to show only the variable value
-        // Use hw.logicalcpu instead of deprecated hw.ncpu; see https://github.com/php/php-src/pull/5541
+        // Windows
         $process = popen('wmic cpu get NumberOfLogicalProcessors', 'rb');
 
-        if (!is_resource($process)) {
-            return null;
+        if (is_resource($process)) {
+            fgets($process);
+            $cores = (int) fgets($process);
+            pclose($process);
+
+            return $cores;
         }
 
-        $cores = self::countCpuCores(fgets($process));
-        pclose($process);
-
-        return $cores;
-    }
-
-    /**
-     * @return positive-int|null
-     */
-    public static function countCpuCores(string $process): ?int
-    {
-        $cpuCount = filter_var(trim($process), FILTER_VALIDATE_INT);
-
-        return is_int($cpuCount) && $cpuCount > 0 ? $cpuCount : null;
+        return null;
     }
 }
