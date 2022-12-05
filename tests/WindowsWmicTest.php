@@ -40,38 +40,38 @@ final class WindowsWmicTest extends TestCase
         yield 'empty' => [
             <<<'EOF'
 
-                EOF,
+EOF,
             null,
         ];
 
         yield 'whitespace' => [
             <<<'EOF'
-
-                EOF,
+ 
+EOF,
             null,
         ];
 
         yield 'example from a Windows machine' => [
             <<<'EOF'
-                3
+3
 
-                EOF,
+EOF,
             3,
         ];
 
         yield 'example from a Windows machine with extra spaces' => [
             <<<'EOF'
-                 3
+ 3 
 
-                EOF,
+EOF,
             3,
         ];
 
         yield 'no processor' => [
             <<<'EOF'
-                0
+0
 
-                EOF,
+EOF,
             null,
         ];
     }

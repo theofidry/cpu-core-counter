@@ -31,6 +31,7 @@ $config->addRules([
     'heredoc_indentation' => false, // For PHP 7.2 compat
 
     'mb_str_functions' => false,
+    'no_trailing_whitespace_in_string' => false,
 ]);
 $config->setCacheFile(__DIR__ . '/.build/php-cs-fixer/.php-cs-fixer.cache');
 
