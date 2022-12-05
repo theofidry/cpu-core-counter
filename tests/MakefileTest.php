@@ -14,22 +14,6 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test;
 
 use Fidry\Makefile\Test\BaseMakefileTestCase;
-use PHPUnit\Framework\TestCase;
-use function class_exists;
-
-// When testing 7.2 or 7.3, fidry/makefile is not installed.
-if (!class_exists(BaseMakefileTestCase::class)) {
-    /**
-     * @internal
-     */
-    class BaseMakefileTestCase extends TestCase
-    {
-        public function test_dummy(): void
-        {
-            $this->addToAssertionCount(1);
-        }
-    }
-}
 
 /**
  * @coversNothing
