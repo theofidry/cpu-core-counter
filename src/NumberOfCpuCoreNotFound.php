@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCounter;
+namespace Fidry\CpuCoreCounter;
 
 use RuntimeException;
 

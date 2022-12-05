@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCounter\Test;
+namespace Fidry\CpuCoreCounter\Test;
 
-use Fidry\CpuCounter\HwFinder;
+use Fidry\CpuCoreCounter\HwFinder;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Fidry\CpuCounter\HwFinder
+ * @covers \Fidry\CpuCoreCounter\HwFinder
  *
  * @internal
  */

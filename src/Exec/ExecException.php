@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCounter\Exec;
+namespace Fidry\CpuCoreCounter\Exec;
 
 use ErrorException;
 use function error_get_last;

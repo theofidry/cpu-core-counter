@@ -11,18 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCounter\Test;
+namespace Fidry\CpuCoreCounter\Test;
 
 use Exception;
-use Fidry\CpuCounter\CpuCoreCounter;
-use Fidry\CpuCounter\CpuCoreFinder;
-use Fidry\CpuCounter\NumberOfCpuCoreNotFound;
+use Fidry\CpuCoreCounter\CpuCoreCounter;
+use Fidry\CpuCoreCounter\CpuCoreFinder;
+use Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
 use PHPUnit\Framework\TestCase;
 use function get_class;
 use function is_int;
 
 /**
- * @covers \Fidry\CpuCounter\CpuCoreCounter
+ * @covers \Fidry\CpuCoreCounter\CpuCoreCounter
  *
  * @internal
  */

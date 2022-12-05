@@ -10,7 +10,7 @@ composer require fidry/cpu-core-counter
 ## Usage
 
 ```php
-use Fidry\CpuCounter\CpuCoreCounter;
+use Fidry\CpuCoreCounter\CpuCoreCounter;
 
 $counter = new CpuCoreCounter();
 
@@ -43,7 +43,7 @@ $cores = (new CpuCoreCounter($finders))->getCount();
 
 ```php
 // Use CPUInfo first & don't use Nproc
-use Fidry\CpuCounter\CpuInfoFinder;use Fidry\CpuCounter\HwFinder;use Fidry\CpuCounter\WindowsWmicFinder;$finders = [
+use Fidry\CpuCoreCounter\CpuInfoFinder;use Fidry\CpuCoreCounter\HwFinder;use Fidry\CpuCoreCounter\WindowsWmicFinder;$finders = [
     new CpuInfoFinder(),
     new WindowsWmicFinder(),
     new HwFinder(),

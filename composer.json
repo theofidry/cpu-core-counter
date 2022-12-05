@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Fidry\\CpuCounter\\": "src/"
+            "Fidry\\CpuCoreCounter\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Fidry\\CpuCounter\\Test\\": "tests/"
+            "Fidry\\CpuCoreCounter\\Test\\": "tests/"
         }
     },
     "config": {
