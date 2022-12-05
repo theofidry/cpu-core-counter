@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCounter\Test;
+namespace Fidry\CpuCoreCounter\Test;
 
-use Fidry\CpuCounter\CpuCoreFinder;
+use Fidry\CpuCoreCounter\CpuCoreFinder;
 
 final class DummyCpuCoreFinder implements CpuCoreFinder
 {

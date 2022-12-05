@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCounter;
+namespace Fidry\CpuCoreCounter;
 
-use Fidry\CpuCounter\Exec\ExecException;
-use Fidry\CpuCounter\Exec\ShellExec;
+use Fidry\CpuCoreCounter\Exec\ExecException;
+use Fidry\CpuCoreCounter\Exec\ShellExec;
 use function filter_var;
 use function function_exists;
 use function is_int;

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCounter\Exec;
+namespace Fidry\CpuCoreCounter\Exec;
 
 use function error_clear_last;
 use function shell_exec;

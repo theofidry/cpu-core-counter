@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCounter;
+namespace Fidry\CpuCoreCounter;
 
 use function file_get_contents;
 use function is_file;
