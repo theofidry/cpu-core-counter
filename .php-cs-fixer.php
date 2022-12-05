@@ -25,9 +25,13 @@ $config = new FidryConfig(
         For the full copyright and license information, please view the LICENSE
         file that was distributed with this source code.
         EOF,
-    74_000,
+    72000,
 );
-$config->addRules(['mb_str_functions' => false]);
+$config->addRules([
+    'heredoc_indentation' => false, // For PHP 7.2 compat
+
+    'mb_str_functions' => false,
+]);
 $config->setCacheFile(__DIR__ . '/.build/php-cs-fixer/.php-cs-fixer.cache');
 
 return $config->setFinder($finder);
