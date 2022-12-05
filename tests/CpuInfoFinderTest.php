@@ -46,7 +46,7 @@ EOF,
 
         yield 'whitespace' => [
             <<<'EOF'
-
+ 
 EOF,
             null,
         ];
