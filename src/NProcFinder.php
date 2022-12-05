@@ -32,10 +32,6 @@ final class NProcFinder implements CpuCoreFinder
      */
     public function find(): ?int
     {
-        if (!function_exists('shell_exec')) {
-            return null;
-        }
-
         if (!self::supportsNproc()) {
             return null;
         }
@@ -51,6 +47,10 @@ final class NProcFinder implements CpuCoreFinder
 
     private static function supportsNproc(): bool
     {
+        if (!function_exists('shell_exec')) {
+            return false;
+        }
+
         try {
             $commandNproc = ShellExec::execute('command -v nproc');
         } catch (ExecException $noNprocCommand) {
