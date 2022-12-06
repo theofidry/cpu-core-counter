@@ -17,7 +17,10 @@ use Fidry\CpuCoreCounter\CpuCoreFinder;
 
 final class DummyCpuCoreFinder implements CpuCoreFinder
 {
-    private ?int $count;
+    /**
+     * @var int|null
+     */
+    private $count;
 
     public function __construct(?int $count)
     {
