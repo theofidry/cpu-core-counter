@@ -40,14 +40,16 @@ final class HwFinderTest extends TestCase
         yield 'empty' => [
             <<<'EOF'
 
-EOF,
+EOF
+            ,
             null,
         ];
 
         yield 'whitespace' => [
             <<<'EOF'
  
-EOF,
+EOF
+            ,
             null,
         ];
 
@@ -56,14 +58,16 @@ EOF,
             <<<'EOF'
 3
 
-EOF,
+EOF
+            ,
             3,
         ];
         yield 'example with extra spaces' => [
             <<<'EOF'
  3 
 
-EOF,
+EOF
+            ,
             3,
         ];
 
@@ -71,7 +75,8 @@ EOF,
             <<<'EOF'
 0
 
-EOF,
+EOF
+            ,
             null,
         ];
     }

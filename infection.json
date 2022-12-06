@@ -1,5 +1,5 @@
 {
-    "$schema": "./tools/infection/resources/schema.json",
+    "$schema": "https://raw.githubusercontent.com/infection/infection/0.26.16/resources/schema.json",
     "ignoreMsiWithNoMutations": true,
     "logs": {
         "text": ".build/infection/infection-log.txt"
