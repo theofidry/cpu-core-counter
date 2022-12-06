@@ -18,12 +18,12 @@ final class CpuCoreCounter
     /**
      * @var list<CpuCoreFinder>
      */
-    private array $finders;
+    private $finders;
 
     /**
-     * @var positive-int
+     * @var positive-int|null
      */
-    private int $count;
+    private $count;
 
     /**
      * @param list<CpuCoreFinder>|null $finders
@@ -41,7 +41,7 @@ final class CpuCoreCounter
     public function getCount(): int
     {
         // Memoize result
-        if (!isset($this->count)) {
+        if (null === $this->count) {
             $this->count = $this->findCount();
         }
 
