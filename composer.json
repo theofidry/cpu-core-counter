@@ -33,10 +33,12 @@
         }
     },
     "autoload-dev": {
-        "classmap": ["stubs"],
         "psr-4": {
             "Fidry\\CpuCoreCounter\\Test\\": "tests/"
-        }
+        },
+        "classmap": [
+            "stubs"
+        ]
     },
     "config": {
         "allow-plugins": {
