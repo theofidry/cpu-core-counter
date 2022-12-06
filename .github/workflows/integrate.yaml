@@ -108,7 +108,7 @@ jobs:
                     php-version: "${{ matrix.php-version }}"
 
             -   name: "Run the PHPUnit tests"
-                run: "make phpunit"
+                run: "vendor/bin/phpunit --configuration phpunit_legacy.xml.dist"
 
     infection:
         name: "Infection"
