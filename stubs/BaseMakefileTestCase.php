@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test;
+namespace Fidry\Makefile\Test;
 
 use Composer\InstalledVersions;
 use PHPUnit\Framework\TestCase;
