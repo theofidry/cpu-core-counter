@@ -33,6 +33,7 @@
         }
     },
     "autoload-dev": {
+        "files": ["stubs"],
         "psr-4": {
             "Fidry\\CpuCoreCounter\\Test\\": "tests/"
         }
