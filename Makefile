@@ -141,7 +141,7 @@ _infection: $(INFECTION_BIN) $(COVERAGE_XML) $(COVERAGE_JUNIT) vendor
 	$(INFECTION)
 
 .PHONY: e2e
-e2e:
+e2e: vendor
 	./e2e/test-finders.sh
 
 .PHONY: security
