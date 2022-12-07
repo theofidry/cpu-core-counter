@@ -11,24 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test\Finder;
+namespace Fidry\CpuCoreCounter\Finder;
 
-use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
-
-final class DummyCpuCoreFinder implements CpuCoreFinder
+/**
+ * This finder returns whatever value you gave to it. This is useful for testing.
+ */
+final class NullCpuCoreFinder implements CpuCoreFinder
 {
-    /**
-     * @var int|null
-     */
-    private $count;
-
-    public function __construct(?int $count)
-    {
-        $this->count = $count;
-    }
-
     public function find(): ?int
     {
-        return $this->count;
+        return null;
     }
 }
