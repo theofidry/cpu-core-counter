@@ -11,6 +11,8 @@ composer require fidry/cpu-core-counter
 
 ```php
 use Fidry\CpuCoreCounter\CpuCoreCounter;
+use Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
+use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
 
 $counter = new CpuCoreCounter();
 
@@ -19,6 +21,15 @@ try {
 } catch (NumberOfCpuCoreNotFound) {
     return 1;   // Fallback value
 }
+
+// An alternative form where we not want to catch the exception:
+
+$counter = new CpuCoreCounter([
+    ...CpuCoreCounter::getDefaultFinders(),
+    new DummyCpuCoreFinder(1),  // Fallback value
+]);
+
+$counter->getCount();   // e.g. 8
 
 ```
 
@@ -50,6 +61,23 @@ $finders = [
 ];
 
 $cores = (new CpuCoreCounter($finders))->getCount();
+```
+
+
+### Checks what finders find what on your system
+
+You have two commands available that provides insight about what the finders
+can find:
+
+```
+$ make diagnosis                                    # From this repository
+$ ./vendor/fidry/cpu-core-counter/bin/diagnose.php  # From the library
+```
+
+And:
+```
+$ make execute                                     # From this repository
+$ ./vendor/fidry/cpu-core-counter/bin/execute.php  # From the library
 ```
 
 
