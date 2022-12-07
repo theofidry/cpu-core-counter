@@ -10,7 +10,9 @@ composer require fidry/cpu-core-counter
 ## Usage
 
 ```php
-use Fidry\CpuCoreCounter\CpuCoreCounter;use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
+use Fidry\CpuCoreCounter\CpuCoreCounter;
+use Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
+use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
 
 $counter = new CpuCoreCounter();
 
@@ -20,7 +22,7 @@ try {
     return 1;   // Fallback value
 }
 
-# An alternative form where we not want to catch the exception:
+// An alternative form where we not want to catch the exception:
 
 $counter = new CpuCoreCounter([
     ...CpuCoreCounter::getDefaultFinders(),
