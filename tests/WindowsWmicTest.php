@@ -13,71 +13,18 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test;
 
+use Fidry\CpuCoreCounter\PopenBasedFinder;
 use Fidry\CpuCoreCounter\WindowsWmicFinder;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Fidry\CpuCoreCounter\WindowsWmicFinder
  *
  * @internal
  */
-final class WindowsWmicTest extends TestCase
+final class WindowsWmicTest extends PopenBasedFinderTestCase
 {
-    /**
-     * @dataProvider wmicProvider
-     */
-    public function test_it_can_count_the_number_of_cpu_cores(
-        string $nproc,
-        ?int $expected
-    ): void {
-        $actual = WindowsWmicFinder::countCpuCores($nproc);
-
-        self::assertSame($expected, $actual);
-    }
-
-    public static function wmicProvider(): iterable
+    protected function getFinder(): PopenBasedFinder
     {
-        yield 'empty' => [
-            <<<'EOF'
-
-EOF
-            ,
-            null,
-        ];
-
-        yield 'whitespace' => [
-            <<<'EOF'
- 
-EOF
-            ,
-            null,
-        ];
-
-        yield 'example from a Windows machine' => [
-            <<<'EOF'
-3
-
-EOF
-            ,
-            3,
-        ];
-
-        yield 'example from a Windows machine with extra spaces' => [
-            <<<'EOF'
- 3 
-
-EOF
-            ,
-            3,
-        ];
-
-        yield 'no processor' => [
-            <<<'EOF'
-0
-
-EOF
-            ,
-            null,
-        ];
+        return new WindowsWmicFinder();
     }
 }
