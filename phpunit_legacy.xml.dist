@@ -5,7 +5,7 @@
          bootstrap="vendor/autoload.php"
          failOnRisky="true"
          failOnWarning="true"
-         cacheResultFile=".build/phpunit/.phpunit.result.cache">
+         cacheResultFile=".build/phpunit/.phpunit_legacy.result.cache">
     <php>
         <ini name="error_reporting" value="-1"/>
     </php>
