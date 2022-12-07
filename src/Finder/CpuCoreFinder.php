@@ -19,7 +19,7 @@ interface CpuCoreFinder
      * Provides an explanation which may offer some insight as to what the finder
      * will be able to find.
      *
-     * This is practical to have an idea of what each finder will find an collect
+     * This is practical to have an idea of what each finder will find collect
      * information for the unit tests, since integration tests are quite complicated
      * as dependent on complex infrastructures.
      */

@@ -96,6 +96,7 @@ abstract class PopenBasedFinder implements CpuCoreFinder
     {
         $class = static::class;
 
+        /** @phpstan-ignore-next-line */
         return substr($class, strrpos($class, '\\') + 1);
     }
 

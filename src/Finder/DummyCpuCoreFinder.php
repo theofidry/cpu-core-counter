@@ -53,6 +53,7 @@ final class DummyCpuCoreFinder implements CpuCoreFinder
     {
         return sprintf(
             '%s(value=%d)',
+            /** @phpstan-ignore-next-line */
             substr(__CLASS__, strrpos(__CLASS__, '\\') + 1),
             $this->count
         );

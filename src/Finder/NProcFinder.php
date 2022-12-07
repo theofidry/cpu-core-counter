@@ -114,6 +114,7 @@ final class NProcFinder implements CpuCoreFinder
     {
         return sprintf(
             '%s(all=%s)',
+            /** @phpstan-ignore-next-line */
             substr(__CLASS__, strrpos(__CLASS__, '\\') + 1),
             $this->all ? 'true' : 'false'
         );

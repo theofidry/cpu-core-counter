@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /*
@@ -15,4 +16,4 @@ use Fidry\CpuCoreCounter\Diagnoser;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-echo Diagnoser::diagnose().PHP_EOL;
+echo Diagnoser::execute().PHP_EOL;

@@ -70,6 +70,7 @@ final class CpuInfoFinder implements CpuCoreFinder
 
     public function toString(): string
     {
+        /** @phpstan-ignore-next-line */
         return substr(__CLASS__, strrpos(__CLASS__, '\\') + 1);
     }
 
