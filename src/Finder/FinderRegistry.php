@@ -28,6 +28,8 @@ final class FinderRegistry
             new DummyCpuCoreFinder(1),
             new HwLogicalFinder(),
             new HwPhysicalFinder(),
+            new LinuxyNProcessorFinder(),
+            new NProcessorFinder(),
             new NProcFinder(true),
             new NProcFinder(false),
             new NullCpuCoreFinder(),
