@@ -24,7 +24,7 @@ final class MakefileTest extends BaseMakefileTestCase
 {
     protected static function getMakefilePath(): string
     {
-        return __DIR__.'/../Makefile';
+        return __DIR__.'/../../Makefile';
     }
 
     protected function getExpectedHelpOutput(): string
@@ -37,6 +37,8 @@ final class MakefileTest extends BaseMakefileTestCase
 # Commands
 #---------------------------------------------------------------------------[0m
 [33mdefault:[0m    Runs the default task
+[33mdiagnose:[0m	 Executes a diagnosis for all the finders
+[33mexecute:[0m	 Executes all the finders
 [33mphive:[0m	 Updates a (registered) tool. E.g. make phive TOOL=infection
 [33mcs:[0m 	    Fixes CS
 [33mcs_lint:[0m    Lints CS
