@@ -14,70 +14,17 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test;
 
 use Fidry\CpuCoreCounter\HwPhysicalFinder;
-use PHPUnit\Framework\TestCase;
+use Fidry\CpuCoreCounter\PopenBasedFinder;
 
 /**
  * @covers \Fidry\CpuCoreCounter\HwPhysicalFinder
  *
  * @internal
  */
-final class HwPhysicalFinderTest extends TestCase
+final class HwPhysicalFinderTest extends PopenBasedFinderTestCase
 {
-    /**
-     * @dataProvider processProvider
-     */
-    public function test_it_can_count_the_number_of_cpu_cores(
-        string $process,
-        ?int $expected
-    ): void {
-        $actual = HwPhysicalFinder::countCpuCores($process);
-
-        self::assertSame($expected, $actual);
-    }
-
-    public static function processProvider(): iterable
+    protected function getFinder(): PopenBasedFinder
     {
-        yield 'empty' => [
-            <<<'EOF'
-
-EOF
-            ,
-            null,
-        ];
-
-        yield 'whitespace' => [
-            <<<'EOF'
- 
-EOF
-            ,
-            null,
-        ];
-
-        // MyMachine™
-        yield 'example from an OSX machine' => [
-            <<<'EOF'
-3
-
-EOF
-            ,
-            3,
-        ];
-        yield 'example with extra spaces' => [
-            <<<'EOF'
- 3 
-
-EOF
-            ,
-            3,
-        ];
-
-        yield 'no processor' => [
-            <<<'EOF'
-0
-
-EOF
-            ,
-            null,
-        ];
+        return new HwPhysicalFinder();
     }
 }

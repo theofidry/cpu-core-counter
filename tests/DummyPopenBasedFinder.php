@@ -13,18 +13,12 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test;
 
-use Fidry\CpuCoreCounter\HwLogicalFinder;
 use Fidry\CpuCoreCounter\PopenBasedFinder;
 
-/**
- * @covers \Fidry\CpuCoreCounter\HwLogicalFinder
- *
- * @internal
- */
-final class HwLogicalFinderTest extends PopenBasedFinderTestCase
+final class DummyPopenBasedFinder extends PopenBasedFinder
 {
-    protected function getFinder(): PopenBasedFinder
+    protected function getCommand(): string
     {
-        return new HwLogicalFinder();
+        return '';
     }
 }
