@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter;
+namespace Fidry\CpuCoreCounter\Finder;
 
 /**
  * Find the number of logical CPU cores for Linux, BSD and OSX.

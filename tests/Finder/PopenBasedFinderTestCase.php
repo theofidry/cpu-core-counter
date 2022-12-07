@@ -11,30 +11,26 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test;
+namespace Fidry\CpuCoreCounter\Test\Finder;
 
+use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Fidry\CpuCoreCounter\PopenBasedFinder
- *
- * @internal
- */
-final class PopenBasedFinderTest extends TestCase
+abstract class PopenBasedFinderTestCase extends TestCase
 {
     /**
-     * @dataProvider popenFgetsProvider
+     * @dataProvider processResultProvider
      */
     public function test_it_can_count_the_number_of_cpu_cores(
-        string $nproc,
+        string $processResult,
         ?int $expected
     ): void {
-        $actual = DummyPopenBasedFinder::countCpuCores($nproc);
+        $actual = $this->getFinder()::countCpuCores($processResult);
 
         self::assertSame($expected, $actual);
     }
 
-    public static function popenFgetsProvider(): iterable
+    public static function processResultProvider(): iterable
     {
         yield 'empty' => [
             <<<'EOF'
@@ -79,4 +75,6 @@ EOF
             null,
         ];
     }
+
+    abstract protected function getFinder(): PopenBasedFinder;
 }

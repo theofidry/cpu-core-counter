@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter;
+namespace Fidry\CpuCoreCounter\Finder;
 
 use Fidry\CpuCoreCounter\Exec\ExecException;
 use Fidry\CpuCoreCounter\Exec\ShellExec;

@@ -11,26 +11,31 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test;
+namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\PopenBasedFinder;
+use Fidry\CpuCoreCounter\Finder\NProcFinder;
 use PHPUnit\Framework\TestCase;
 
-abstract class PopenBasedFinderTestCase extends TestCase
+/**
+ * @covers \Fidry\CpuCoreCounter\Finder\NProcFinder
+ *
+ * @internal
+ */
+final class NProcFinderTest extends TestCase
 {
     /**
-     * @dataProvider processResultProvider
+     * @dataProvider nprocProvider
      */
     public function test_it_can_count_the_number_of_cpu_cores(
-        string $processResult,
+        string $nproc,
         ?int $expected
     ): void {
-        $actual = $this->getFinder()::countCpuCores($processResult);
+        $actual = NProcFinder::countCpuCores($nproc);
 
         self::assertSame($expected, $actual);
     }
 
-    public static function processResultProvider(): iterable
+    public static function nprocProvider(): iterable
     {
         yield 'empty' => [
             <<<'EOF'
@@ -48,7 +53,8 @@ EOF
             null,
         ];
 
-        yield 'example from a Windows machine' => [
+        // $ docker run  --tty --rm --platform linux/amd64 alpine:3.14 nproc --all
+        yield 'example from an alpine Docker image' => [
             <<<'EOF'
 3
 
@@ -56,8 +62,7 @@ EOF
             ,
             3,
         ];
-
-        yield 'example from a Windows machine with extra spaces' => [
+        yield 'example with extra spaces' => [
             <<<'EOF'
  3 
 
@@ -75,6 +80,4 @@ EOF
             null,
         ];
     }
-
-    abstract protected function getFinder(): PopenBasedFinder;
 }

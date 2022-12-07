@@ -11,20 +11,20 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test;
+namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\PopenBasedFinder;
-use Fidry\CpuCoreCounter\WindowsWmicFinder;
+use Fidry\CpuCoreCounter\Finder\HwPhysicalFinder;
+use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
 
 /**
- * @covers \Fidry\CpuCoreCounter\WindowsWmicFinder
+ * @covers \Fidry\CpuCoreCounter\Finder\HwPhysicalFinder
  *
  * @internal
  */
-final class WindowsWmicTest extends PopenBasedFinderTestCase
+final class HwPhysicalFinderTest extends PopenBasedFinderTestCase
 {
     protected function getFinder(): PopenBasedFinder
     {
-        return new WindowsWmicFinder();
+        return new HwPhysicalFinder();
     }
 }

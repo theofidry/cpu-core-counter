@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test;
+namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\HwLogicalFinder;
-use Fidry\CpuCoreCounter\PopenBasedFinder;
+use Fidry\CpuCoreCounter\Finder\HwLogicalFinder;
+use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
 
 /**
- * @covers \Fidry\CpuCoreCounter\HwLogicalFinder
+ * @covers \Fidry\CpuCoreCounter\Finder\HwLogicalFinder
  *
  * @internal
  */
