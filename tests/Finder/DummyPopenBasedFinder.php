@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test;
+namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\PopenBasedFinder;
+use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
 
 final class DummyPopenBasedFinder extends PopenBasedFinder
 {

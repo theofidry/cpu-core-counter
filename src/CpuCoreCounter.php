@@ -13,6 +13,12 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter;
 
+use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
+use Fidry\CpuCoreCounter\Finder\CpuInfoFinder;
+use Fidry\CpuCoreCounter\Finder\HwLogicalFinder;
+use Fidry\CpuCoreCounter\Finder\NProcFinder;
+use Fidry\CpuCoreCounter\Finder\WindowsWmicFinder;
+
 final class CpuCoreCounter
 {
     /**

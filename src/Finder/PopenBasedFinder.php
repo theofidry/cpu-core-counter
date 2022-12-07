@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter;
+namespace Fidry\CpuCoreCounter\Finder;
 
 use function fgets;
 use function filter_var;
