@@ -14,59 +14,86 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter;
 
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
-use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 use function array_map;
+use function explode;
 use function implode;
+use function max;
+use function str_repeat;
 use const PHP_EOL;
 
 /**
- * Provides an explanation which may offer some insight as to what each finders
- * will be able to find.
- *
- * This is practical to have an idea of what each finder will find collect
- * information for the unit tests, since integration tests are quite complicated
- * as dependent on complex infrastructures.
+ * Utility to debug.
  *
  * @private
  */
 final class Diagnoser
 {
-    public static function diagnose(): string
+    /**
+     * Provides an aggregated diagnosis based on each finders diagnosis.
+     *
+     * @param list<CpuCoreFinder> $finders
+     */
+    public static function diagnose(array $finders): string
     {
         $diagnoses = array_map(
-            static function (CpuCoreFinder $finder): string {
-                return implode(
-                    '',
-                    [
-                        $finder->toString(),
-                        ': ',
-                        PHP_EOL,
-                        $finder->diagnose(),
-                    ]
-                );
-            },
-            FinderRegistry::getAllVariants()
+            static fn (CpuCoreFinder $finder): string => self::diagnoseFinder($finder),
+            $finders
         );
 
         return implode(PHP_EOL, $diagnoses);
     }
 
-    public static function execute(): string
+    /**
+     * Executes each finders.
+     *
+     * @param list<CpuCoreFinder> $finders
+     */
+    public static function execute(array $finders): string
     {
         $diagnoses = array_map(
             static function (CpuCoreFinder $finder): string {
+                $coresCount = $finder->find();
+
                 return implode(
                     '',
                     [
                         $finder->toString(),
                         ': ',
-                        null !== $finder->find() ? '.' : 'F',
+                        null === $coresCount ? 'NULL' : $coresCount,
                     ]
                 );
             },
-            FinderRegistry::getAllVariants()
+            $finders
         );
 
         return implode(PHP_EOL, $diagnoses);
+    }
+
+    private static function diagnoseFinder(CpuCoreFinder $finder): string
+    {
+        $diagnosis = $finder->diagnose();
+
+        $maxLineLength = max(
+            array_map(
+                'strlen',
+                explode(PHP_EOL, $diagnosis)
+            )
+        );
+
+        $separator = str_repeat('-', $maxLineLength);
+
+        return implode(
+            '',
+            [
+                $finder->toString().':'.PHP_EOL,
+                $separator.PHP_EOL,
+                $diagnosis.PHP_EOL,
+                $separator.PHP_EOL,
+            ]
+        );
+    }
+
+    private function __construct()
+    {
     }
 }

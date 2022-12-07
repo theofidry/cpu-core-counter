@@ -13,7 +13,9 @@
 declare(strict_types=1);
 
 use Fidry\CpuCoreCounter\Diagnoser;
+use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-echo Diagnoser::diagnose().PHP_EOL;
+echo 'Running diagnosis...'.PHP_EOL.PHP_EOL;
+echo Diagnoser::diagnose(FinderRegistry::getAllVariants()).PHP_EOL;

@@ -71,10 +71,14 @@ final class NProcFinder implements CpuCoreFinder
             );
         }
 
-        $nprocCommand = 'nproc'.($this->all ? ' --all' : '');
+        // Redirect the STDERR to the STDOUT since popen cannot capture the
+        // STDERR.
+        // We could use proc_open but this would be a greater difference between
+        // the command we really execute when using the finder and what we will
+        // diagnose.
+        $nprocCommand = 'nproc'.($this->all ? ' --all' : '').' 2>&1';
 
         try {
-            // TODO: clarify what happens with the STDERR here
             $nproc = ShellExec::execute($nprocCommand);
         } catch (ExecException $nprocFailed) {
             return sprintf(
