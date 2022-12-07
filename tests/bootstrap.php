@@ -11,17 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Fidry\Makefile\Test;
+use Composer\InstalledVersions;
 
-use PHPUnit\Framework\TestCase;
+$autoloader = require __DIR__.'/../vendor/autoload.php';
 
-/**
- * @internal
- */
-class BaseMakefileTestCase extends TestCase
-{
-    public function test_dummy(): void
-    {
-        $this->addToAssertionCount(1);
-    }
+if (!InstalledVersions::isInstalled('fidry/makefile')) {
+    require_once __DIR__.'/../stubs/BaseMakefileTestCase.php';
 }
+
+return $autoloader;

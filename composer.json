@@ -35,10 +35,7 @@
     "autoload-dev": {
         "psr-4": {
             "Fidry\\CpuCoreCounter\\Test\\": "tests/"
-        },
-        "classmap": [
-            "stubs"
-        ]
+        }
     },
     "config": {
         "allow-plugins": {
