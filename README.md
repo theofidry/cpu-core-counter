@@ -53,8 +53,21 @@ $cores = (new CpuCoreCounter($finders))->getCount();
 ```
 
 
+## Backward Compatibility Promise (BCP)
+
+The policy is for the major part following the same as [Symfony's one][symfony-bc-policy].
+Note that the code marked as `@private` or `@internal` are excluded from the BCP.
+
+The following elements are also excluded:
+
+- The `diagnose` and `execute` commands: those are for debugging/inspection purposes only
+- `CpuCoreCounter::getDefaultFinders()`: new finders may be added or the order of finders changed at any time
+
+
 ## License
 
 This package is licensed using the MIT License.
 
 Please have a look at [`LICENSE.md`](LICENSE.md).
+
+[symfony-bc-policy]: https://symfony.com/doc/current/contributing/code/bc.html
