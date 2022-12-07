@@ -1,0 +1,9 @@
+CpuInfoFinder: F
+DummyCpuCoreFinder: .
+HwLogicalFinder: .
+HwPhysicalFinder: .
+NProcFinder{all=true}: .
+NProcFinder{all=false}: .
+NullCpuCoreFinder: F
+WindowsWmicLogicalFinder: F
+WindowsWmicPhysicalFinder: F

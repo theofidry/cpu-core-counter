@@ -23,6 +23,7 @@
     <coverage>
         <include>
             <directory>src</directory>
+            <file>tests/Finder/LabeledFinder.php</file>
         </include>
     </coverage>
 </phpunit>
