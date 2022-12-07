@@ -25,6 +25,9 @@ jobs:
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
+            -   name: "Install Composer dependencies"
+                uses: "ramsey/composer-install@v2"
+
             -   name: "Install ComposerNormalize"
                 run: "phive install composer-normalize --trust-gpg-keys C00543248C87FB13"
 
@@ -58,6 +61,9 @@ jobs:
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
+            -   name: "Install Composer dependencies"
+                uses: "ramsey/composer-install@v2"
+
             -   name: "Run Auto-Review tests"
                 run: "make autoreview"
 
@@ -80,6 +86,9 @@ jobs:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
 
+            -   name: "Install Composer dependencies"
+                uses: "ramsey/composer-install@v2"
+
             -   name: "Run the PHPUnit tests"
                 run: "make phpunit"
 
@@ -100,6 +109,9 @@ jobs:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
+
+            -   name: "Install Composer dependencies"
+                uses: "ramsey/composer-install@v2"
 
             -   name: "Install Infection"
                 run: "phive install infection --trust-gpg-keys C5095986493B4AA0"
