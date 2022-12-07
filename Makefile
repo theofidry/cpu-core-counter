@@ -140,6 +140,10 @@ infection: $(INFECTION_BIN) vendor
 _infection: $(INFECTION_BIN) $(COVERAGE_XML) $(COVERAGE_JUNIT) vendor
 	$(INFECTION)
 
+.PHONY: e2e
+e2e:
+	./e2e/test-finders.sh
+
 .PHONY: security
 security:	## Runs the security check
 security: composer_audit
