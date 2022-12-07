@@ -15,8 +15,9 @@ namespace Fidry\CpuCoreCounter\Test;
 
 use Exception;
 use Fidry\CpuCoreCounter\CpuCoreCounter;
-use Fidry\CpuCoreCounter\CpuCoreFinder;
+use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
+use Fidry\CpuCoreCounter\Test\Finder\DummyCpuCoreFinder;
 use PHPUnit\Framework\TestCase;
 use function get_class;
 use function is_int;
