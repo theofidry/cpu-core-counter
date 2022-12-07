@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
+use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\NProcFinder;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,29 @@ use PHPUnit\Framework\TestCase;
  */
 final class NProcFinderTest extends TestCase
 {
+    /**
+     * @dataProvider finderProvider
+     */
+    public function test_it_can_describe_itself(CpuCoreFinder $finder, string $expected): void
+    {
+        $actual = $finder->toString();
+
+        self::assertSame($expected, $actual);
+    }
+
+    public static function finderProvider(): iterable
+    {
+        yield [
+            new NProcFinder(true),
+            'NProcFinder(all=true)',
+        ];
+
+        yield [
+            new NProcFinder(false),
+            'NProcFinder(all=false)',
+        ];
+    }
+
     /**
      * @dataProvider nprocProvider
      */

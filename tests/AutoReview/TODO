@@ -1,0 +1,4 @@
+Move MakefileTest here
+Add test to ensure all finders are listed in FinderRegistry
+Add test to ensure each class has a test case
+Add test to ensure the test class matches its corresponding class

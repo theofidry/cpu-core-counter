@@ -14,17 +14,24 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
-use Fidry\CpuCoreCounter\Finder\WindowsWmicFinder;
+use Fidry\CpuCoreCounter\Finder\WindowsWmicPhysicalFinder;
 
 /**
- * @covers \Fidry\CpuCoreCounter\Finder\WindowsWmicFinder
+ * @covers \Fidry\CpuCoreCounter\Finder\WindowsWmicPhysicalFinder
  *
  * @internal
  */
-final class WindowsWmicTest extends PopenBasedFinderTestCase
+final class WindowsWmicPhysicalFinderTest extends PopenBasedFinderTestCase
 {
+    public function test_it_can_describe_itself(): void
+    {
+        $finder = new WindowsWmicPhysicalFinder();
+
+        self::assertSame('WindowsWmicPhysicalFinder', $finder->toString());
+    }
+
     protected function getFinder(): PopenBasedFinder
     {
-        return new WindowsWmicFinder();
+        return new WindowsWmicPhysicalFinder();
     }
 }

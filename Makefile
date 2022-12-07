@@ -49,6 +49,16 @@ help:
 default:   ## Runs the default task: CS fix and all the tests
 default: security cs autoreview test
 
+.PHONY: diagnose
+diagnose:	## Executes a diagnosis for all the finders
+diagnose: vendor
+	./bin/diagnose.php
+
+.PHONY: execute
+execute:	## Executes all the finders
+execute: vendor
+	./bin/execute.php
+
 .PHONY: phive
 phive:	## Updates a (registered) tool. E.g. make phive TOOL=infection
 phive: $(PHIVE_BIN)
@@ -139,6 +149,10 @@ infection: $(INFECTION_BIN) vendor
 .PHONY: _infection
 _infection: $(INFECTION_BIN) $(COVERAGE_XML) $(COVERAGE_JUNIT) vendor
 	$(INFECTION)
+
+.PHONY: e2e
+e2e: vendor
+	./e2e/test-finders.sh
 
 .PHONY: security
 security:	## Runs the security check

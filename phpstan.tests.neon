@@ -5,7 +5,6 @@ parameters:
 	level: 6
 
 	paths:
-		- src
 		- tests
 
 	tmpDir: .build/phpstan/tests/
@@ -15,3 +14,7 @@ parameters:
 		# This is a sanity check
 		- path: tests/CpuCoreCounterTest.php
 		  message: '#assertInstanceOf\(\) with .Exception. and Exception will always evaluate to true.#'
+
+		# Skipped test
+		- path: tests/Exec/ShellExecTest.php
+		  message: '#Unreachable statement \- code above always terminates\.#'
