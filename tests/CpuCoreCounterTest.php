@@ -20,7 +20,7 @@ use Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
 use Fidry\CpuCoreCounter\Test\Finder\DummyCpuCoreFinder;
 use PHPUnit\Framework\TestCase;
 use function get_class;
-use function is_int;
+use function is_array;
 
 /**
  * @covers \Fidry\CpuCoreCounter\CpuCoreCounter
@@ -40,7 +40,7 @@ final class CpuCoreCounterTest extends TestCase
      * @dataProvider cpuCoreFinderProvider
      *
      * @param list<CpuCoreFinder> $finders
-     * @param int|Exception       $expected
+     * @param array{CpuCoreFinder, positive-int}|Exception       $expected
      */
     public function test_it_can_get_the_number_of_cpu_cores_based_on_the_registered_finders(
         array $finders,
@@ -48,10 +48,42 @@ final class CpuCoreCounterTest extends TestCase
     ): void {
         $counter = new CpuCoreCounter($finders);
 
-        if (is_int($expected)) {
+        if (is_array($expected)) {
+            $expected = $expected[1];
             $actual = $counter->getCount();
 
             self::assertSame($expected, $actual);
+
+            return;
+        }
+
+        // Sanity check
+        self::assertInstanceOf(Exception::class, $expected);
+
+        $this->expectException(get_class($expected));
+        $this->expectExceptionMessage($expected->getMessage());
+
+        $counter->getCount();
+    }
+
+    /**
+     * @dataProvider cpuCoreFinderProvider
+     *
+     * @param list<CpuCoreFinder> $finders
+     * @param array{CpuCoreFinder, positive-int}|Exception       $expected
+     */
+    public function test_it_can_get_the_finder_and_number_of_cpu_cores_based_on_the_registered_finders(
+        array $finders,
+        $expected
+    ): void {
+        $counter = new CpuCoreCounter($finders);
+
+        if (is_array($expected)) {
+            [$expectedCores, $expectedFinder] = $expected;
+            [$actualCores, $actualFinder] = $counter->getFinderAndCores();
+
+            self::assertSame($expectedFinder, $actualFinder);
+            self::assertSame($expectedCores, $actualCores);
 
             return;
         }
@@ -74,12 +106,14 @@ final class CpuCoreCounterTest extends TestCase
             $defaultException,
         ];
 
-        yield 'single finder finds a value' => [
-            [
-                new DummyCpuCoreFinder(3),
-            ],
-            3,
-        ];
+        yield 'single finder finds a value' => (static function () {
+            $finder = new DummyCpuCoreFinder(3);
+
+            return [
+                [$finder],
+                [$finder, 3],
+            ];
+        })();
 
         yield 'single finder does not find a value' => [
             [
@@ -88,23 +122,31 @@ final class CpuCoreCounterTest extends TestCase
             $defaultException,
         ];
 
-        yield 'multiple finders find a value' => [
-            [
-                new DummyCpuCoreFinder(3),
-                new DummyCpuCoreFinder(7),
-                new DummyCpuCoreFinder(11),
-            ],
-            3,
-        ];
+        yield 'multiple finders find a value' => (static function () {
+            $finder = new DummyCpuCoreFinder(3);
 
-        yield 'multiple finders find a value with some not finding any' => [
-            [
-                new DummyCpuCoreFinder(null),
-                new DummyCpuCoreFinder(7),
-                new DummyCpuCoreFinder(null),
-                new DummyCpuCoreFinder(11),
-            ],
-            7,
-        ];
+            return [
+                [
+                    $finder,
+                    new DummyCpuCoreFinder(7),
+                    new DummyCpuCoreFinder(11),
+                ],
+                [$finder, 3],
+            ];
+        })();
+
+        yield 'multiple finders find a value with some not finding any' => (static function () {
+            $finder = new DummyCpuCoreFinder(7);
+
+            return [
+                [
+                    new DummyCpuCoreFinder(null),
+                    $finder,
+                    new DummyCpuCoreFinder(null),
+                    new DummyCpuCoreFinder(11),
+                ],
+                [$finder, 7],
+            ];
+        })();
     }
 }

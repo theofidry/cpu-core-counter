@@ -73,6 +73,24 @@ final class CpuCoreCounter
     }
 
     /**
+     * @throws NumberOfCpuCoreNotFound
+     *
+     * @return array{CpuCoreFinder, positive-int}
+     */
+    public function getFinderAndCores(): array
+    {
+        foreach ($this->finders as $finder) {
+            $cores = $finder->find();
+
+            if (null !== $cores) {
+                return [$finder, $cores];
+            }
+        }
+
+        throw NumberOfCpuCoreNotFound::create();
+    }
+
+    /**
      * @return list<CpuCoreFinder>
      */
     public static function getDefaultFinders(): array
