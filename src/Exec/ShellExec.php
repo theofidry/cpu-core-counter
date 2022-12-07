@@ -37,7 +37,11 @@ final class ShellExec
 
         $safeResult = shell_exec($command);
 
-        if (null === $safeResult || false === $safeResult) {
+        if (null === $safeResult) {
+            throw ExecException::createFromStderr($command);
+        }
+
+        if (false === $safeResult) {
             throw ExecException::createFromPhpError();
         }
 

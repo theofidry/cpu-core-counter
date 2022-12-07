@@ -1,6 +1,8 @@
 /.github/                       export-ignore
 /.phive/                        export-ignore
 /bin/                           export-ignore
+/e2e/                           export-ignore
+/stubs/                         export-ignore
 /tests/                         export-ignore
 /.editorconfig                  export-ignore
 /.gitattributes                 export-ignore
@@ -9,7 +11,9 @@
 /.yamllint.yaml                 export-ignore
 /composer-require-checker.json  export-ignore
 /composer.lock                  export-ignore
-/infection.json                 export-ignore
+/infection.json5                export-ignore
 /Makefile                       export-ignore
-/phpstan.*.neon                 export-ignore
-/phpunit*.xml export-ignore     export-ignore
+/phpstan.src.neon               export-ignore
+/phpstan.tests.neon             export-ignore
+/phpunit_legacy.xml.dist        export-ignore
+/phpunit.xml.dist               export-ignore

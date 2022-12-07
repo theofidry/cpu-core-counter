@@ -15,10 +15,21 @@ namespace Fidry\CpuCoreCounter\Exec;
 
 use ErrorException;
 use function error_get_last;
+use function sprintf;
 
 // see https://github.com/thecodingmachine/safe/blob/master/generated/Exceptions/ExecException.php
 final class ExecException extends ErrorException
 {
+    public static function createFromStderr(string $commmand): self
+    {
+        return new self(
+            sprintf(
+                'The command "%s" exited without writing to the STDOUT.',
+                $commmand
+            )
+        );
+    }
+
     public static function createFromPhpError(): self
     {
         $error = error_get_last();
