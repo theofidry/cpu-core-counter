@@ -25,9 +25,7 @@ final class HwLogicalFinderTest extends PopenBasedFinderTestCase
 {
     public function test_it_can_describe_itself(): void
     {
-        $finder = new HwLogicalFinder();
-
-        self::assertSame('HwLogicalFinder', $finder->toString());
+        self::assertSame('HwLogicalFinder', $this->getFinder()->toString());
     }
 
     protected function getFinder(): PopenBasedFinder

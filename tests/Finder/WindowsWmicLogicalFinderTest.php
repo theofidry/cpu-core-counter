@@ -25,9 +25,7 @@ final class WindowsWmicLogicalFinderTest extends PopenBasedFinderTestCase
 {
     public function test_it_can_describe_itself(): void
     {
-        $finder = new WindowsWmicLogicalFinder();
-
-        self::assertSame('WindowsWmicLogicalFinder', $finder->toString());
+        self::assertSame('WindowsWmicLogicalFinder', $this->getFinder()->toString());
     }
 
     protected function getFinder(): PopenBasedFinder

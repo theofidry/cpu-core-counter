@@ -25,9 +25,7 @@ final class HwPhysicalFinderTest extends PopenBasedFinderTestCase
 {
     public function test_it_can_describe_itself(): void
     {
-        $finder = new HwPhysicalFinder();
-
-        self::assertSame('HwPhysicalFinder', $finder->toString());
+        self::assertSame('HwPhysicalFinder', $this->getFinder()->toString());
     }
 
     protected function getFinder(): PopenBasedFinder

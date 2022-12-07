@@ -33,6 +33,11 @@ final class CpuInfoFinderTest extends TestCase
         $this->finder = new CpuInfoFinder();
     }
 
+    protected function tearDown(): void
+    {
+        unset($this->finder);
+    }
+
     public function test_it_can_describe_itself(): void
     {
         self::assertSame('CpuInfoFinder', $this->finder->toString());
