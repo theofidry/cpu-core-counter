@@ -18,8 +18,10 @@ use Fidry\CpuCoreCounter\Exec\ShellExec;
 use function filter_var;
 use function function_exists;
 use function is_int;
+use function sprintf;
 use function trim;
 use const FILTER_VALIDATE_INT;
+use const PHP_EOL;
 
 /**
  * The number of (logical) cores.
@@ -29,6 +31,8 @@ use const FILTER_VALIDATE_INT;
  */
 final class NProcFinder implements CpuCoreFinder
 {
+    private const DETECT_NPROC_COMMAND = 'command -v nproc';
+
     /**
      * @var bool
      */
@@ -40,6 +44,50 @@ final class NProcFinder implements CpuCoreFinder
     public function __construct(bool $all = true)
     {
         $this->all = $all;
+    }
+
+    public function diagnose(): string
+    {
+        if (!function_exists('shell_exec')) {
+            return 'The function "shell_exec" is not available.';
+        }
+
+        try {
+            $commandNproc = ShellExec::execute(self::DETECT_NPROC_COMMAND);
+        } catch (ExecException $nprocCommandNotFound) {
+            return sprintf(
+                'The command nproc was not detected. The command "%s" failed: %s',
+                self::DETECT_NPROC_COMMAND,
+                $nprocCommandNotFound->getMessage()
+            );
+        }
+
+        if ('' === trim($commandNproc)) {
+            return sprintf(
+                'The command nproc was not detected. The command "%s" gave an empty output.',
+                self::DETECT_NPROC_COMMAND
+            );
+        }
+
+        $nprocCommand = 'nproc'.($this->all ? ' --all' : '');
+
+        try {
+            // TODO: clarify what happens with the STDERR here
+            $nproc = ShellExec::execute($nprocCommand);
+        } catch (ExecException $nprocFailed) {
+            return sprintf(
+                'The command "%s" failed: %s',
+                $nprocCommand,
+                $nprocFailed->getMessage()
+            );
+        }
+
+        return sprintf(
+            'The command "%s" gave the following output:%s%s',
+            $nprocCommand,
+            PHP_EOL,
+            $nproc
+        );
     }
 
     /**
@@ -67,8 +115,8 @@ final class NProcFinder implements CpuCoreFinder
         }
 
         try {
-            $commandNproc = ShellExec::execute('command -v nproc');
-        } catch (ExecException $noNprocCommand) {
+            $commandNproc = ShellExec::execute(self::DETECT_NPROC_COMMAND);
+        } catch (ExecException $nprocCommandNotFound) {
             return false;
         }
 

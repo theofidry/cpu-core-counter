@@ -31,6 +31,7 @@ final class LabeledFinderTest extends TestCase
 
         self::assertSame('DummyCpuCoreFinder', $finder->getLabel());
         self::assertSame(7, $finder->find());
+        self::assertSame('Will return "7".', $finder->diagnose());
     }
 
     public function test_it_decorates_a_finder_with_the_given_label_when_specified(): void
@@ -42,5 +43,6 @@ final class LabeledFinderTest extends TestCase
 
         self::assertSame('Foo', $finder->getLabel());
         self::assertSame(7, $finder->find());
+        self::assertSame('Will return "7".', $finder->diagnose());
     }
 }

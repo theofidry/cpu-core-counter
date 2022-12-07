@@ -15,7 +15,9 @@ namespace Fidry\CpuCoreCounter\Finder;
 
 use function file_get_contents;
 use function is_file;
+use function sprintf;
 use function substr_count;
+use const PHP_EOL;
 
 /**
  * Find the number of CPU cores looking up at the cpuinfo file which is available
@@ -27,6 +29,32 @@ use function substr_count;
 final class CpuInfoFinder implements CpuCoreFinder
 {
     private const CPU_INFO_PATH = '/proc/cpuinfo';
+
+    public function diagnose(): string
+    {
+        if (!is_file(self::CPU_INFO_PATH)) {
+            return sprintf(
+                'The file "%s" could not be found.',
+                self::CPU_INFO_PATH
+            );
+        }
+
+        $cpuInfo = file_get_contents(self::CPU_INFO_PATH);
+
+        if (false === $cpuInfo) {
+            return sprintf(
+                'Could not get the content of the file "%s".',
+                self::CPU_INFO_PATH
+            );
+        }
+
+        return sprintf(
+            'Found the file "%s" with the content:%s%s',
+            self::CPU_INFO_PATH,
+            PHP_EOL,
+            $cpuInfo
+        );
+    }
 
     /**
      * @return positive-int|null

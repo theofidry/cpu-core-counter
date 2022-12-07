@@ -41,6 +41,11 @@ final class LabeledFinder implements CpuCoreFinder
         return $this->label;
     }
 
+    public function diagnose(): string
+    {
+        return $this->decoratedFinder->diagnose();
+    }
+
     public function find(): ?int
     {
         return $this->decoratedFinder->find();
