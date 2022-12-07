@@ -16,11 +16,11 @@ namespace Fidry\CpuCoreCounter\Finder;
 use function defined;
 
 /**
- * Find the number of CPU cores for Windows.
+ * Find the number of logical CPU cores for Windows.
  *
  * @see https://github.com/paratestphp/paratest/blob/c163539818fd96308ca8dc60f46088461e366ed4/src/Runners/PHPUnit/Options.php#L912-L916
  */
-final class WindowsWmicFinder extends PopenBasedFinder
+final class WindowsWmicLogicalFinder extends PopenBasedFinder
 {
     /**
      * @return positive-int|null
