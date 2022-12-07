@@ -29,4 +29,11 @@ final class NullCpuCoreFinderTest extends TestCase
 
         self::assertNull($finder->find());
     }
+
+    public function test_it_can_describe_itself(): void
+    {
+        $finder = new NullCpuCoreFinder();
+
+        self::assertSame('NullCpuCoreFinder', $finder->toString());
+    }
 }

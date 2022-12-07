@@ -24,13 +24,28 @@ use PHPUnit\Framework\TestCase;
 final class CpuInfoFinderTest extends TestCase
 {
     /**
+     * @var CpuInfoFinder
+     */
+    private $finder;
+
+    protected function setUp(): void
+    {
+        $this->finder = new CpuInfoFinder();
+    }
+
+    public function test_it_can_describe_itself(): void
+    {
+        self::assertSame('CpuInfoFinder', $this->finder->toString());
+    }
+
+    /**
      * @dataProvider cpuInfoProvider
      */
     public function test_it_can_count_the_number_of_cpu_cores(
         string $cpuInfo,
         ?int $expected
     ): void {
-        $actual = CpuInfoFinder::countCpuCores($cpuInfo);
+        $actual = $this->finder::countCpuCores($cpuInfo);
 
         self::assertSame($expected, $actual);
     }

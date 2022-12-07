@@ -11,42 +11,23 @@
 
 declare(strict_types=1);
 
-use Fidry\CpuCoreCounter\Finder\CpuInfoFinder;
-use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
-use Fidry\CpuCoreCounter\Finder\HwLogicalFinder;
-use Fidry\CpuCoreCounter\Finder\HwPhysicalFinder;
-use Fidry\CpuCoreCounter\Finder\NProcFinder;
-use Fidry\CpuCoreCounter\Finder\NullCpuCoreFinder;
-use Fidry\CpuCoreCounter\Finder\WindowsWmicLogicalFinder;
-use Fidry\CpuCoreCounter\Finder\WindowsWmicPhysicalFinder;
-use Fidry\CpuCoreCounter\Test\Finder\LabeledFinder;
+use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
+use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-$finders = [
-    new LabeledFinder(new CpuInfoFinder()),
-    new LabeledFinder(new DummyCpuCoreFinder(11)),
-    new LabeledFinder(new HwLogicalFinder()),
-    new LabeledFinder(new HwPhysicalFinder()),
-    new LabeledFinder(new NProcFinder(), 'NProcFinder{all=true}'),
-    new LabeledFinder(new NProcFinder(false), 'NProcFinder{all=false}'),
-    new LabeledFinder(new NullCpuCoreFinder()),
-    new LabeledFinder(new WindowsWmicLogicalFinder()),
-    new LabeledFinder(new WindowsWmicPhysicalFinder()),
-];
-
 $results = array_map(
-    static function (LabeledFinder $finder): string {
+    static function (CpuCoreFinder $finder): string {
         return implode(
             '',
             [
-                $finder->getLabel(),
+                $finder->toString(),
                 ': ',
                 null !== $finder->find() ? '.' : 'F',
             ]
         );
     },
-    $finders
+    FinderRegistry::getAllVariants()
 );
 
 echo implode(PHP_EOL, $results).PHP_EOL;

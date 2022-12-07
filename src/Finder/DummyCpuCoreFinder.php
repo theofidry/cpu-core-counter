@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
+use function sprintf;
+use function strrpos;
+use function substr;
+
 /**
  * This finder returns whatever value you gave to it. This is useful for testing
  * or as a fallback to avoid to catch the NumberOfCpuCoreNotFound exception.
@@ -23,6 +27,14 @@ final class DummyCpuCoreFinder implements CpuCoreFinder
      * @var positive-int
      */
     private $count;
+
+    public function diagnose(): string
+    {
+        return sprintf(
+            'Will return "%d".',
+            $this->count
+        );
+    }
 
     /**
      * @param positive-int $count
@@ -35,5 +47,15 @@ final class DummyCpuCoreFinder implements CpuCoreFinder
     public function find(): ?int
     {
         return $this->count;
+    }
+
+    public function toString(): string
+    {
+        return sprintf(
+            '%s(value=%d)',
+            /** @phpstan-ignore-next-line */
+            substr(__CLASS__, strrpos(__CLASS__, '\\') + 1),
+            $this->count
+        );
     }
 }

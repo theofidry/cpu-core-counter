@@ -79,4 +79,11 @@ EOF
             null,
         ];
     }
+
+    public function test_it_can_describe_itself(): void
+    {
+        $finder = new DummyPopenBasedFinder();
+
+        self::assertSame('DummyPopenBasedFinder', $finder->toString());
+    }
 }

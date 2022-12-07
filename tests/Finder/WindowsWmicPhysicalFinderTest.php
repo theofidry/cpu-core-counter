@@ -23,6 +23,13 @@ use Fidry\CpuCoreCounter\Finder\WindowsWmicPhysicalFinder;
  */
 final class WindowsWmicPhysicalFinderTest extends PopenBasedFinderTestCase
 {
+    public function test_it_can_describe_itself(): void
+    {
+        $finder = new WindowsWmicPhysicalFinder();
+
+        self::assertSame('WindowsWmicPhysicalFinder', $finder->toString());
+    }
+
     protected function getFinder(): PopenBasedFinder
     {
         return new WindowsWmicPhysicalFinder();
