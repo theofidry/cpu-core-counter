@@ -14,17 +14,17 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
-use Fidry\CpuCoreCounter\Finder\WindowsWmicFinder;
+use Fidry\CpuCoreCounter\Finder\WindowsWmicLogicalFinder;
 
 /**
- * @covers \Fidry\CpuCoreCounter\Finder\WindowsWmicFinder
+ * @covers \Fidry\CpuCoreCounter\Finder\WindowsWmicLogicalFinder
  *
  * @internal
  */
-final class WindowsWmicTest extends PopenBasedFinderTestCase
+final class WindowsWmicLogicalFinderTest extends PopenBasedFinderTestCase
 {
     protected function getFinder(): PopenBasedFinder
     {
-        return new WindowsWmicFinder();
+        return new WindowsWmicLogicalFinder();
     }
 }

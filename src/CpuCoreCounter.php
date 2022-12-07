@@ -17,7 +17,7 @@ use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\CpuInfoFinder;
 use Fidry\CpuCoreCounter\Finder\HwLogicalFinder;
 use Fidry\CpuCoreCounter\Finder\NProcFinder;
-use Fidry\CpuCoreCounter\Finder\WindowsWmicFinder;
+use Fidry\CpuCoreCounter\Finder\WindowsWmicLogicalFinder;
 
 final class CpuCoreCounter
 {
@@ -97,7 +97,7 @@ final class CpuCoreCounter
     {
         return [
             new NProcFinder(),
-            new WindowsWmicFinder(),
+            new WindowsWmicLogicalFinder(),
             new HwLogicalFinder(),
             new CpuInfoFinder(),
         ];
