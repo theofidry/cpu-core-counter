@@ -23,12 +23,12 @@ use function popen;
 use const FILTER_VALIDATE_INT;
 
 /**
- * Find the number of CPU cores for Linux, BSD and OSX.
+ * Find the number of logical CPU cores for Linux, BSD and OSX.
  *
  * @see https://github.com/paratestphp/paratest/blob/c163539818fd96308ca8dc60f46088461e366ed4/src/Runners/PHPUnit/Options.php#L903-L909
  * @see https://opensource.apple.com/source/xnu/xnu-792.2.4/libkern/libkern/sysctl.h.auto.html
  */
-final class HwFinder implements CpuCoreFinder
+final class HwLogicalFinder implements CpuCoreFinder
 {
     /**
      * @return positive-int|null

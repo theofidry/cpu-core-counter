@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test;
 
-use Fidry\CpuCoreCounter\HwFinder;
+use Fidry\CpuCoreCounter\HwLogicalFinder;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Fidry\CpuCoreCounter\HwFinder
+ * @covers \Fidry\CpuCoreCounter\HwLogicalFinder
  *
  * @internal
  */
-final class HwFinderTest extends TestCase
+final class HwLogicalFinderTest extends TestCase
 {
     /**
      * @dataProvider processProvider
@@ -30,7 +30,7 @@ final class HwFinderTest extends TestCase
         string $process,
         ?int $expected
     ): void {
-        $actual = HwFinder::countCpuCores($process);
+        $actual = HwLogicalFinder::countCpuCores($process);
 
         self::assertSame($expected, $actual);
     }

@@ -43,10 +43,10 @@ $cores = (new CpuCoreCounter($finders))->getCount();
 
 ```php
 // Use CPUInfo first & don't use Nproc
-use Fidry\CpuCoreCounter\CpuInfoFinder;use Fidry\CpuCoreCounter\HwFinder;use Fidry\CpuCoreCounter\WindowsWmicFinder;$finders = [
+use Fidry\CpuCoreCounter\CpuInfoFinder;use Fidry\CpuCoreCounter\HwLogicalFinder;use Fidry\CpuCoreCounter\WindowsWmicFinder;$finders = [
     new CpuInfoFinder(),
     new WindowsWmicFinder(),
-    new HwFinder(),
+    new HwLogicalFinder(),
 ];
 
 $cores = (new CpuCoreCounter($finders))->getCount();

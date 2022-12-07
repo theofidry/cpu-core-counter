@@ -74,7 +74,7 @@ final class CpuCoreCounter
         return [
             new NProcFinder(),
             new WindowsWmicFinder(),
-            new HwFinder(),
+            new HwLogicalFinder(),
             new CpuInfoFinder(),
         ];
     }
