@@ -22,6 +22,9 @@ use function trim;
 use const FILTER_VALIDATE_INT;
 
 /**
+ * The number of processing units available. Usually matches the number of
+ * logical cores.
+ *
  * @see https://github.com/infection/infection/blob/fbd8c44/src/Resource/Processor/CpuCoresCountProvider.php#L69-L82
  * @see https://unix.stackexchange.com/questions/146051/number-of-processors-in-proc-cpuinfo
  */
