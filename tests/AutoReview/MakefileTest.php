@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test;
+namespace Fidry\CpuCoreCounter\Test\AutoReview;
 
 use Fidry\Makefile\Test\BaseMakefileTestCase;
 
