@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
+use function strrpos;
+use function substr;
+
 /**
  * This finder returns whatever value you gave to it. This is useful for testing.
  */
@@ -26,5 +29,10 @@ final class NullCpuCoreFinder implements CpuCoreFinder
     public function find(): ?int
     {
         return null;
+    }
+
+    public function toString(): string
+    {
+        return substr(__CLASS__, strrpos(__CLASS__, '\\') + 1);
     }
 }

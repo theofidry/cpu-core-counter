@@ -21,6 +21,8 @@ use function is_resource;
 use function pclose;
 use function popen;
 use function sprintf;
+use function strrpos;
+use function substr;
 use const FILTER_VALIDATE_INT;
 use const PHP_EOL;
 
@@ -88,6 +90,13 @@ abstract class PopenBasedFinder implements CpuCoreFinder
         return false === $processResult
             ? null
             : self::countCpuCores($processResult);
+    }
+
+    public function toString(): string
+    {
+        $class = static::class;
+
+        return substr($class, strrpos($class, '\\') + 1);
     }
 
     /**

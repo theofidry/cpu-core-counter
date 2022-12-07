@@ -23,6 +23,13 @@ use Fidry\CpuCoreCounter\Finder\WindowsWmicLogicalFinder;
  */
 final class WindowsWmicLogicalFinderTest extends PopenBasedFinderTestCase
 {
+    public function test_it_can_describe_itself(): void
+    {
+        $finder = new WindowsWmicLogicalFinder();
+
+        self::assertSame('WindowsWmicLogicalFinder', $finder->toString());
+    }
+
     protected function getFinder(): PopenBasedFinder
     {
         return new WindowsWmicLogicalFinder();

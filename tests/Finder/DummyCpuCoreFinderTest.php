@@ -29,4 +29,11 @@ final class DummyCpuCoreFinderTest extends TestCase
 
         self::assertSame(5, $finder->find());
     }
+
+    public function test_it_can_describe_itself(): void
+    {
+        $finder = new DummyCpuCoreFinder(5);
+
+        self::assertSame('DummyCpuCoreFinder(value=5)', $finder->toString());
+    }
 }

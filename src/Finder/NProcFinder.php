@@ -19,6 +19,8 @@ use function filter_var;
 use function function_exists;
 use function is_int;
 use function sprintf;
+use function strrpos;
+use function substr;
 use function trim;
 use const FILTER_VALIDATE_INT;
 use const PHP_EOL;
@@ -106,6 +108,15 @@ final class NProcFinder implements CpuCoreFinder
         }
 
         return self::countCpuCores($nproc);
+    }
+
+    public function toString(): string
+    {
+        return sprintf(
+            '%s(all=%s)',
+            substr(__CLASS__, strrpos(__CLASS__, '\\') + 1),
+            $this->all ? 'true' : 'false'
+        );
     }
 
     private static function supportsNproc(): bool

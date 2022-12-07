@@ -32,4 +32,6 @@ interface CpuCoreFinder
      * @return positive-int|null
      */
     public function find(): ?int;
+
+    public function toString(): string;
 }

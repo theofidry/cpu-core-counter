@@ -16,6 +16,8 @@ namespace Fidry\CpuCoreCounter\Finder;
 use function file_get_contents;
 use function is_file;
 use function sprintf;
+use function strrpos;
+use function substr;
 use function substr_count;
 use const PHP_EOL;
 
@@ -64,6 +66,11 @@ final class CpuInfoFinder implements CpuCoreFinder
         $cpuInfo = self::getCpuInfo();
 
         return null === $cpuInfo ? null : self::countCpuCores($cpuInfo);
+    }
+
+    public function toString(): string
+    {
+        return substr(__CLASS__, strrpos(__CLASS__, '\\') + 1);
     }
 
     private static function getCpuInfo(): ?string
