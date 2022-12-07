@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0"
+        "php": "^7.2 || ^8.0"
     },
     "require-dev": {
         "fidry/makefile": "^0.2.0",
@@ -23,7 +23,7 @@
         "phpstan/phpstan-deprecation-rules": "^1.0.0",
         "phpstan/phpstan-phpunit": "^1.2.2",
         "phpstan/phpstan-strict-rules": "^1.4.4",
-        "phpunit/phpunit": "^9.5.26",
+        "phpunit/phpunit": "^9.5.26 || ^8.5.31",
         "theofidry/php-cs-fixer-config": "^1.0",
         "webmozarts/strict-phpunit": "^7.5"
     },
@@ -35,7 +35,10 @@
     "autoload-dev": {
         "psr-4": {
             "Fidry\\CpuCoreCounter\\Test\\": "tests/"
-        }
+        },
+        "classmap": [
+            "stubs"
+        ]
     },
     "config": {
         "allow-plugins": {

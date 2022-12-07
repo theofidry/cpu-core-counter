@@ -20,7 +20,7 @@ final class NumberOfCpuCoreNotFound extends RuntimeException
     public static function create(): self
     {
         return new self(
-            'Could not find the number of CPU cores available.',
+            'Could not find the number of CPU cores available.'
         );
     }
 }

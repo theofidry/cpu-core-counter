@@ -92,6 +92,36 @@ jobs:
             -   name: "Run the PHPUnit tests"
                 run: "make phpunit"
 
+    legacy-tests:
+        name: "Legacy Tests"
+        runs-on: "ubuntu-latest"
+        strategy:
+            matrix:
+                php-version:
+                    - "7.2"
+                    - "7.3"
+        steps:
+            -   name: "Checkout"
+                uses: "actions/checkout@v3.1.0"
+
+            -   name: "Remove incompatible dev dependencies"
+                run: |
+                    composer remove --dev fidry/makefile --no-update --no-install;
+                    composer remove --dev theofidry/php-cs-fixer-config --no-update --no-install;
+                    composer remove --dev webmozarts/strict-phpunit --no-update --no-install;
+
+            -   name: "Set up PHP"
+                uses: "shivammathur/setup-php@2.22.0"
+                with:
+                    coverage: "none"
+                    php-version: "${{ matrix.php-version }}"
+
+            -   name: "Install Composer dependencies"
+                uses: "ramsey/composer-install@v2"
+
+            -   name: "Run the PHPUnit tests"
+                run: "vendor/bin/phpunit --configuration phpunit_legacy.xml.dist"
+
     infection:
         name: "Infection"
         runs-on: "ubuntu-latest"
