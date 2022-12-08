@@ -46,7 +46,7 @@ abstract class PopenBasedFinder implements CpuCoreFinder
         if (!is_resource($process)) {
             return sprintf(
                 'Could not execute the function "popen" with the command "%s".',
-                $command,
+                $command
             );
         }
 
