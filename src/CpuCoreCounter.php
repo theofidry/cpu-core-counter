@@ -14,10 +14,7 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter;
 
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
-use Fidry\CpuCoreCounter\Finder\CpuInfoFinder;
-use Fidry\CpuCoreCounter\Finder\HwLogicalFinder;
-use Fidry\CpuCoreCounter\Finder\NProcFinder;
-use Fidry\CpuCoreCounter\Finder\WindowsWmicLogicalFinder;
+use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 
 final class CpuCoreCounter
 {
@@ -36,7 +33,7 @@ final class CpuCoreCounter
      */
     public function __construct(?array $finders = null)
     {
-        $this->finders = $finders ?? self::getDefaultFinders();
+        $this->finders = $finders ?? FinderRegistry::getDefaultLogicalFinders();
     }
 
     /**
@@ -88,18 +85,5 @@ final class CpuCoreCounter
         }
 
         throw NumberOfCpuCoreNotFound::create();
-    }
-
-    /**
-     * @return list<CpuCoreFinder>
-     */
-    public static function getDefaultFinders(): array
-    {
-        return [
-            new NProcFinder(),
-            new WindowsWmicLogicalFinder(),
-            new HwLogicalFinder(),
-            new CpuInfoFinder(),
-        ];
     }
 }

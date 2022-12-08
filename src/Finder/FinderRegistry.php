@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
-/**
- * @private
- */
 final class FinderRegistry
 {
     /**
@@ -35,6 +32,32 @@ final class FinderRegistry
             new NullCpuCoreFinder(),
             new WindowsWmicPhysicalFinder(),
             new WindowsWmicLogicalFinder(),
+        ];
+    }
+
+    /**
+     * @return list<CpuCoreFinder>
+     */
+    public static function getDefaultLogicalFinders(): array
+    {
+        return [
+            new NProcFinder(),
+            new WindowsWmicLogicalFinder(),
+            new HwLogicalFinder(),
+            new LinuxyNProcessorFinder(),
+            new NProcessorFinder(),
+            new CpuInfoFinder(),
+        ];
+    }
+
+    /**
+     * @return list<CpuCoreFinder>
+     */
+    public static function getDefaultPhysicalFinders(): array
+    {
+        return [
+            new WindowsWmicPhysicalFinder(),
+            new HwPhysicalFinder(),
         ];
     }
 
