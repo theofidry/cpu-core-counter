@@ -41,8 +41,8 @@ final class FinderRegistry
     public static function getDefaultLogicalFinders(): array
     {
         return [
-            new NProcFinder(),
             new WindowsWmicLogicalFinder(),
+            new NProcFinder(),
             new HwLogicalFinder(),
             new LinuxyNProcessorFinder(),
             new NProcessorFinder(),
