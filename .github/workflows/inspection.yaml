@@ -1,0 +1,89 @@
+name: "Inspection"
+
+on: # yamllint disable-line rule:truthy
+    pull_request: null
+    push:
+        branches:
+            - "main"
+
+jobs:
+    ubuntu-inspection:
+        name: "Ubuntu Inspection"
+        runs-on: "ubuntu-latest"
+        strategy:
+            matrix:
+                php-version:
+                    - "8.1"
+        steps:
+            -   name: "Checkout"
+                uses: "actions/checkout@v3.1.0"
+
+            -   name: "Set up PHP"
+                uses: "shivammathur/setup-php@2.22.0"
+                with:
+                    coverage: "xdebug"
+                    php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
+
+            -   name: "Install Composer dependencies"
+                uses: "ramsey/composer-install@v2"
+
+            -   name: "Execute finders"
+                run: "php bin/execute.php"
+
+            -   name: "Run diagnosis"
+                run: "php bin/diagnosis.php"
+
+    windows-inspection:
+        name: "Windows Inspection"
+        runs-on: "windows-latest"
+        strategy:
+            matrix:
+                php-version:
+                    - "8.1"
+        steps:
+            -   name: "Checkout"
+                uses: "actions/checkout@v3.1.0"
+
+            -   name: "Set up PHP"
+                uses: "shivammathur/setup-php@2.22.0"
+                with:
+                    coverage: "xdebug"
+                    php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
+
+            -   name: "Install Composer dependencies"
+                uses: "ramsey/composer-install@v2"
+
+            -   name: "Execute finders"
+                run: "php bin/execute.php"
+
+            -   name: "Run diagnosis"
+                run: "php bin/diagnosis.php"
+
+    osx-inspection:
+        name: "OSX Inspection"
+        runs-on: "macos-latest"
+        strategy:
+            matrix:
+                php-version:
+                    - "8.1"
+        steps:
+            -   name: "Checkout"
+                uses: "actions/checkout@v3.1.0"
+
+            -   name: "Set up PHP"
+                uses: "shivammathur/setup-php@2.22.0"
+                with:
+                    coverage: "xdebug"
+                    php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
+
+            -   name: "Install Composer dependencies"
+                uses: "ramsey/composer-install@v2"
+
+            -   name: "Execute finders"
+                run: "php bin/execute.php"
+
+            -   name: "Run diagnosis"
+                run: "php bin/diagnosis.php"
