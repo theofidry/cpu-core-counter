@@ -36,7 +36,9 @@ final class Diagnoser
     public static function diagnose(array $finders): string
     {
         $diagnoses = array_map(
-            static fn (CpuCoreFinder $finder): string => self::diagnoseFinder($finder),
+            static function (CpuCoreFinder $finder): string {
+                return self::diagnoseFinder($finder);
+            },
             $finders
         );
 
