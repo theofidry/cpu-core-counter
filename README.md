@@ -63,6 +63,19 @@ $finders = [
 $cores = (new CpuCoreCounter($finders))->getCount();
 ```
 
+### Choosing only logical or physical finders
+
+`FinderRegistry` provides two helpful entries:
+
+- `::getDefaultLogicalFinders()`: gives an ordered list of finders that will
+  look for the _logical_ CPU cores count
+- `::getDefaultPhysicalFinders()`: gives an ordered list of finders that will
+  look for the _physical_ CPU cores count
+
+By default when using `CpuCoreCounter`, it will use the logical finders since
+it is more likely what you are looking for and is what is used by PHP source to
+build the PHP binary.
+
 
 ### Checks what finders find what on your system
 
