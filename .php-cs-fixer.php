@@ -31,6 +31,7 @@ $config->addRules([
     // For PHP 7.2 compat
     'heredoc_indentation' => false,
     'trailing_comma_in_multiline' => false,
+    'use_arrow_functions' => false,
 
     'mb_str_functions' => false,
     'no_trailing_whitespace_in_string' => false,
