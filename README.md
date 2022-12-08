@@ -89,7 +89,7 @@ Note that the code marked as `@private` or `@internal` are excluded from the BCP
 The following elements are also excluded:
 
 - The `diagnose` and `execute` commands: those are for debugging/inspection purposes only
-- `CpuCoreCounter::getDefaultFinders()`: new finders may be added or the order of finders changed at any time
+- `FinderRegistry::get*Finders()`: new finders may be added or the order of finders changed at any time
 
 
 ## License
