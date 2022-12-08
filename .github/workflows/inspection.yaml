@@ -32,7 +32,7 @@ jobs:
                 run: "php bin/execute.php"
 
             -   name: "Run diagnosis"
-                run: "php bin/diagnosis.php"
+                run: "php bin/diagnose.php"
 
     windows-inspection:
         name: "Windows Inspection"
@@ -59,7 +59,7 @@ jobs:
                 run: "php bin/execute.php"
 
             -   name: "Run diagnosis"
-                run: "php bin/diagnosis.php"
+                run: "php bin/diagnose.php"
 
     osx-inspection:
         name: "OSX Inspection"
@@ -86,4 +86,4 @@ jobs:
                 run: "php bin/execute.php"
 
             -   name: "Run diagnosis"
-                run: "php bin/diagnosis.php"
+                run: "php bin/diagnose.php"
