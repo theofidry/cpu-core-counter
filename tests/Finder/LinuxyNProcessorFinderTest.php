@@ -14,21 +14,21 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\LinuxyNProcessorFinder;
-use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
+use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\LinuxyNProcessorFinder
  *
  * @internal
  */
-final class LinuxyNProcessorFinderTest extends PopenBasedFinderTestCase
+final class LinuxyNProcessorFinderTest extends ProcOpenBasedFinderTestCase
 {
     public function test_it_can_describe_itself(): void
     {
         self::assertSame('LinuxyNProcessorFinder', $this->getFinder()->toString());
     }
 
-    protected function getFinder(): PopenBasedFinder
+    protected function getFinder(): ProcOpenBasedFinder
     {
         return new LinuxyNProcessorFinder();
     }

@@ -16,11 +16,11 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Fidry\CpuCoreCounter\Finder\PopenBasedFinder
+ * @covers \Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder
  *
  * @internal
  */
-final class PopenBasedFinderTest extends TestCase
+final class ProcOpenBasedFinderTest extends TestCase
 {
     /**
      * @dataProvider popenFgetsProvider
@@ -29,7 +29,7 @@ final class PopenBasedFinderTest extends TestCase
         string $nproc,
         ?int $expected
     ): void {
-        $actual = DummyPopenBasedFinder::countCpuCores($nproc);
+        $actual = DummyProcOpenBasedFinder::countCpuCores($nproc);
 
         self::assertSame($expected, $actual);
     }
@@ -82,8 +82,8 @@ EOF
 
     public function test_it_can_describe_itself(): void
     {
-        $finder = new DummyPopenBasedFinder();
+        $finder = new DummyProcOpenBasedFinder();
 
-        self::assertSame('DummyPopenBasedFinder', $finder->toString());
+        self::assertSame('DummyProcOpenBasedFinder', $finder->toString());
     }
 }

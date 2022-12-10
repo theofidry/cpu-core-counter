@@ -18,7 +18,7 @@ namespace Fidry\CpuCoreCounter\Finder;
  *
  * @see https://twitter.com/freebsdfrau/status/1052016199452700678?s=20&t=M2pHkRqmmna-UF68lfL2hw
  */
-final class NProcessorFinder extends PopenBasedFinder
+final class NProcessorFinder extends ProcOpenBasedFinder
 {
     protected function getCommand(): string
     {
