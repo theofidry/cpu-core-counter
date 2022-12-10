@@ -1,5 +1,6 @@
 /.build/
 /composer.lock
 /e2e/actual-output
+/e2e/expected-output
 /tools/
 /vendor/
