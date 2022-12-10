@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
-use function strrpos;
-use function substr;
-
 /**
  * This finder returns whatever value you gave to it. This is useful for testing.
  */
@@ -33,7 +30,6 @@ final class NullCpuCoreFinder implements CpuCoreFinder
 
     public function toString(): string
     {
-        /** @phpstan-ignore-next-line */
-        return substr(__CLASS__, strrpos(__CLASS__, '\\') + 1);
+        return 'NullCpuCoreFinder';
     }
 }

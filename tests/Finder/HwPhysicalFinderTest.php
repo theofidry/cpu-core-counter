@@ -23,11 +23,6 @@ use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
  */
 final class HwPhysicalFinderTest extends ProcOpenBasedFinderTestCase
 {
-    public function test_it_can_describe_itself(): void
-    {
-        self::assertSame('HwPhysicalFinder', $this->getFinder()->toString());
-    }
-
     protected function getFinder(): ProcOpenBasedFinder
     {
         return new HwPhysicalFinder();

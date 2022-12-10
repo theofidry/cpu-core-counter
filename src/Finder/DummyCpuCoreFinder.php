@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Finder;
 
 use function sprintf;
-use function strrpos;
-use function substr;
 
 /**
  * This finder returns whatever value you gave to it. This is useful for testing
@@ -51,11 +49,6 @@ final class DummyCpuCoreFinder implements CpuCoreFinder
 
     public function toString(): string
     {
-        return sprintf(
-            '%s(value=%d)',
-            /** @phpstan-ignore-next-line */
-            substr(__CLASS__, strrpos(__CLASS__, '\\') + 1),
-            $this->count
-        );
+        return 'DummyCpuCoreFinder';
     }
 }

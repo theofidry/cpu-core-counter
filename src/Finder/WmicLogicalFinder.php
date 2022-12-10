@@ -24,4 +24,9 @@ final class WmicLogicalFinder extends ProcOpenBasedFinder
     {
         return 'wmic cpu get NumberOfLogicalProcessors';
     }
+
+    public function toString(): string
+    {
+        return 'WmicLogicalFinder';
+    }
 }

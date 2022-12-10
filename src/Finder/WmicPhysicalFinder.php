@@ -24,4 +24,9 @@ final class WmicPhysicalFinder extends ProcOpenBasedFinder
     {
         return 'wmic cpu get NumberOfProcessors';
     }
+
+    public function toString(): string
+    {
+        return 'WmicPhysicalFinder';
+    }
 }

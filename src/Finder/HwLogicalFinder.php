@@ -25,4 +25,9 @@ final class HwLogicalFinder extends ProcOpenBasedFinder
     {
         return 'sysctl -n hw.logicalcpu';
     }
+
+    public function toString(): string
+    {
+        return 'HwLogicalFinder';
+    }
 }

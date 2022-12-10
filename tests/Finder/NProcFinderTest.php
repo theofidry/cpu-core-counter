@@ -16,6 +16,7 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\NProcFinder;
 use PHPUnit\Framework\TestCase;
+use function sprintf;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\NProcFinder
@@ -38,12 +39,18 @@ final class NProcFinderTest extends TestCase
     {
         yield [
             new NProcFinder(true),
-            'NProcFinder(all=true)',
+            sprintf(
+                '%s(all=true)',
+                FinderShortClassName::get(new NProcFinder())
+            )
         ];
 
         yield [
             new NProcFinder(false),
-            'NProcFinder(all=false)',
+            sprintf(
+                '%s(all=false)',
+                FinderShortClassName::get(new NProcFinder())
+            )
         ];
     }
 

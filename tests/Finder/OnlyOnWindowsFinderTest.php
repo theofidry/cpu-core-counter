@@ -19,6 +19,7 @@ use Fidry\CpuCoreCounter\Finder\OnlyOnWindowsFinder;
 use PHPUnit\Framework\TestCase;
 use function define;
 use function defined;
+use function sprintf;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\OnlyOnWindowsFinder
@@ -31,7 +32,13 @@ final class OnlyOnWindowsFinderTest extends TestCase
     {
         $finder = new OnlyOnWindowsFinder(new NullCpuCoreFinder());
 
-        self::assertSame('OnlyOnWindowsFinder(NullCpuCoreFinder)', $finder->toString());
+        self::assertSame(
+            sprintf(
+                '%s(NullCpuCoreFinder)',
+                FinderShortClassName::get($finder)
+            ),
+            $finder->toString()
+        );
     }
 
     public function test_it_enriches_the_decorated_finder_diagnosis(): void

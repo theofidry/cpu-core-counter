@@ -76,5 +76,13 @@ EOF
         ];
     }
 
+    public function test_it_can_describe_itself(): void
+    {
+        self::assertSame(
+            FinderShortClassName::get($this->getFinder()),
+            $this->getFinder()->toString()
+        );
+    }
+
     abstract protected function getFinder(): ProcOpenBasedFinder;
 }

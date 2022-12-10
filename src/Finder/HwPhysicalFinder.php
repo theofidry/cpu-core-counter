@@ -25,4 +25,9 @@ final class HwPhysicalFinder extends ProcOpenBasedFinder
     {
         return 'sysctl -n hw.physicalcpu';
     }
+
+    public function toString(): string
+    {
+        return 'HwPhysicalFinder';
+    }
 }
