@@ -14,22 +14,22 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
-use Fidry\CpuCoreCounter\Finder\WindowsWmicLogicalFinder;
+use Fidry\CpuCoreCounter\Finder\WmicLogicalFinder;
 
 /**
- * @covers \Fidry\CpuCoreCounter\Finder\WindowsWmicLogicalFinder
+ * @covers \Fidry\CpuCoreCounter\Finder\WmicLogicalFinder
  *
  * @internal
  */
-final class WindowsWmicLogicalFinderTest extends ProcOpenBasedFinderTestCase
+final class WmicLogicalFinderTest extends ProcOpenBasedFinderTestCase
 {
     public function test_it_can_describe_itself(): void
     {
-        self::assertSame('WindowsWmicLogicalFinder', $this->getFinder()->toString());
+        self::assertSame('WmicLogicalFinder', $this->getFinder()->toString());
     }
 
     protected function getFinder(): ProcOpenBasedFinder
     {
-        return new WindowsWmicLogicalFinder();
+        return new WmicLogicalFinder();
     }
 }
