@@ -238,3 +238,30 @@ jobs:
 
             -   name: "Run E2E tests"
                 run: "./e2e/test-finders.sh"
+
+    e2e-ubuntu-restricted:
+        name: "End-to-End tests Ubuntu (restricted)"
+        runs-on: "ubuntu-latest"
+        strategy:
+            matrix:
+                php-version:
+                    - "8.1"
+        steps:
+            -   name: "Checkout"
+                uses: "actions/checkout@v3.1.0"
+
+            -   name: "Set up PHP"
+                uses: "shivammathur/setup-php@2.22.0"
+                with:
+                    coverage: "xdebug"
+                    php-version: "${{ matrix.php-version }}"
+                    tools: "phive"
+
+            -   name: "Install Composer dependencies"
+                uses: "ramsey/composer-install@v2"
+
+            -   name: "Setup the expected output"
+                run: "mv expected-output-ubuntu-restricted e2e/expected-output"
+
+            -   name: "Run E2E tests"
+                run: "./e2e/test-restricted-finders.sh"
