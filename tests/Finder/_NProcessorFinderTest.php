@@ -23,11 +23,6 @@ use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
  */
 final class _NProcessorFinderTest extends ProcOpenBasedFinderTestCase
 {
-    public function test_it_can_describe_itself(): void
-    {
-        self::assertSame('_NProcessorFinder', $this->getFinder()->toString());
-    }
-
     protected function getFinder(): ProcOpenBasedFinder
     {
         return new _NProcessorFinder();

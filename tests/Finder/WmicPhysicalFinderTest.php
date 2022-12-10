@@ -23,14 +23,6 @@ use Fidry\CpuCoreCounter\Finder\WmicPhysicalFinder;
  */
 final class WmicPhysicalFinderTest extends ProcOpenBasedFinderTestCase
 {
-    public function test_it_can_describe_itself(): void
-    {
-        self::assertSame(
-            FinderShortClassName::get($this->getFinder()),
-            $this->getFinder()->toString()
-        );
-    }
-
     protected function getFinder(): ProcOpenBasedFinder
     {
         return new WmicPhysicalFinder();

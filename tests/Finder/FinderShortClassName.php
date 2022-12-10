@@ -24,7 +24,6 @@ final class FinderShortClassName
     {
         $class = get_class($finder);
 
-        /** @phpstan-ignore-next-line */
         return substr($class, strrpos($class, '\\') + 1);
     }
 

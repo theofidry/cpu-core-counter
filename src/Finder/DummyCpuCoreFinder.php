@@ -49,6 +49,9 @@ final class DummyCpuCoreFinder implements CpuCoreFinder
 
     public function toString(): string
     {
-        return 'DummyCpuCoreFinder';
+        return sprintf(
+            'DummyCpuCoreFinder(value=%d)',
+            $this->count
+        );
     }
 }

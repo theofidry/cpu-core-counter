@@ -114,7 +114,10 @@ final class NProcFinder implements CpuCoreFinder
 
     public function toString(): string
     {
-        return 'NProcFinder';
+        return sprintf(
+            'NProcFinder(all=%s)',
+            $this->all ? 'true' : 'false'
+        );
     }
 
     private static function supportsNproc(): bool

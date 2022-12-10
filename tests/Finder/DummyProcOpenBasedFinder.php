@@ -21,4 +21,9 @@ final class DummyProcOpenBasedFinder extends ProcOpenBasedFinder
     {
         return '';
     }
+
+    public function toString(): string
+    {
+        return 'DummyProcOpenBasedFinder';
+    }
 }
