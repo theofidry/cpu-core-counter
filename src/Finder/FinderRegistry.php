@@ -25,7 +25,7 @@ final class FinderRegistry
             new DummyCpuCoreFinder(1),
             new HwLogicalFinder(),
             new HwPhysicalFinder(),
-            new LinuxyNProcessorFinder(),
+            new _NProcessorFinder(),
             new NProcessorFinder(),
             new NProcFinder(true),
             new NProcFinder(false),
@@ -50,7 +50,7 @@ final class FinderRegistry
             new OnlyOnWindowsFinder(new WmicLogicalFinder()),
             new NProcFinder(),
             new HwLogicalFinder(),
-            new LinuxyNProcessorFinder(),
+            new _NProcessorFinder(),
             new NProcessorFinder(),
             new CpuInfoFinder(),
         ];
