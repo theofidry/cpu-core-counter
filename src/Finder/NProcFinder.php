@@ -13,15 +13,10 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
-use Fidry\CpuCoreCounter\Exec\ExecException;
-use Fidry\CpuCoreCounter\Exec\ShellExec;
 use function filter_var;
-use function function_exists;
 use function is_int;
 use function sprintf;
-use function trim;
 use const FILTER_VALIDATE_INT;
-use const PHP_EOL;
 
 /**
  * The number of (logical) cores.
