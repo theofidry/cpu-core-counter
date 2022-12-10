@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\Finder\NProcessorFinder;
+use Fidry\CpuCoreCounter\Finder\_NProcessorFinder;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 
 /**
- * @covers \Fidry\CpuCoreCounter\Finder\NProcessorFinder
+ * @covers \Fidry\CpuCoreCounter\Finder\_NProcessorFinder
  *
  * @internal
  */
-final class NProcessorFinderTest extends ProcOpenBasedFinderTestCase
+final class _NProcessorFinderTest extends ProcOpenBasedFinderTestCase
 {
     protected function getFinder(): ProcOpenBasedFinder
     {
-        return new NProcessorFinder();
+        return new _NProcessorFinder();
     }
 }

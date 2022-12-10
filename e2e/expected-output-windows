@@ -1,0 +1,13 @@
+CpuInfoFinder: F
+DummyCpuCoreFinder(value=1): .
+HwLogicalFinder: F
+HwPhysicalFinder: F
+_NProcessorFinder: .
+NProcessorFinder: F
+NProcFinder(all=true): F
+NProcFinder(all=false): F
+NullCpuCoreFinder: F
+OnlyOnWindowsFinder(DummyCpuCoreFinder(value=1)): .
+SkipOnWindowsFinder(DummyCpuCoreFinder(value=1)): F
+WmicPhysicalFinder: F
+WmicLogicalFinder: F

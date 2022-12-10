@@ -20,6 +20,12 @@
                 "Fidry\\CpuCoreCounter\\CpuCoreCounter::getDefaultFinders"
             ]
         },
+        "CastString": {
+            "ignore": [
+                // I can't find a case in practice where this would happen
+                "Fidry\\CpuCoreCounter\\Exec\\ProcOpen::execute"
+            ]
+        },
         "FalseValue": {
             "ignore": [
                 // This is from thecodingmachine/safe – leave it alone
@@ -28,6 +34,8 @@
         },
         "FunctionCallRemoval": {
             "ignore": [
+                // I can't find a case in practice where this would happen
+                "Fidry\\CpuCoreCounter\\Exec\\ProcOpen::execute",
                 // This is from thecodingmachine/safe – leave it alone
                 "Fidry\\CpuCoreCounter\\Exec\\ShellExec::execute"
             ]

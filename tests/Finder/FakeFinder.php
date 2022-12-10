@@ -11,25 +11,25 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Finder;
+namespace Fidry\CpuCoreCounter\Test\Finder;
 
-/**
- * This finder returns whatever value you gave to it. This is useful for testing.
- */
-final class NullCpuCoreFinder implements CpuCoreFinder
+use DomainException;
+use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
+
+final class FakeFinder implements CpuCoreFinder
 {
     public function diagnose(): string
     {
-        return 'Will return "null".';
+        throw new DomainException('Not implemented.');
     }
 
     public function find(): ?int
     {
-        return null;
+        throw new DomainException('Not implemented.');
     }
 
     public function toString(): string
     {
-        return 'NullCpuCoreFinder';
+        throw new DomainException('Not implemented.');
     }
 }

@@ -15,6 +15,7 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
 use PHPUnit\Framework\TestCase;
+use function sprintf;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder
@@ -34,6 +35,12 @@ final class DummyCpuCoreFinderTest extends TestCase
     {
         $finder = new DummyCpuCoreFinder(5);
 
-        self::assertSame('DummyCpuCoreFinder(value=5)', $finder->toString());
+        self::assertSame(
+            sprintf(
+                '%s(value=5)',
+                FinderShortClassName::get($finder)
+            ),
+            $finder->toString()
+        );
     }
 }

@@ -14,21 +14,16 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\HwPhysicalFinder;
-use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
+use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\HwPhysicalFinder
  *
  * @internal
  */
-final class HwPhysicalFinderTest extends PopenBasedFinderTestCase
+final class HwPhysicalFinderTest extends ProcOpenBasedFinderTestCase
 {
-    public function test_it_can_describe_itself(): void
-    {
-        self::assertSame('HwPhysicalFinder', $this->getFinder()->toString());
-    }
-
-    protected function getFinder(): PopenBasedFinder
+    protected function getFinder(): ProcOpenBasedFinder
     {
         return new HwPhysicalFinder();
     }
