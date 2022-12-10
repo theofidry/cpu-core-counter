@@ -30,8 +30,14 @@ final class FinderRegistry
             new NProcFinder(true),
             new NProcFinder(false),
             new NullCpuCoreFinder(),
-            new WindowsWmicPhysicalFinder(),
-            new WindowsWmicLogicalFinder(),
+            new OnlyOnWindowsFinder(
+                new DummyCpuCoreFinder(1)
+            ),
+            new SkipOnWindowsFinder(
+                new DummyCpuCoreFinder(1)
+            ),
+            new WmicPhysicalFinder(),
+            new WmicLogicalFinder(),
         ];
     }
 
@@ -41,7 +47,7 @@ final class FinderRegistry
     public static function getDefaultLogicalFinders(): array
     {
         return [
-            new WindowsWmicLogicalFinder(),
+            new OnlyOnWindowsFinder(new WmicLogicalFinder()),
             new NProcFinder(),
             new HwLogicalFinder(),
             new LinuxyNProcessorFinder(),
@@ -56,7 +62,7 @@ final class FinderRegistry
     public static function getDefaultPhysicalFinders(): array
     {
         return [
-            new WindowsWmicPhysicalFinder(),
+            new OnlyOnWindowsFinder(new WmicPhysicalFinder()),
             new HwPhysicalFinder(),
         ];
     }
