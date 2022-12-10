@@ -27,4 +27,19 @@ final class WmicPhysicalFinderTest extends ProcOpenBasedFinderTestCase
     {
         return new WmicPhysicalFinder();
     }
+
+    public static function processResultProvider(): iterable
+    {
+        yield from parent::processResultProvider();
+
+        yield 'example from the GitHub Actions machine' => [
+            <<<'EOF'
+NumberOfCores  
+
+2  
+EOF
+            ,
+            2,
+        ];
+    }
 }
