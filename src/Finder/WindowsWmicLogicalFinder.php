@@ -20,7 +20,7 @@ use function defined;
  *
  * @see https://github.com/paratestphp/paratest/blob/c163539818fd96308ca8dc60f46088461e366ed4/src/Runners/PHPUnit/Options.php#L912-L916
  */
-final class WindowsWmicLogicalFinder extends PopenBasedFinder
+final class WindowsWmicLogicalFinder extends ProcOpenBasedFinder
 {
     /**
      * @return positive-int|null

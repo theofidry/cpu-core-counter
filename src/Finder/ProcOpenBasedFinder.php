@@ -13,59 +13,50 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
-use function fgets;
+use Fidry\CpuCoreCounter\Exec\ProcOpen;
 use function filter_var;
 use function function_exists;
 use function is_int;
-use function is_resource;
-use function pclose;
-use function popen;
 use function sprintf;
 use function strrpos;
 use function substr;
+use function trim;
 use const FILTER_VALIDATE_INT;
 use const PHP_EOL;
 
-abstract class PopenBasedFinder implements CpuCoreFinder
+abstract class ProcOpenBasedFinder implements CpuCoreFinder
 {
     public function diagnose(): string
     {
-        if (!function_exists('popen')) {
-            return 'The function "popen" is not available.';
+        if (!function_exists('proc_open')) {
+            return 'The function "proc_open" is not available.';
         }
 
-        // Redirect the STDERR to the STDOUT since popen cannot capture the
-        // STDERR.
-        // We could use proc_open but this would be a greater difference between
-        // the command we really execute when using the finder and what we will
-        // diagnose.
-        $command = $this->getCommand().' 2>&1';
+        $command = $this->getCommand();
+        $output = ProcOpen::execute($command);
 
-        $process = popen($command, 'rb');
-
-        if (!is_resource($process)) {
+        if (null === $output) {
             return sprintf(
-                'Could not execute the function "popen" with the command "%s".',
+                'Failed to execute the command "%s".',
                 $command
             );
         }
 
-        $processResult = fgets($process);
-        $exitCode = pclose($process);
+        [$stdout, $stderr] = $output;
+        $failed = '' !== trim($stderr);
 
-        return 0 === $exitCode
+        return $failed
             ? sprintf(
-                'Executed the command "%s" and got the following output:%s%s',
+                'Executed the command "%s" which wrote the following output to the STDERR:%s%s',
                 $command,
                 PHP_EOL,
-                $processResult
+                $stderr
             )
             : sprintf(
-                'Executed the command "%s" which exited with a non-success exit code (%d) with the following output:%s%s',
+                'Executed the command "%s" and got the following (STDOUT) output:%s%s',
                 $command,
-                $exitCode,
                 PHP_EOL,
-                $processResult
+                $stdout
             );
     }
 
@@ -74,22 +65,22 @@ abstract class PopenBasedFinder implements CpuCoreFinder
      */
     public function find(): ?int
     {
-        if (!function_exists('popen')) {
+        if (!function_exists('proc_open')) {
             return null;
         }
 
-        $process = popen($this->getCommand(), 'rb');
+        $output = ProcOpen::execute($this->getCommand());
 
-        if (!is_resource($process)) {
+        if (null === $output) {
             return null;
         }
 
-        $processResult = fgets($process);
-        pclose($process);
+        [$stdout, $stderr] = $output;
+        $failed = '' !== trim($stderr);
 
-        return false === $processResult
+        return $failed
             ? null
-            : self::countCpuCores($processResult);
+            : self::countCpuCores($stdout);
     }
 
     public function toString(): string

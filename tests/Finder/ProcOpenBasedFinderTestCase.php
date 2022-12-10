@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
+use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 use PHPUnit\Framework\TestCase;
 
-abstract class PopenBasedFinderTestCase extends TestCase
+abstract class ProcOpenBasedFinderTestCase extends TestCase
 {
     /**
      * @dataProvider processResultProvider
@@ -76,5 +76,5 @@ EOF
         ];
     }
 
-    abstract protected function getFinder(): PopenBasedFinder;
+    abstract protected function getFinder(): ProcOpenBasedFinder;
 }

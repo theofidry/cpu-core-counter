@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\Finder\PopenBasedFinder;
+use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 
-final class DummyPopenBasedFinder extends PopenBasedFinder
+final class DummyProcOpenBasedFinder extends ProcOpenBasedFinder
 {
     protected function getCommand(): string
     {
