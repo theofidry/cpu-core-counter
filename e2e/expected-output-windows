@@ -9,5 +9,5 @@ NProcFinder(all=false): F
 NullCpuCoreFinder: F
 OnlyOnWindowsFinder(DummyCpuCoreFinder(value=1)): .
 SkipOnWindowsFinder(DummyCpuCoreFinder(value=1)): F
-WmicPhysicalFinder: F
-WmicLogicalFinder: F
+WmicPhysicalFinder: .
+WmicLogicalFinder: .

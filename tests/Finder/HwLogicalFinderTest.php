@@ -27,19 +27,4 @@ final class HwLogicalFinderTest extends ProcOpenBasedFinderTestCase
     {
         return new HwLogicalFinder();
     }
-
-    public static function processResultProvider(): iterable
-    {
-        yield from parent::processResultProvider();
-
-        yield 'example from the GitHub Actions machine' => [
-            <<<'EOF'
-NumberOfLogicalProcessors  
-
-2  
-EOF
-            ,
-            2,
-        ];
-    }
 }
