@@ -94,4 +94,12 @@ EOF
 
         self::assertSame(1, $finder->find());
     }
+
+    public function it_handles_finders_with_dynamic_names(): void
+    {
+        $finder = new OnlyOnWindowsFinder(new DynamicNameFinder(['F1', 'F2']));
+
+        self::assertSame('OnlyOnWindowsFinder(F1)', $finder->toString());
+        self::assertSame('OnlyOnWindowsFinder(F2)', $finder->toString());
+    }
 }
