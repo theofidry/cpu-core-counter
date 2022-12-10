@@ -1,7 +1,9 @@
-CpuInfoFinder: F
+CpuInfoFinder: .
 DummyCpuCoreFinder(value=1): .
-HwLogicalFinder: .
-HwPhysicalFinder: .
+HwLogicalFinder: F
+HwPhysicalFinder: F
+LinuxyNProcessorFinder: .
+NProcessorFinder: F
 NProcFinder(all=true): .
 NProcFinder(all=false): .
 NullCpuCoreFinder: F
