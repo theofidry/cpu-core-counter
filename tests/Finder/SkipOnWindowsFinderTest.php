@@ -19,6 +19,7 @@ use Fidry\CpuCoreCounter\Finder\SkipOnWindowsFinder;
 use PHPUnit\Framework\TestCase;
 use function define;
 use function defined;
+use function sprintf;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\SkipOnWindowsFinder
@@ -31,7 +32,13 @@ final class SkipOnWindowsFinderTest extends TestCase
     {
         $finder = new SkipOnWindowsFinder(new NullCpuCoreFinder());
 
-        self::assertSame('SkipOnWindowsFinder(NullCpuCoreFinder)', $finder->toString());
+        self::assertSame(
+            sprintf(
+                '%s(NullCpuCoreFinder)',
+                FinderShortClassName::get($finder)
+            ),
+            $finder->toString()
+        );
     }
 
     public function test_it_enriches_the_decorated_finder_diagnosis(): void

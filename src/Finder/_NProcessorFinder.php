@@ -24,4 +24,9 @@ final class _NProcessorFinder extends ProcOpenBasedFinder
     {
         return 'getconf _NPROCESSORS_ONLN';
     }
+
+    public function toString(): string
+    {
+        return '_NProcessorFinder';
+    }
 }

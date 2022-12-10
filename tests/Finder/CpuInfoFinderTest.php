@@ -40,7 +40,10 @@ final class CpuInfoFinderTest extends TestCase
 
     public function test_it_can_describe_itself(): void
     {
-        self::assertSame('CpuInfoFinder', $this->finder->toString());
+        self::assertSame(
+            FinderShortClassName::get($this->finder),
+            $this->finder->toString()
+        );
     }
 
     /**

@@ -84,6 +84,9 @@ EOF
     {
         $finder = new DummyProcOpenBasedFinder();
 
-        self::assertSame('DummyProcOpenBasedFinder', $finder->toString());
+        self::assertSame(
+            FinderShortClassName::get($finder),
+            $finder->toString()
+        );
     }
 }

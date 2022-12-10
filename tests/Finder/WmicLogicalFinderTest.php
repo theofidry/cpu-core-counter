@@ -23,11 +23,6 @@ use Fidry\CpuCoreCounter\Finder\WmicLogicalFinder;
  */
 final class WmicLogicalFinderTest extends ProcOpenBasedFinderTestCase
 {
-    public function test_it_can_describe_itself(): void
-    {
-        self::assertSame('WmicLogicalFinder', $this->getFinder()->toString());
-    }
-
     protected function getFinder(): ProcOpenBasedFinder
     {
         return new WmicLogicalFinder();

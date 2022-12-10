@@ -13,17 +13,21 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
+use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
+use function get_class;
+use function strrpos;
+use function substr;
 
-final class DummyProcOpenBasedFinder extends ProcOpenBasedFinder
+final class FinderShortClassName
 {
-    protected function getCommand(): string
+    public static function get(CpuCoreFinder $finder): string
     {
-        return '';
+        $class = get_class($finder);
+
+        return substr($class, strrpos($class, '\\') + 1);
     }
 
-    public function toString(): string
+    private function __construct()
     {
-        return 'DummyProcOpenBasedFinder';
     }
 }

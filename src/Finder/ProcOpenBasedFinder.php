@@ -18,8 +18,6 @@ use function filter_var;
 use function function_exists;
 use function is_int;
 use function sprintf;
-use function strrpos;
-use function substr;
 use function trim;
 use const FILTER_VALIDATE_INT;
 use const PHP_EOL;
@@ -81,14 +79,6 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
         return $failed
             ? null
             : self::countCpuCores($stdout);
-    }
-
-    public function toString(): string
-    {
-        $class = static::class;
-
-        /** @phpstan-ignore-next-line */
-        return substr($class, strrpos($class, '\\') + 1);
     }
 
     /**

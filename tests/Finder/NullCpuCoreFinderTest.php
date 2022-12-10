@@ -34,6 +34,9 @@ final class NullCpuCoreFinderTest extends TestCase
     {
         $finder = new NullCpuCoreFinder();
 
-        self::assertSame('NullCpuCoreFinder', $finder->toString());
+        self::assertSame(
+            FinderShortClassName::get($finder),
+            $finder->toString()
+        );
     }
 }

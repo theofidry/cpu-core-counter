@@ -19,8 +19,6 @@ use function filter_var;
 use function function_exists;
 use function is_int;
 use function sprintf;
-use function strrpos;
-use function substr;
 use function trim;
 use const FILTER_VALIDATE_INT;
 use const PHP_EOL;
@@ -117,9 +115,7 @@ final class NProcFinder implements CpuCoreFinder
     public function toString(): string
     {
         return sprintf(
-            '%s(all=%s)',
-            /** @phpstan-ignore-next-line */
-            substr(__CLASS__, strrpos(__CLASS__, '\\') + 1),
+            'NProcFinder(all=%s)',
             $this->all ? 'true' : 'false'
         );
     }
