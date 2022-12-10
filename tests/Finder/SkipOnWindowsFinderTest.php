@@ -81,4 +81,12 @@ final class SkipOnWindowsFinderTest extends TestCase
 
         self::assertSame(1, $finder->find());
     }
+
+    public function it_handles_finders_with_dynamic_names(): void
+    {
+        $finder = new SkipOnWindowsFinder(new DynamicNameFinder(['F1', 'F2']));
+
+        self::assertSame('SkipOnWindowsFinder(F1)', $finder->toString());
+        self::assertSame('SkipOnWindowsFinder(F2)', $finder->toString());
+    }
 }
