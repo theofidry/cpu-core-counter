@@ -73,11 +73,11 @@ final class CpuInfoFinder implements CpuCoreFinder
 
     private static function getCpuInfo(): ?string
     {
-        if (!is_file(self::CPU_INFO_PATH)) {
+        if (!@is_file(self::CPU_INFO_PATH)) {
             return null;
         }
 
-        $cpuInfo = file_get_contents(self::CPU_INFO_PATH);
+        $cpuInfo = @file_get_contents(self::CPU_INFO_PATH);
 
         return false === $cpuInfo
             ? null
