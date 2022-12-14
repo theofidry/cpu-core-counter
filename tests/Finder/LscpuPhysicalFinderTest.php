@@ -86,6 +86,21 @@ EOF
             2
         ];
 
+
+        yield 'example with unrecognized physical core' => [
+            <<<'EOF'
+# The following is the parsable format, which can be fed to other
+# programs. Each different item in every column has an unique ID
+# starting from zero.
+# CPU,Core,Socket,Node,,L1d,L1i,L2
+0,0,0,0,,0,0,0
+1,-,0,0,,1,1,1
+
+EOF
+            ,
+            1
+        ];
+
         yield 'handling lscpu failure' => [
             <<<'EOF'
 lscpu: failed to determine number of CPUs: /sys/devices/system/cpu/possible: No such file or directory

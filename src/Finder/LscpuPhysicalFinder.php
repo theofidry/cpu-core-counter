@@ -48,6 +48,8 @@ final class LscpuPhysicalFinder extends ProcOpenBasedFinder
             $cores[$core] = true;
         }
 
+        unset($cores['-']);
+
         return empty($cores) ? null : count($cores);
     }
 }
