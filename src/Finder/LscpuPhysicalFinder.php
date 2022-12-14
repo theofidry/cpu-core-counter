@@ -38,10 +38,15 @@ final class LscpuPhysicalFinder extends ProcOpenBasedFinder
 
         $cores = [];
         foreach ($actualLines as $line) {
-            [, $coreId, ] = explode(',', $line, 3);
-            $cores[] = $coreId;
+            strtok($line, ',');
+            $core = strtok(',');
+
+            if (false === $core) {
+                continue;
+            }
+
+            $cores[$core] = true;
         }
-        $cores = array_unique($cores);
 
         return empty($cores) ? null : count($cores);
     }
