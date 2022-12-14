@@ -36,6 +36,10 @@ final class LscpuPhysicalFinder extends ProcOpenBasedFinder
 
         $actualLines = preg_grep('/^[0-9]+\,/', $lines);
 
+        if ($actualLines === false) {
+            return null;
+        }
+
         $cores = [];
         foreach ($actualLines as $line) {
             strtok($line, ',');
@@ -50,6 +54,7 @@ final class LscpuPhysicalFinder extends ProcOpenBasedFinder
 
         unset($cores['-']);
 
-        return empty($cores) ? null : count($cores);
+        $count = count($cores);
+        return $count === 0 ? null : $count;
     }
 }
