@@ -41,5 +41,14 @@ EOF
             ,
             2,
         ];
+
+        yield 'another example from the GitHub Actions machine' => [
+            <<<'EOF'
+NumberOfLogicalProcessors  
+8  
+EOF
+            ,
+            8,
+        ];
     }
 }
