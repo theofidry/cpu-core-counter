@@ -17,7 +17,6 @@ use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use function filter_var;
 use function is_int;
 use function sprintf;
-use const FILTER_VALIDATE_INT;
 
 /**
  * The number of (logical) cores.
