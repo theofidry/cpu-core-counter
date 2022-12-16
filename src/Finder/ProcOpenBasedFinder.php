@@ -63,10 +63,6 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
      */
     public function find(): ?int
     {
-        if (!function_exists('proc_open')) {
-            return null;
-        }
-
         $output = ProcOpen::execute($this->getCommand());
 
         if (null === $output) {
