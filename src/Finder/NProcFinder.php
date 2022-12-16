@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
-use function filter_var;
-use function is_int;
 use function sprintf;
-use const FILTER_VALIDATE_INT;
 
 /**
  * The number of (logical) cores.
@@ -50,15 +47,5 @@ final class NProcFinder extends ProcOpenBasedFinder
     protected function getCommand(): string
     {
         return 'nproc'.($this->all ? ' --all' : '').' 2>&1';
-    }
-
-    /**
-     * @return positive-int|null
-     */
-    public static function countCpuCores(string $nproc): ?int
-    {
-        $cpuCount = filter_var($nproc, FILTER_VALIDATE_INT);
-
-        return is_int($cpuCount) && $cpuCount > 0 ? $cpuCount : null;
     }
 }
