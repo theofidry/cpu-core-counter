@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Fidry CPUCounter Config package.
+ *
+ * (c) Théo FIDRY <theo.fidry@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Executor;
@@ -13,14 +22,7 @@ use function stream_get_contents;
 
 final class ProcOpenExecutor implements ProcessExecutor
 {
-<<<<<<<< HEAD:src/Executor/ProcOpenExecutor.php
     public function execute(string $command): ?array
-========
-    /**
-     * @return array{string, string}|null STDOUT & STDERR tuple
-     */
-    public static function execute(string $command): ?array
->>>>>>>> upstream/main:src/Executor/ProcOpen.php
     {
         if (!function_exists('proc_open')) {
             return null;

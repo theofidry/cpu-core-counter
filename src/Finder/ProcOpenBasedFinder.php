@@ -85,7 +85,7 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
 
         return $failed
             ? null
-            : self::countCpuCores($stdout);
+            : $this->countCpuCores($stdout);
     }
 
     /**
@@ -93,7 +93,7 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
      *
      * @return positive-int|null
      */
-    protected static function countCpuCores(string $process): ?int
+    protected function countCpuCores(string $process): ?int
     {
         $cpuCount = filter_var($process, FILTER_VALIDATE_INT);
 

@@ -39,8 +39,7 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
 
     protected function tearDown(): void
     {
-        unset($this->executor);
-        unset($this->finder);
+        unset($this->executor, $this->finder);
     }
 
     /**
@@ -49,8 +48,7 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
     public function test_it_can_do_a_diagnosis(
         ?array $output,
         string $expectedRegex
-    ): void
-    {
+    ): void {
         $this->executor->setOutput($output);
 
         $actual = $this->finder->diagnose();

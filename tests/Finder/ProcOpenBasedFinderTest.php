@@ -15,8 +15,6 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
-use Fidry\CpuCoreCounter\Test\Executor\DummyExecutor;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder

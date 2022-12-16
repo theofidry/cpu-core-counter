@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
-use Fidry\CpuCoreCounter\Executor\ProcOpenExecutor;
 use Fidry\CpuCoreCounter\Finder\HwLogicalFinder;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 
