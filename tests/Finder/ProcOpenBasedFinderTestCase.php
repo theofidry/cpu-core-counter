@@ -44,14 +44,16 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
     }
 
     /**
-     * @requires php 7.3
-     *
      * @dataProvider diagnosisProvider
      */
     public function test_it_can_do_a_diagnosis(
         ?array $output,
         string $expectedRegex
     ): void {
+        if (PHP_VERSION_ID < 70300) {
+            self::markTestSkipped();
+        }
+
         $this->executor->setOutput($output);
 
         $actual = $this->finder->diagnose();
