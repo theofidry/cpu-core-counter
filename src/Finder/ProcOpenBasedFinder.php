@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
-use Fidry\CpuCoreCounter\Exec\ProcOpen;
+use Fidry\CpuCoreCounter\Executor\ProcOpen;
 use function filter_var;
 use function function_exists;
 use function is_int;
