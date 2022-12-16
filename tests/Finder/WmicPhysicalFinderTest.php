@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
+use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 use Fidry\CpuCoreCounter\Finder\WmicPhysicalFinder;
 
@@ -23,9 +24,9 @@ use Fidry\CpuCoreCounter\Finder\WmicPhysicalFinder;
  */
 final class WmicPhysicalFinderTest extends ProcOpenBasedFinderTestCase
 {
-    protected function getFinder(): ProcOpenBasedFinder
+    protected function createFinder(ProcessExecutor $executor): ProcOpenBasedFinder
     {
-        return new WmicPhysicalFinder();
+        return new WmicPhysicalFinder($executor);
     }
 
     public static function processResultProvider(): iterable

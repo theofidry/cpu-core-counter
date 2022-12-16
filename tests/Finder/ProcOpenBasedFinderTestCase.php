@@ -13,11 +13,74 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
+use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
+use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
+use Fidry\CpuCoreCounter\Test\Executor\DummyExecutor;
 use PHPUnit\Framework\TestCase;
 
 abstract class ProcOpenBasedFinderTestCase extends TestCase
 {
+    /**
+     * @var DummyExecutor
+     */
+    private $executor;
+
+    /**
+     * @var CpuCoreFinder
+     */
+    private $finder;
+
+    protected function setUp(): void
+    {
+        $this->executor = new DummyExecutor();
+        $this->finder = $this->createFinder($this->executor);
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->executor);
+        unset($this->finder);
+    }
+
+    /**
+     * @dataProvider diagnosisProvider
+     */
+    public function test_it_can_do_a_diagnosis(
+        ?array $output,
+        string $expectedRegex
+    ): void
+    {
+        $this->executor->setOutput($output);
+
+        $actual = $this->finder->diagnose();
+
+        self::assertMatchesRegularExpression($expectedRegex, $actual);
+    }
+
+    public static function diagnosisProvider(): iterable
+    {
+        yield 'could not execute command' => [
+            null,
+            '/^Failed to execute the command ".*"\.$/',
+        ];
+
+        yield 'only written in the stdout' => [
+            ['smth in stdout', ''],
+            '/^Executed the command ".*" and got the following \(STDOUT\) output:\nsmth in stdout$/',
+        ];
+
+        yield 'only written in the stderr' => [
+            ['', 'smth in stderr'],
+            '/^Executed the command ".*" which wrote the following output to the STDERR:\nsmth in stderr$/',
+        ];
+
+        yield 'only written in the stdout and stderr' => [
+            ['smth in stdout', 'smth in stderr'],
+            '/^Executed the command ".*" which wrote the following output to the STDERR:\nsmth in stderr$/',
+        ];
+    }
+
     /**
      * @dataProvider processResultProvider
      */
@@ -25,7 +88,9 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
         string $processResult,
         ?int $expected
     ): void {
-        $actual = $this->getFinder()::countCpuCores($processResult);
+        $this->executor->setOutput([$processResult, '']);
+
+        $actual = $this->finder->find();
 
         self::assertSame($expected, $actual);
     }
@@ -79,10 +144,10 @@ EOF
     public function test_it_can_describe_itself(): void
     {
         self::assertSame(
-            FinderShortClassName::get($this->getFinder()),
-            $this->getFinder()->toString()
+            FinderShortClassName::get($this->finder),
+            $this->finder->toString()
         );
     }
 
-    abstract protected function getFinder(): ProcOpenBasedFinder;
+    abstract protected function createFinder(ProcessExecutor $executor): ProcOpenBasedFinder;
 }

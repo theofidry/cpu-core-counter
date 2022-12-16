@@ -11,25 +11,41 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test\Exec;
+namespace Fidry\CpuCoreCounter\Test\Executor;
 
-use Fidry\CpuCoreCounter\Exec\ProcOpen;
+use Fidry\CpuCoreCounter\Executor\ProcOpen;
+use Fidry\CpuCoreCounter\Executor\ProcOpenExecutor;
 use PHPUnit\Framework\TestCase;
 use const PHP_EOL;
 
 /**
- * @covers \Fidry\CpuCoreCounter\Exec\ProcOpen
+ * @covers \Fidry\CpuCoreCounter\Executor\ProcOpenExecutor
  *
  * @internal
  */
-final class ProcOpenTest extends TestCase
+final class ProcOpenExecutorTest extends TestCase
 {
+    /**
+     * @var ProcOpenExecutor
+     */
+    private $executor;
+
+    protected function setUp(): void
+    {
+        $this->executor = new ProcOpenExecutor();
+    }
+    
+    protected function tearDown(): void
+    {
+        unset($this->executor);
+    }
+
     public function test_it_can_execute_a_command_writing_output_to_the_stdout(): void
     {
         $command = 'echo "Hello world!"';
 
         $expected = ['Hello world!'.PHP_EOL, ''];
-        $actual = ProcOpen::execute($command);
+        $actual = $this->executor->execute($command);
 
         self::assertSame($expected, $actual);
     }
@@ -39,7 +55,7 @@ final class ProcOpenTest extends TestCase
         $command = 'echo "Hello world!" 1>&2';
 
         $expected = ['', 'Hello world!'.PHP_EOL];
-        $actual = ProcOpen::execute($command);
+        $actual = $this->executor->execute($command);
 
         self::assertSame($expected, $actual);
     }
@@ -49,7 +65,7 @@ final class ProcOpenTest extends TestCase
         $command = 'echoerr() { echo "$@" 1>&2; }; echoerr "Hello world!" 2>&1';
 
         $expected = ['Hello world!'.PHP_EOL, ''];
-        $actual = ProcOpen::execute($command);
+        $actual = $this->executor->execute($command);
 
         self::assertSame($expected, $actual);
     }

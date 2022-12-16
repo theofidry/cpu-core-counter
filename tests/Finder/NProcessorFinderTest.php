@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
+use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\NProcessorFinder;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 
@@ -23,8 +24,8 @@ use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
  */
 final class NProcessorFinderTest extends ProcOpenBasedFinderTestCase
 {
-    protected function getFinder(): ProcOpenBasedFinder
+    protected function createFinder(ProcessExecutor $executor): ProcOpenBasedFinder
     {
-        return new NProcessorFinder();
+        return new NProcessorFinder($executor);
     }
 }

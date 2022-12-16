@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
+use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
+use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
+use Fidry\CpuCoreCounter\Test\Executor\DummyExecutor;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,73 +23,10 @@ use PHPUnit\Framework\TestCase;
  *
  * @internal
  */
-final class ProcOpenBasedFinderTest extends TestCase
+final class ProcOpenBasedFinderTest extends ProcOpenBasedFinderTestCase
 {
-    /**
-     * @dataProvider popenFgetsProvider
-     */
-    public function test_it_can_count_the_number_of_cpu_cores(
-        string $nproc,
-        ?int $expected
-    ): void {
-        $actual = DummyProcOpenBasedFinder::countCpuCores($nproc);
-
-        self::assertSame($expected, $actual);
-    }
-
-    public static function popenFgetsProvider(): iterable
+    protected function createFinder(ProcessExecutor $executor): ProcOpenBasedFinder
     {
-        yield 'empty' => [
-            <<<'EOF'
-
-EOF
-            ,
-            null,
-        ];
-
-        yield 'whitespace' => [
-            <<<'EOF'
- 
-EOF
-            ,
-            null,
-        ];
-
-        yield 'example from a Windows machine' => [
-            <<<'EOF'
-3
-
-EOF
-            ,
-            3,
-        ];
-
-        yield 'example from a Windows machine with extra spaces' => [
-            <<<'EOF'
- 3 
-
-EOF
-            ,
-            3,
-        ];
-
-        yield 'no processor' => [
-            <<<'EOF'
-0
-
-EOF
-            ,
-            null,
-        ];
-    }
-
-    public function test_it_can_describe_itself(): void
-    {
-        $finder = new DummyProcOpenBasedFinder();
-
-        self::assertSame(
-            FinderShortClassName::get($finder),
-            $finder->toString()
-        );
+        return new DummyProcOpenBasedFinder($executor);
     }
 }

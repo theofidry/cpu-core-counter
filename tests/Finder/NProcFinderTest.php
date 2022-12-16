@@ -38,7 +38,7 @@ final class NProcFinderTest extends TestCase
     public static function finderProvider(): iterable
     {
         yield [
-            new NProcFinder(true),
+            new NProcFinder(null, true),
             sprintf(
                 '%s(all=true)',
                 FinderShortClassName::get(new NProcFinder())
@@ -46,7 +46,7 @@ final class NProcFinderTest extends TestCase
         ];
 
         yield [
-            new NProcFinder(false),
+            new NProcFinder(null, false),
             sprintf(
                 '%s(all=false)',
                 FinderShortClassName::get(new NProcFinder())

@@ -1,31 +1,24 @@
 <?php
 
-/*
- * This file is part of the Fidry CPUCounter Config package.
- *
- * (c) Théo FIDRY <theo.fidry@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Exec;
+namespace Fidry\CpuCoreCounter\Executor;
 
 use function fclose;
+use function function_exists;
 use function is_resource;
 use function proc_close;
 use function proc_open;
 use function stream_get_contents;
 
-final class ProcOpen
+final class ProcOpenExecutor implements ProcessExecutor
 {
-    /**
-     * @return array{string, string} STDOUT & STDERR tuple
-     */
-    public static function execute(string $command): ?array
+    public function execute(string $command): ?array
     {
+        if (!function_exists('proc_open')) {
+            return null;
+        }
+
         $pipes = [];
 
         $process = @proc_open(
@@ -50,9 +43,5 @@ final class ProcOpen
         proc_close($process);
 
         return [$stdout, $stderr];
-    }
-
-    private function __construct()
-    {
     }
 }
