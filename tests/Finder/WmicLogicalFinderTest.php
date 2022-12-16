@@ -34,21 +34,27 @@ final class WmicLogicalFinderTest extends ProcOpenBasedFinderTestCase
         yield from parent::processResultProvider();
 
         yield 'example from the GitHub Actions machine' => [
-            <<<'EOF'
+            [
+                <<<'EOF'
 NumberOfLogicalProcessors  
 
 2  
 EOF
-            ,
+                ,
+                '',
+            ],
             2,
         ];
 
         yield 'another example from the GitHub Actions machine' => [
-            <<<'EOF'
+            [
+                <<<'EOF'
 NumberOfLogicalProcessors  
 8  
 EOF
-            ,
+                ,
+                '',
+            ],
             8,
         ];
     }

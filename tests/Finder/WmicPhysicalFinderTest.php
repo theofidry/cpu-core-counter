@@ -34,12 +34,15 @@ final class WmicPhysicalFinderTest extends ProcOpenBasedFinderTestCase
         yield from parent::processResultProvider();
 
         yield 'example from the GitHub Actions machine' => [
-            <<<'EOF'
+            [
+                <<<'EOF'
 NumberOfCores  
 
 2  
 EOF
-            ,
+                ,
+                '',
+            ],
             2,
         ];
     }

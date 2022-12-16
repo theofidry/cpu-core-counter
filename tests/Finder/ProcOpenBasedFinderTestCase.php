@@ -24,7 +24,7 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
     /**
      * @var DummyExecutor
      */
-    private $executor;
+    protected $executor;
 
     /**
      * @var CpuCoreFinder
@@ -58,6 +58,9 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
 
     public static function diagnosisProvider(): iterable
     {
+        $stdoutResultRegex = '/^Executed the command ".*" and got the following \(STDOUT\) output:\nsmth in stdout$/';
+        $stderrResultRegex = '/^Executed the command ".*" which wrote the following output to the STDERR:\nsmth in stderr$/';
+
         yield 'could not execute command' => [
             null,
             '/^Failed to execute the command ".*"\.$/',
@@ -65,17 +68,22 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
 
         yield 'only written in the stdout' => [
             ['smth in stdout', ''],
-            '/^Executed the command ".*" and got the following \(STDOUT\) output:\nsmth in stdout$/',
+            $stdoutResultRegex,
         ];
 
         yield 'only written in the stderr' => [
             ['', 'smth in stderr'],
-            '/^Executed the command ".*" which wrote the following output to the STDERR:\nsmth in stderr$/',
+            $stderrResultRegex,
         ];
 
-        yield 'only written in the stdout and stderr' => [
+        yield 'written in the stdout and stderr' => [
             ['smth in stdout', 'smth in stderr'],
-            '/^Executed the command ".*" which wrote the following output to the STDERR:\nsmth in stderr$/',
+            $stderrResultRegex,
+        ];
+
+        yield 'written in the stdout and stderr with stderr being blank' => [
+            ['smth in stdout', ' '],
+            $stdoutResultRegex,
         ];
     }
 
@@ -83,10 +91,10 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
      * @dataProvider processResultProvider
      */
     public function test_it_can_count_the_number_of_cpu_cores(
-        string $processResult,
+        ?array $processResult,
         ?int $expected
     ): void {
-        $this->executor->setOutput([$processResult, '']);
+        $this->executor->setOutput($processResult);
 
         $actual = $this->finder->find();
 
@@ -95,47 +103,99 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
 
     public static function processResultProvider(): iterable
     {
-        yield 'empty' => [
-            <<<'EOF'
-
-EOF
-            ,
+        yield 'command could not be executed' => [
+            null,
             null,
         ];
 
-        yield 'whitespace' => [
-            <<<'EOF'
- 
-EOF
-            ,
+        yield 'empty stdout & stderr' => [
+            ['', ''],
             null,
         ];
 
-        yield 'example from a Windows machine' => [
-            <<<'EOF'
-3
+        yield 'whitespace stdout' => [
+            [' ', ''],
+            null,
+        ];
 
-EOF
-            ,
+        yield 'whitespace stderr' => [
+            ['', ' '],
+            null,
+        ];
+
+        yield 'whitespace stdout & stderr' => [
+            [' ', ' '],
+            null,
+        ];
+
+        yield 'linux line return for stdout' => [
+            ["\n", ''],
+            null,
+        ];
+
+        yield 'linux line return for stderr' => [
+            ['', "\n"],
+            null,
+        ];
+
+        yield 'linux line return for stdout & stderr' => [
+            ["\n", "\n"],
+            null,
+        ];
+
+        yield 'windows line return for stdout' => [
+            ["\r\n", ''],
+            null,
+        ];
+
+        yield 'windows line return for stderr' => [
+            ['', "\r\n"],
+            null,
+        ];
+
+        yield 'windows line return for stdout & stderr' => [
+            ["\r\n", "\r\n"],
+            null,
+        ];
+
+        yield 'nominal' => [
+            ['3', ''],
             3,
         ];
 
-        yield 'example from a Windows machine with extra spaces' => [
-            <<<'EOF'
- 3 
+        yield 'example from linux' => [
+            ["3\n", ''],
+            3,
+        ];
 
-EOF
-            ,
+        yield 'example with extra blank lines and carriage return from linux' => [
+            ["  \n  3  \n  \n", ''],
+            3,
+        ];
+
+        yield 'example from windows' => [
+            ["3\r\n", ''],
+            3,
+        ];
+
+        yield 'example with extra blank lines and carriage return from windows' => [
+            ["  \r\n  3  \r\n  \r\n", ''],
             3,
         ];
 
         yield 'no processor' => [
-            <<<'EOF'
-0
-
-EOF
-            ,
+            ['0', ''],
             null,
+        ];
+
+        yield 'valid result with stderr' => [
+            ['3', 'something'],
+            null,
+        ];
+
+        yield 'valid result with blank stderr' => [
+            ['3', ' '],
+            3,
         ];
     }
 

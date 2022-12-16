@@ -33,7 +33,7 @@ final class ProcOpenExecutorTest extends TestCase
     {
         $this->executor = new ProcOpenExecutor();
     }
-    
+
     protected function tearDown(): void
     {
         unset($this->executor);

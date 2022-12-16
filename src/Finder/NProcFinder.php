@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Finder;
 
 use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
-use function filter_var;
-use function is_int;
 use function sprintf;
 
 /**
@@ -53,6 +51,6 @@ final class NProcFinder extends ProcOpenBasedFinder
 
     protected function getCommand(): string
     {
-        return 'nproc'.($this->all ? ' --all' : '').' 2>&1';
+        return 'nproc'.($this->all ? ' --all' : '');
     }
 }

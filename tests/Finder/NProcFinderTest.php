@@ -15,6 +15,7 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\NProcFinder;
+use Fidry\CpuCoreCounter\Test\Executor\DummyExecutor;
 use PHPUnit\Framework\TestCase;
 use function sprintf;
 
@@ -25,6 +26,21 @@ use function sprintf;
  */
 final class NProcFinderTest extends TestCase
 {
+    /**
+     * @var DummyExecutor
+     */
+    private $executor;
+
+    protected function setUp(): void
+    {
+        $this->executor = new DummyExecutor();
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->executor);
+    }
+
     /**
      * @dataProvider finderProvider
      */
@@ -46,7 +62,15 @@ final class NProcFinderTest extends TestCase
         ];
 
         yield [
-            new NProcFinder( false),
+            new NProcFinder(),
+            sprintf(
+                '%s(all=true)',
+                FinderShortClassName::get(new NProcFinder())
+            )
+        ];
+
+        yield [
+            new NProcFinder(false),
             sprintf(
                 '%s(all=false)',
                 FinderShortClassName::get(new NProcFinder())
@@ -58,10 +82,28 @@ final class NProcFinderTest extends TestCase
      * @dataProvider \Fidry\CpuCoreCounter\Test\Finder\ProcOpenBasedFinderTestCase::processResultProvider
      */
     public function test_it_can_count_the_number_of_cpu_cores(
-        string $nproc,
+        ?array $processResult,
         ?int $expected
     ): void {
-        $actual = NProcFinder::countCpuCores($nproc);
+        $finder = new NProcFinder(false, $this->executor);
+        $this->executor->setOutput($processResult);
+
+        $actual = $finder->find();
+
+        self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider \Fidry\CpuCoreCounter\Test\Finder\ProcOpenBasedFinderTestCase::processResultProvider
+     */
+    public function test_it_can_count_the_number_of_cpu_cores_all_variant(
+        ?array $processResult,
+        ?int $expected
+    ): void {
+        $finder = new NProcFinder(true, $this->executor);
+        $this->executor->setOutput($processResult);
+
+        $actual = $finder->find();
 
         self::assertSame($expected, $actual);
     }
