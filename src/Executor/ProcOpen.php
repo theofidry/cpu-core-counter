@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Exec;
+namespace Fidry\CpuCoreCounter\Executor;
 
 use function fclose;
 use function is_resource;
