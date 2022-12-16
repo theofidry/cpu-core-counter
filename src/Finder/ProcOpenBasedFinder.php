@@ -78,7 +78,7 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
 
         return $failed
             ? null
-            : self::countCpuCores($stdout);
+            : static::countCpuCores($stdout);
     }
 
     /**
