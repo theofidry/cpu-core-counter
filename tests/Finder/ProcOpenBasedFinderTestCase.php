@@ -18,6 +18,7 @@ use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 use Fidry\CpuCoreCounter\Test\Executor\DummyExecutor;
 use PHPUnit\Framework\TestCase;
+use const PHP_VERSION_ID;
 
 abstract class ProcOpenBasedFinderTestCase extends TestCase
 {
@@ -43,6 +44,8 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
     }
 
     /**
+     * @requires php 7.3
+     *
      * @dataProvider diagnosisProvider
      */
     public function test_it_can_do_a_diagnosis(
