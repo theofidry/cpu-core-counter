@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
+use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 use Fidry\CpuCoreCounter\Finder\WmicLogicalFinder;
 
@@ -23,9 +24,9 @@ use Fidry\CpuCoreCounter\Finder\WmicLogicalFinder;
  */
 final class WmicLogicalFinderTest extends ProcOpenBasedFinderTestCase
 {
-    protected function getFinder(): ProcOpenBasedFinder
+    protected function createFinder(ProcessExecutor $executor): ProcOpenBasedFinder
     {
-        return new WmicLogicalFinder();
+        return new WmicLogicalFinder($executor);
     }
 
     public static function processResultProvider(): iterable
@@ -33,21 +34,27 @@ final class WmicLogicalFinderTest extends ProcOpenBasedFinderTestCase
         yield from parent::processResultProvider();
 
         yield 'example from the GitHub Actions machine' => [
-            <<<'EOF'
+            [
+                <<<'EOF'
 NumberOfLogicalProcessors  
 
 2  
 EOF
-            ,
+                ,
+                '',
+            ],
             2,
         ];
 
         yield 'another example from the GitHub Actions machine' => [
-            <<<'EOF'
+            [
+                <<<'EOF'
 NumberOfLogicalProcessors  
 8  
 EOF
-            ,
+                ,
+                '',
+            ],
             8,
         ];
     }

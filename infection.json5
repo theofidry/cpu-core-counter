@@ -14,6 +14,9 @@
     "timeout": 10,
 
     "mutators": {
+        "global-ignore": [
+            "Fidry\\CpuCoreCounter\\Finder\\NProcFinder::getCommand"
+        ],
         "@default": true,
         "ArrayItemRemoval": {
             "ignore": [
@@ -23,21 +26,13 @@
         "CastString": {
             "ignore": [
                 // I can't find a case in practice where this would happen
-                "Fidry\\CpuCoreCounter\\Executor\\ProcOpen::execute"
-            ]
-        },
-        "FalseValue": {
-            "ignore": [
-                // This is from thecodingmachine/safe – leave it alone
-                "Fidry\\CpuCoreCounter\\Executor\\ShellExec::execute"
+                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute"
             ]
         },
         "FunctionCallRemoval": {
             "ignore": [
                 // I can't find a case in practice where this would happen
-                "Fidry\\CpuCoreCounter\\Executor\\ProcOpen::execute",
-                // This is from thecodingmachine/safe – leave it alone
-                "Fidry\\CpuCoreCounter\\Executor\\ShellExec::execute"
+                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute",
             ]
         },
         "PublicVisibility": false

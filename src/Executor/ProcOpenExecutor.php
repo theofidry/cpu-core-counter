@@ -20,12 +20,9 @@ use function proc_close;
 use function proc_open;
 use function stream_get_contents;
 
-final class ProcOpen
+final class ProcOpenExecutor implements ProcessExecutor
 {
-    /**
-     * @return array{string, string}|null STDOUT & STDERR tuple
-     */
-    public static function execute(string $command): ?array
+    public function execute(string $command): ?array
     {
         if (!function_exists('proc_open')) {
             return null;
@@ -55,9 +52,5 @@ final class ProcOpen
         proc_close($process);
 
         return [$stdout, $stderr];
-    }
-
-    private function __construct()
-    {
     }
 }
