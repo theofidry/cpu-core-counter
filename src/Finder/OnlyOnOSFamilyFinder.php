@@ -100,7 +100,7 @@ final class OnlyOnOSFamilyFinder implements CpuCoreFinder
     public function toString(): string
     {
         return sprintf(
-            'OnlyOnOSFamilyFinder(skip=(%s),%s)',
+            'OnlyOnOSFamilyFinder(only=(%s),%s)',
             implode(',', $this->skippedOSFamilies),
             $this->decoratedFinder->toString()
         );

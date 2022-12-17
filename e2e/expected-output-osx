@@ -7,7 +7,7 @@ NProcessorFinder: .
 NProcFinder(all=true): F
 NProcFinder(all=false): F
 NullCpuCoreFinder: F
-OnlyOnOSFamilyFinder(skip=(Windows),DummyCpuCoreFinder(value=1)): F
 SkipOnOSFamilyFinder(skip=(Windows),DummyCpuCoreFinder(value=1)): .
+OnlyOnOSFamilyFinder(only=(Windows),DummyCpuCoreFinder(value=1)): F
 WmicPhysicalFinder: F
 WmicLogicalFinder: F

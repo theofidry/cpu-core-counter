@@ -49,42 +49,42 @@ final class OnlyOnOSFamilyFinderTest extends TestCase
 
         yield 'no family' => [
             new OnlyOnOSFamilyFinder([], new NullCpuCoreFinder()),
-            $shortName.'(skip=(),NullCpuCoreFinder)',
+            $shortName.'(only=(),NullCpuCoreFinder)',
         ];
 
         yield 'windows' => [
             OnlyOnOSFamilyFinder::forWindows(new NullCpuCoreFinder()),
-            $shortName.'(skip=(Windows),NullCpuCoreFinder)',
+            $shortName.'(only=(Windows),NullCpuCoreFinder)',
         ];
 
         yield 'BSD' => [
             OnlyOnOSFamilyFinder::forBSD(new NullCpuCoreFinder()),
-            $shortName.'(skip=(BSD),NullCpuCoreFinder)',
+            $shortName.'(only=(BSD),NullCpuCoreFinder)',
         ];
 
         yield 'Darwin' => [
             OnlyOnOSFamilyFinder::forDarwin(new NullCpuCoreFinder()),
-            $shortName.'(skip=(Darwin),NullCpuCoreFinder)',
+            $shortName.'(only=(Darwin),NullCpuCoreFinder)',
         ];
 
         yield 'Solaris' => [
             OnlyOnOSFamilyFinder::forSolaris(new NullCpuCoreFinder()),
-            $shortName.'(skip=(Solaris),NullCpuCoreFinder)',
+            $shortName.'(only=(Solaris),NullCpuCoreFinder)',
         ];
 
         yield 'Linux' => [
             OnlyOnOSFamilyFinder::forLinux(new NullCpuCoreFinder()),
-            $shortName.'(skip=(Linux),NullCpuCoreFinder)',
+            $shortName.'(only=(Linux),NullCpuCoreFinder)',
         ];
 
         yield 'Arbitrary' => [
             new OnlyOnOSFamilyFinder('MyFamily', new NullCpuCoreFinder()),
-            $shortName.'(skip=(MyFamily),NullCpuCoreFinder)',
+            $shortName.'(only=(MyFamily),NullCpuCoreFinder)',
         ];
 
         yield 'multiple families' => [
             new OnlyOnOSFamilyFinder(['Darwin', 'Solaris'], new NullCpuCoreFinder()),
-            $shortName.'(skip=(Darwin,Solaris),NullCpuCoreFinder)',
+            $shortName.'(only=(Darwin,Solaris),NullCpuCoreFinder)',
         ];
     }
 

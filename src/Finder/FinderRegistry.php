@@ -30,7 +30,7 @@ final class FinderRegistry
             new NProcFinder(true),
             new NProcFinder(false),
             new NullCpuCoreFinder(),
-            OnlyOnOSFamilyFinder::forWindows(
+            SkipOnOSFamilyFinder::forWindows(
                 new DummyCpuCoreFinder(1)
             ),
             OnlyOnOSFamilyFinder::forWindows(
