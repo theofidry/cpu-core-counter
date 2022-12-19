@@ -138,7 +138,5 @@ EOF
             ],
             null
         ];
-
-        // yield from ProcOpenBasedFinderTestCase::processResultProvider();
     }
 }
