@@ -15,15 +15,31 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\LscpuPhysicalFinder;
+use Fidry\CpuCoreCounter\Test\Executor\DummyExecutor;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Fidry\CpuCoreCounter\Finder\LscpuLogicalFinder
+ * @covers \Fidry\CpuCoreCounter\Finder\LscpuPhysicalFinder
  *
  * @internal
  */
 final class LscpuPhysicalFinderTest extends TestCase
 {
+    /**
+     * @var DummyExecutor
+     */
+    protected $executor;
+
+    protected function setUp(): void
+    {
+        $this->executor = new DummyExecutor();
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->executor);
+    }
+
     /**
      * @dataProvider finderProvider
      */
@@ -46,10 +62,13 @@ final class LscpuPhysicalFinderTest extends TestCase
      * @dataProvider lscpuProvider
      */
     public function test_it_can_count_the_number_of_cpu_cores(
-        string $lscpu,
+        ?array $processResult,
         ?int $expected
     ): void {
-        $actual = LscpuPhysicalFinder::countCpuCores($lscpu);
+        $finder = new LscpuPhysicalFinder($this->executor);
+        $this->executor->setOutput($processResult);
+
+        $actual = $finder->find();
 
         self::assertSame($expected, $actual);
     }
@@ -57,6 +76,7 @@ final class LscpuPhysicalFinderTest extends TestCase
     public static function lscpuProvider(): iterable
     {
         yield 'example with four logical but two physical' => [
+            [
             <<<'EOF'
 # The following is the parsable format, which can be fed to other
 # programs. Each different item in every column has an unique ID
@@ -68,11 +88,15 @@ final class LscpuPhysicalFinderTest extends TestCase
 3,1,0,0,,1,1,1,0
 
 EOF
+                ,
+                ''
+            ]
             ,
             2
         ];
 
         yield 'example with two cores' => [
+            [
             <<<'EOF'
 # The following is the parsable format, which can be fed to other
 # programs. Each different item in every column has an unique ID
@@ -82,11 +106,15 @@ EOF
 1,1,0,0,,1,1,1
 
 EOF
+                ,
+                ''
+            ]
             ,
             2
         ];
 
         yield 'example with unrecognized physical core' => [
+            [
             <<<'EOF'
 # The following is the parsable format, which can be fed to other
 # programs. Each different item in every column has an unique ID
@@ -96,17 +124,25 @@ EOF
 1,-,0,0,,1,1,1
 
 EOF
+                ,
+                ''
+            ]
             ,
             1
         ];
 
         yield 'handling lscpu failure' => [
+            [
+                '',
             <<<'EOF'
 lscpu: failed to determine number of CPUs: /sys/devices/system/cpu/possible: No such file or directory
 
 EOF
+            ]
             ,
             null
         ];
+
+        // yield from ProcOpenBasedFinderTestCase::processResultProvider();
     }
 }

@@ -30,7 +30,7 @@ final class LscpuPhysicalFinder extends ProcOpenBasedFinder
         return 'lscpu -p';
     }
 
-    public static function countCpuCores(string $lscpu): ?int
+    protected function countCpuCores(string $lscpu): ?int
     {
         $lines = explode(PHP_EOL, $lscpu);
 
