@@ -36,7 +36,7 @@ final class LscpuPhysicalFinder extends ProcOpenBasedFinder
 
         $actualLines = preg_grep('/^[0-9]+\,/', $lines);
 
-        if ($actualLines === false) {
+        if (false === $actualLines) {
             return null;
         }
 
@@ -55,6 +55,7 @@ final class LscpuPhysicalFinder extends ProcOpenBasedFinder
         unset($cores['-']);
 
         $count = count($cores);
-        return $count === 0 ? null : $count;
+
+        return 0 === $count ? null : $count;
     }
 }

@@ -31,12 +31,13 @@ final class LscpuLogicalFinder extends ProcOpenBasedFinder
 
         $actualLines = preg_grep('/^[0-9]+\,/', $lines);
 
-        if ($actualLines === false) {
+        if (false === $actualLines) {
             return null;
         }
 
         $count = count($actualLines);
-        return $count === 0 ? null : $count;
+
+        return 0 === $count ? null : $count;
     }
 
     public function toString(): string

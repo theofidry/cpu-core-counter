@@ -86,7 +86,6 @@ EOF
             2
         ];
 
-
         yield 'example with unrecognized physical core' => [
             <<<'EOF'
 # The following is the parsable format, which can be fed to other
@@ -109,6 +108,5 @@ EOF
             ,
             null
         ];
-
     }
 }
