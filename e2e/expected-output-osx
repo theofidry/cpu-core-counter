@@ -2,6 +2,8 @@ CpuInfoFinder: F
 DummyCpuCoreFinder(value=1): .
 HwLogicalFinder: .
 HwPhysicalFinder: .
+LscpuLogicalFinder: F
+LscpuPhysicalFinder: F
 _NProcessorFinder: .
 NProcessorFinder: .
 NProcFinder(all=true): F
