@@ -77,7 +77,7 @@ final class LscpuLogicalFinderTest extends TestCase
     {
         yield 'example with four logical but two physical' => [
             [
-            <<<'EOF'
+                <<<'EOF'
 # The following is the parsable format, which can be fed to other
 # programs. Each different item in every column has an unique ID
 # starting from zero.
@@ -90,14 +90,13 @@ final class LscpuLogicalFinderTest extends TestCase
 EOF
                 ,
                 ''
-            ]
-            ,
+            ],
             4
         ];
 
         yield 'example with two cores' => [
             [
-            <<<'EOF'
+                <<<'EOF'
 # The following is the parsable format, which can be fed to other
 # programs. Each different item in every column has an unique ID
 # starting from zero.
@@ -108,20 +107,18 @@ EOF
 EOF
                 ,
                 ''
-            ]
-            ,
+            ],
             2
         ];
 
         yield 'handling lscpu failure' => [
             [
                 '',
-            <<<'EOF'
+                <<<'EOF'
 lscpu: failed to determine number of CPUs: /sys/devices/system/cpu/possible: No such file or directory
 
 EOF
-            ]
-            ,
+            ],
             null
         ];
     }
