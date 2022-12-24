@@ -25,6 +25,8 @@ final class FinderRegistry
             new DummyCpuCoreFinder(1),
             new HwLogicalFinder(),
             new HwPhysicalFinder(),
+            new LscpuLogicalFinder(),
+            new LscpuPhysicalFinder(),
             new _NProcessorFinder(),
             new NProcessorFinder(),
             new NProcFinder(true),
@@ -53,6 +55,7 @@ final class FinderRegistry
             new _NProcessorFinder(),
             new NProcessorFinder(),
             new CpuInfoFinder(),
+            new LscpuLogicalFinder(),
         ];
     }
 
@@ -64,6 +67,7 @@ final class FinderRegistry
         return [
             OnlyOnOSFamilyFinder::forWindows(new WmicPhysicalFinder()),
             new HwPhysicalFinder(),
+            new LscpuPhysicalFinder(),
         ];
     }
 
