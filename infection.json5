@@ -29,12 +29,19 @@
                 "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute"
             ]
         },
+        "Continue_": false,
         "FunctionCallRemoval": {
             "ignore": [
                 // I can't find a case in practice where this would happen
-                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute",
+                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute"
             ]
         },
-        "PublicVisibility": false
+        "PublicVisibility": false,
+        "TrueValue": {
+            "ignore": [
+                // This is a case where the value does not matter
+                "Fidry\\CpuCoreCounter\\Finder\\LscpuPhysicalFinder::countCpuCores"
+            ]
+        }
     }
 }
