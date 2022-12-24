@@ -54,8 +54,8 @@ final class FinderRegistry
             new HwLogicalFinder(),
             new _NProcessorFinder(),
             new NProcessorFinder(),
-            new CpuInfoFinder(),
             new LscpuLogicalFinder(),
+            new CpuInfoFinder(),
         ];
     }
 

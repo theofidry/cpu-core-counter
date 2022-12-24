@@ -13,68 +13,84 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
+use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\LscpuPhysicalFinder;
-use Fidry\CpuCoreCounter\Test\Executor\DummyExecutor;
-use PHPUnit\Framework\TestCase;
+use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\LscpuPhysicalFinder
  *
  * @internal
  */
-final class LscpuPhysicalFinderTest extends TestCase
+final class LscpuPhysicalFinderTest extends ProcOpenBasedFinderTestCase
 {
-    /**
-     * @var DummyExecutor
-     */
-    protected $executor;
-
-    protected function setUp(): void
+    public static function processResultProvider(): iterable
     {
-        $this->executor = new DummyExecutor();
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->executor);
-    }
-
-    /**
-     * @dataProvider finderProvider
-     */
-    public function test_it_can_describe_itself(CpuCoreFinder $finder, string $expected): void
-    {
-        $actual = $finder->toString();
-
-        self::assertSame($expected, $actual);
-    }
-
-    public static function finderProvider(): iterable
-    {
-        yield [
-            new LscpuPhysicalFinder(),
-            FinderShortClassName::get(new LscpuPhysicalFinder())
+        yield 'command could not be executed' => [
+            null,
+            null,
         ];
-    }
 
-    /**
-     * @dataProvider lscpuProvider
-     */
-    public function test_it_can_count_the_number_of_cpu_cores(
-        ?array $processResult,
-        ?int $expected
-    ): void {
-        $finder = new LscpuPhysicalFinder($this->executor);
-        $this->executor->setOutput($processResult);
+        yield 'empty stdout & stderr' => [
+            ['', ''],
+            null,
+        ];
 
-        $actual = $finder->find();
+        yield 'whitespace stdout' => [
+            [' ', ''],
+            null,
+        ];
 
-        self::assertSame($expected, $actual);
-    }
+        yield 'whitespace stderr' => [
+            ['', ' '],
+            null,
+        ];
 
-    public static function lscpuProvider(): iterable
-    {
+        yield 'whitespace stdout & stderr' => [
+            [' ', ' '],
+            null,
+        ];
+
+        yield 'linux line return for stdout' => [
+            ["\n", ''],
+            null,
+        ];
+
+        yield 'linux line return for stderr' => [
+            ['', "\n"],
+            null,
+        ];
+
+        yield 'linux line return for stdout & stderr' => [
+            ["\n", "\n"],
+            null,
+        ];
+
+        yield 'windows line return for stdout' => [
+            ["\r\n", ''],
+            null,
+        ];
+
+        yield 'windows line return for stderr' => [
+            ['', "\r\n"],
+            null,
+        ];
+
+        yield 'windows line return for stdout & stderr' => [
+            ["\r\n", "\r\n"],
+            null,
+        ];
+
+        yield 'no processor' => [
+            ['0', ''],
+            null,
+        ];
+
+        yield 'valid result with stderr' => [
+            ['3', 'something'],
+            null,
+        ];
+
         yield 'example with four logical but two physical' => [
             [
                 <<<'EOF'
@@ -138,5 +154,10 @@ EOF
             ],
             null
         ];
+    }
+
+    protected function createFinder(ProcessExecutor $executor): ProcOpenBasedFinder
+    {
+        return new LscpuPhysicalFinder($executor);
     }
 }
