@@ -40,8 +40,8 @@ final class CpuCoreCounterTest extends TestCase
     /**
      * @dataProvider cpuCoreFinderProvider
      *
-     * @param list<CpuCoreFinder> $finders
-     * @param array{CpuCoreFinder, positive-int}|Exception       $expected
+     * @param list<CpuCoreFinder>                          $finders
+     * @param array{CpuCoreFinder, positive-int}|Exception $expected
      */
     public function test_it_can_get_the_number_of_cpu_cores_based_on_the_registered_finders(
         array $finders,
@@ -70,8 +70,8 @@ final class CpuCoreCounterTest extends TestCase
     /**
      * @dataProvider cpuCoreFinderProvider
      *
-     * @param list<CpuCoreFinder> $finders
-     * @param array{CpuCoreFinder, positive-int}|Exception       $expected
+     * @param list<CpuCoreFinder>                          $finders
+     * @param array{CpuCoreFinder, positive-int}|Exception $expected
      */
     public function test_it_can_get_the_finder_and_number_of_cpu_cores_based_on_the_registered_finders(
         array $finders,

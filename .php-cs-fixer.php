@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__.'/vendor/theofidry/php-cs-fixer-config/src/FidryConfig.php';
+require_once __DIR__.'/vendor/fidry/php-cs-fixer-config/src/FidryConfig.php';
 
 use Fidry\PhpCsFixerConfig\FidryConfig;
 use PhpCsFixer\Finder;
@@ -29,6 +29,7 @@ $config = new FidryConfig(
 );
 $config->addRules([
     // For PHP 7.2 compat
+    'get_class_to_class_keyword' => false,
     'heredoc_indentation' => false,
     'trailing_comma_in_multiline' => false,
     'use_arrow_functions' => false,
