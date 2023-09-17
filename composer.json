@@ -18,7 +18,7 @@
     },
     "require-dev": {
         "fidry/makefile": "^0.2.0",
-        "fidry/php-cs-fixer-config": "^1.0",
+        "fidry/php-cs-fixer-config": "^1.1.2",
         "phpstan/extension-installer": "^1.2.0",
         "phpstan/phpstan": "^1.9.2",
         "phpstan/phpstan-deprecation-rules": "^1.0.0",
