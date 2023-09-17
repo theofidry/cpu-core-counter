@@ -5,6 +5,8 @@ on: # yamllint disable-line rule:truthy
     push:
         branches:
             - "main"
+    schedule:
+        - cron: "0 0 1 * *"
 
 jobs:
     ubuntu-inspection:
