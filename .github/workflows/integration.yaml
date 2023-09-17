@@ -1,4 +1,4 @@
-name: "Integrate"
+name: "Integration"
 
 on: # yamllint disable-line rule:truthy
     pull_request: null
