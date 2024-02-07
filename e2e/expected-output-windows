@@ -11,5 +11,8 @@ NProcFinder(all=false): F
 NullCpuCoreFinder: F
 SkipOnOSFamilyFinder(skip=(Windows),DummyCpuCoreFinder(value=1)): F
 OnlyOnOSFamilyFinder(only=(Windows),DummyCpuCoreFinder(value=1)): .
+OnlyInPowerShellFinder(CmiCmdletLogicalFinder): F
+OnlyInPowerShellFinder(CmiCmdletPhysicalFinder): F
+WindowsRegistryLogicalFinder: .
 WmicPhysicalFinder: .
 WmicLogicalFinder: .
