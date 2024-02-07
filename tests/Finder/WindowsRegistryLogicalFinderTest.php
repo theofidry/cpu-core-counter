@@ -16,7 +16,6 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 use Fidry\CpuCoreCounter\Finder\WindowsRegistryLogicalFinder;
-use Fidry\CpuCoreCounter\Finder\WmicLogicalFinder;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\WindowsRegistryLogicalFinder

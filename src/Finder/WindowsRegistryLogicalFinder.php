@@ -16,7 +16,6 @@ namespace Fidry\CpuCoreCounter\Finder;
 use function array_filter;
 use function count;
 use function explode;
-use function preg_match;
 use function trim;
 use const PHP_EOL;
 
@@ -43,7 +42,7 @@ final class WindowsRegistryLogicalFinder extends ProcOpenBasedFinder
             array_filter(
                 explode(PHP_EOL, $process),
                 static function (string $line): bool {
-                    return trim($line) !== '';
+                    return '' !== trim($line);
                 }
             )
         );
