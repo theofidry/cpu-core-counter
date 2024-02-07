@@ -9,94 +9,22 @@ on: # yamllint disable-line rule:truthy
         - cron: "0 0 1 * *"
 
 jobs:
-    ubuntu-inspection:
-        name: "Ubuntu Inspection"
-        runs-on: "ubuntu-latest"
+    inspection:
+        name: "${{ matrix.os.name }}"
+        runs-on: "${{ matrix.os.image }}"
         strategy:
             matrix:
                 php-version:
                     - "8.3"
-        steps:
-            -   name: "Checkout"
-                uses: "actions/checkout@v3.1.0"
-
-            -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.22.0"
-                with:
-                    coverage: "xdebug"
-                    php-version: "${{ matrix.php-version }}"
-                    tools: "phive"
-
-            -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
-
-            -   name: "Execute finders"
-                run: "php bin/execute.php"
-
-            -   name: "Run diagnosis"
-                run: "php bin/diagnose.php"
-
-    windows-inspection:
-        name: "Windows Inspection"
-        runs-on: "windows-latest"
-        strategy:
-            matrix:
-                php-version:
-                    - "8.3"
-        steps:
-            -   name: "Checkout"
-                uses: "actions/checkout@v3.1.0"
-
-            -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.22.0"
-                with:
-                    coverage: "xdebug"
-                    php-version: "${{ matrix.php-version }}"
-                    tools: "phive"
-
-            -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
-
-            -   name: "Execute finders"
-                run: "php bin/execute.php"
-
-            -   name: "Run diagnosis"
-                run: "php bin/diagnose.php"
-
-    osx-inspection:
-        name: "OSX Inspection"
-        runs-on: "macos-latest"
-        strategy:
-            matrix:
-                php-version:
-                    - "8.3"
-        steps:
-            -   name: "Checkout"
-                uses: "actions/checkout@v3.1.0"
-
-            -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.22.0"
-                with:
-                    coverage: "xdebug"
-                    php-version: "${{ matrix.php-version }}"
-                    tools: "phive"
-
-            -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
-
-            -   name: "Execute finders"
-                run: "php bin/execute.php"
-
-            -   name: "Run diagnosis"
-                run: "php bin/diagnose.php"
-
-    osx-m1-inspection:
-        name: "OSX M1 Inspection"
-        runs-on: " 	macos-14"
-        strategy:
-            matrix:
-                php-version:
-                    - "8.3"
+                os:
+                    - name: "Ubuntu Inspection"
+                      image: "ubuntu-latest"
+                    - name: "Windows Inspection"
+                      image: "windows-latest"
+                    - name: "OSX Inspection"
+                      image: "macos-latest"
+                    - name: "OSX M1 Inspection"
+                      image: "macos-14"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@v3.1.0"
@@ -124,10 +52,7 @@ jobs:
         name: "Inspection status"
         runs-on: "ubuntu-latest"
         needs:
-            - "ubuntu-inspection"
-            - "windows-inspection"
-            - "osx-inspection"
-            - "osx-m1-inspection"
+            - "inspection"
         if: "always()"
         steps:
             - name: "Successful run"
