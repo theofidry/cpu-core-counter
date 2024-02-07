@@ -78,7 +78,7 @@ EOF
                         ' HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0 ',
                         ' ',
                         '',
-                    ],
+                    ]
                 ),
                 ''
             ],
