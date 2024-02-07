@@ -50,6 +50,7 @@ final class FinderRegistry
     public static function getDefaultLogicalFinders(): array
     {
         return [
+            OnlyOnOSFamilyFinder::forWindows(new WindowsRegistryLogicalFinder()),
             OnlyOnOSFamilyFinder::forWindows(new WmicLogicalFinder()),
             new NProcFinder(),
             new HwLogicalFinder(),

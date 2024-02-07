@@ -43,13 +43,16 @@ final class WindowsRegistryLogicalFinderTest extends ProcOpenBasedFinderTestCase
         yield 'example from the GitHub Actions machine' => [
             [
                 <<<'EOF'
-[HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0]
-[HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\2]
+HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0
+HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\1
+HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\2
+HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\3
+
 EOF
                 ,
                 '',
             ],
-            2,
+            4,
         ];
 
         yield 'another example from the GitHub Actions machine' => [
