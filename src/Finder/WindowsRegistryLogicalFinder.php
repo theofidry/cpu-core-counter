@@ -16,7 +16,6 @@ namespace Fidry\CpuCoreCounter\Finder;
 use function array_filter;
 use function count;
 use function explode;
-use function trim;
 use const PHP_EOL;
 
 /**

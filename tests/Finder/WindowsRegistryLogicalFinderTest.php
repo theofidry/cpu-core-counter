@@ -16,6 +16,8 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 use Fidry\CpuCoreCounter\Finder\WindowsRegistryLogicalFinder;
+use function implode;
+use const PHP_EOL;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\WindowsRegistryLogicalFinder
@@ -65,6 +67,22 @@ EOF
                 '',
             ],
             2,
+        ];
+
+        yield 'non trimmed lines' => [
+            [
+                implode(
+                    PHP_EOL,
+                    [
+                        '',
+                        ' HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0 ',
+                        ' ',
+                        '',
+                    ],
+                ),
+                ''
+            ],
+            1,
         ];
     }
 }
