@@ -38,6 +38,7 @@ final class FinderRegistry
             OnlyOnOSFamilyFinder::forWindows(
                 new DummyCpuCoreFinder(1)
             ),
+            new WindowsRegistryLogicalFinder(),
             new WmicPhysicalFinder(),
             new WmicLogicalFinder(),
         ];
