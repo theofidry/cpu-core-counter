@@ -10,7 +10,7 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
     inspection:
-        name: "${{ matrix.os.name }}"
+        name: "${{ matrix.os.name }} (PHP ${{ matrix.php-version }})"
         runs-on: "${{ matrix.os.image }}"
         strategy:
             matrix:
