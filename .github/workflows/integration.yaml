@@ -21,14 +21,14 @@ jobs:
                 uses: "actions/checkout@v4.1.1"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.29.0"
+                uses: "shivammathur/setup-php@2.30.0"
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
+                uses: "ramsey/composer-install@v3"
 
             -   name: "Install ComposerNormalize"
                 run: "phive install composer-normalize --trust-gpg-keys C00543248C87FB13"
@@ -57,14 +57,14 @@ jobs:
                 uses: "actions/checkout@v4.1.1"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.29.0"
+                uses: "shivammathur/setup-php@2.30.0"
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
+                uses: "ramsey/composer-install@v3"
 
             -   name: "Run Auto-Review tests"
                 run: "make autoreview"
@@ -85,13 +85,13 @@ jobs:
                 uses: "actions/checkout@v4.1.1"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.29.0"
+                uses: "shivammathur/setup-php@2.30.0"
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
+                uses: "ramsey/composer-install@v3"
 
             -   name: "Run the PHPUnit tests"
                 run: "make phpunit"
@@ -115,13 +115,13 @@ jobs:
                     composer remove --dev webmozarts/strict-phpunit --no-update --no-install;
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.29.0"
+                uses: "shivammathur/setup-php@2.30.0"
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
+                uses: "ramsey/composer-install@v3"
 
             -   name: "Run the PHPUnit tests"
                 run: "vendor/bin/phpunit --configuration phpunit_legacy.xml.dist"
@@ -138,14 +138,14 @@ jobs:
                 uses: "actions/checkout@v4.1.1"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.29.0"
+                uses: "shivammathur/setup-php@2.30.0"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
+                uses: "ramsey/composer-install@v3"
 
             -   name: "Install Infection"
                 run: "phive install infection --trust-gpg-keys C5095986493B4AA0"
@@ -174,14 +174,14 @@ jobs:
                 uses: "actions/checkout@v4.1.1"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.29.0"
+                uses: "shivammathur/setup-php@2.30.0"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
+                uses: "ramsey/composer-install@v3"
 
             -   name: "Setup the expected output"
                 run: "mv e2e/expected-output-ubuntu e2e/expected-output"
@@ -201,14 +201,14 @@ jobs:
                 uses: "actions/checkout@v4.1.1"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.29.0"
+                uses: "shivammathur/setup-php@2.30.0"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
+                uses: "ramsey/composer-install@v3"
 
             -   name: "Setup the expected output"
                 run: "mv e2e/expected-output-osx e2e/expected-output"
@@ -228,14 +228,14 @@ jobs:
                 uses: "actions/checkout@v4.1.1"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.29.0"
+                uses: "shivammathur/setup-php@2.30.0"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
+                uses: "ramsey/composer-install@v3"
 
             -   name: "Setup the expected output"
                 run: "mv e2e/expected-output-windows e2e/expected-output"
@@ -255,14 +255,14 @@ jobs:
                 uses: "actions/checkout@v4.1.1"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.29.0"
+                uses: "shivammathur/setup-php@2.30.0"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@v2"
+                uses: "ramsey/composer-install@v3"
 
             -   name: "Setup the expected output"
                 run: "mv e2e/expected-output-ubuntu-restricted e2e/expected-output"
