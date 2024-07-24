@@ -16,6 +16,10 @@ use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
 
 $counter = new CpuCoreCounter();
 
+// For knowing the number of cores you can use for launching parallel processes:
+$counter->getAvailableParallelism();
+
+// Get the number of CPU cores (by default it will use the logical cores count):
 try {
     $counter->getCount();   // e.g. 8
 } catch (NumberOfCpuCoreNotFound) {
@@ -29,6 +33,10 @@ $counter = new CpuCoreCounter([
     new DummyCpuCoreFinder(1),  // Fallback value
 ]);
 
+// A type-safe alternative form:
+$counter->getCountWithFallback(1);
+
+// Note that the result in memoized.
 $counter->getCount();   // e.g. 8
 
 ```
@@ -68,11 +76,11 @@ $cores = (new CpuCoreCounter($finders))->getCount();
 `FinderRegistry` provides two helpful entries:
 
 - `::getDefaultLogicalFinders()`: gives an ordered list of finders that will
-  look for the _logical_ CPU cores count
+  look for the _logical_ CPU cores count.
 - `::getDefaultPhysicalFinders()`: gives an ordered list of finders that will
-  look for the _physical_ CPU cores count
+  look for the _physical_ CPU cores count.
 
-By default when using `CpuCoreCounter`, it will use the logical finders since
+By default, when using `CpuCoreCounter`, it will use the logical finders since
 it is more likely what you are looking for and is what is used by PHP source to
 build the PHP binary.
 

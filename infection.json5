@@ -30,10 +30,20 @@
             ]
         },
         "Continue_": false,
+        "DecrementInteger": {
+            "ignore": [
+                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableParallelism"
+            ]
+        },
         "FunctionCallRemoval": {
             "ignore": [
                 // I can't find a case in practice where this would happen
                 "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute"
+            ]
+        },
+        "IncrementInteger": {
+            "ignore": [
+                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableParallelism"
             ]
         },
         "PublicVisibility": false,

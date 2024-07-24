@@ -23,6 +23,7 @@ final class FinderRegistry
         return [
             new CpuInfoFinder(),
             new DummyCpuCoreFinder(1),
+            new EnvVariableFinder(),
             new HwLogicalFinder(),
             new HwPhysicalFinder(),
             new LscpuLogicalFinder(),

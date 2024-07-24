@@ -37,6 +37,19 @@ final class CpuCoreCounter
     }
 
     /**
+     * @param positive-int $reservedCpus
+     *
+     * @return positive-int
+     */
+    public function getAvailableParallelism(int $reservedCpus = 1): int
+    {
+        $count = $this->getCountWithFallback(1);
+        $availableCpus = $count - $reservedCpus;
+
+        return max(1, $availableCpus);
+    }
+
+    /**
      * @throws NumberOfCpuCoreNotFound
      *
      * @return positive-int
@@ -49,6 +62,20 @@ final class CpuCoreCounter
         }
 
         return $this->count;
+    }
+
+    /**
+     * @param positive-int $fallback
+     *
+     * @return positive-int
+     */
+    public function getCountWithFallback(int $fallback): int
+    {
+        try {
+            return $this->getCount();
+        } catch (NumberOfCpuCoreNotFound $exception) {
+            return $fallback;
+        }
     }
 
     /**

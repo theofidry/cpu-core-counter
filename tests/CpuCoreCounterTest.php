@@ -150,4 +150,69 @@ final class CpuCoreCounterTest extends TestCase
             ];
         })();
     }
+
+    /**
+     * @dataProvider availableCpuCoreProvider
+     *
+     * @param list<CpuCoreFinder> $finders
+     * @param positive-int        $expected
+     */
+    public function test_it_can_get_the_number_of_available_cpu_cores_for_parallelism(
+        array $finders,
+        ?int $reservedCpus,
+        int $expected
+    ): void {
+        $counter = new CpuCoreCounter($finders);
+
+        $actual = null === $reservedCpus
+            ? $counter->getAvailableParallelism()
+            : $counter->getAvailableParallelism($reservedCpus);
+
+        self::assertSame($expected, $actual);
+    }
+
+    public static function availableCpuCoreProvider(): iterable
+    {
+        yield 'no finder' => [
+            [],
+            null,
+            1,
+        ];
+
+        yield 'no finder, multiple CPUs reserved' => [
+            [],
+            3,
+            1,
+        ];
+
+        yield 'CPU count found' => (static function () {
+            $finder = new DummyCpuCoreFinder(5);
+
+            return [
+                [$finder],
+                null,
+                4,
+            ];
+        })();
+
+        yield 'CPU count found, multiple CPUs reserved' => (static function () {
+            $finder = new DummyCpuCoreFinder(5);
+
+            return [
+                [$finder],
+                2,
+                3,
+            ];
+        })();
+
+        yield 'CPU count found, all CPUs reserved' => (static function () {
+            $finder = new DummyCpuCoreFinder(5);
+
+            return [
+                [$finder],
+                5,
+                1,
+            ];
+        })();
+    }
 }
