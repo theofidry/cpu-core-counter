@@ -43,7 +43,7 @@ final class CpuCoreCounter
      *
      * @return positive-int
      */
-    public function getAvailableParallelism(
+    public function getAvailableForParallelisation(
         int $reservedCpus = 1,
         ?int $limit = null
     ): int
