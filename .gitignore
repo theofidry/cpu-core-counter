@@ -1,4 +1,6 @@
+.envrc.local
 /.build/
+/.direnv/
 /composer.lock
 /e2e/actual-output
 /e2e/expected-output
