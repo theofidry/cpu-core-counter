@@ -41,7 +41,7 @@ final class CpuCoreCounter
      *
      * @return positive-int
      */
-    public function getAvailableParallelism(int $reservedCpus = 1): int
+    public function getAvailableForParallelisation(int $reservedCpus = 1): int
     {
         $count = $this->getCountWithFallback(1);
         $availableCpus = $count - $reservedCpus;

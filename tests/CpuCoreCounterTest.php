@@ -157,7 +157,7 @@ final class CpuCoreCounterTest extends TestCase
      * @param list<CpuCoreFinder> $finders
      * @param positive-int        $expected
      */
-    public function test_it_can_get_the_number_of_available_cpu_cores_for_parallelism(
+    public function test_it_can_get_the_number_of_available_cpu_cores_for_parallelisation(
         array $finders,
         ?int $reservedCpus,
         int $expected
@@ -165,8 +165,8 @@ final class CpuCoreCounterTest extends TestCase
         $counter = new CpuCoreCounter($finders);
 
         $actual = null === $reservedCpus
-            ? $counter->getAvailableParallelism()
-            : $counter->getAvailableParallelism($reservedCpus);
+            ? $counter->getAvailableForParallelisation()
+            : $counter->getAvailableForParallelisation($reservedCpus);
 
         self::assertSame($expected, $actual);
     }

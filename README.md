@@ -17,7 +17,7 @@ use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
 $counter = new CpuCoreCounter();
 
 // For knowing the number of cores you can use for launching parallel processes:
-$counter->getAvailableParallelism();
+$counter->getAvailableForParallelisation();
 
 // Get the number of CPU cores (by default it will use the logical cores count):
 try {
@@ -36,7 +36,7 @@ $counter = new CpuCoreCounter([
 // A type-safe alternative form:
 $counter->getCountWithFallback(1);
 
-// Note that the result in memoized.
+// Note that the result is memoized.
 $counter->getCount();   // e.g. 8
 
 ```
