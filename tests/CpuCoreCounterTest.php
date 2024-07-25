@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test;
 
+use Closure;
 use Exception;
 use Fidry\CpuCoreCounter\CpuCoreCounter;
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
@@ -22,6 +23,7 @@ use Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
 use PHPUnit\Framework\TestCase;
 use function get_class;
 use function is_array;
+use function sprintf;
 
 /**
  * @covers \Fidry\CpuCoreCounter\CpuCoreCounter
@@ -30,6 +32,21 @@ use function is_array;
  */
 final class CpuCoreCounterTest extends TestCase
 {
+    /**
+     * @var null|Closure(): void
+     */
+    private $cleanupEnvironmentVariables;
+
+    protected function tearDown(): void
+    {
+        $cleanupEnvironmentVariables = $this->cleanupEnvironmentVariables;
+
+        if (null !== $cleanupEnvironmentVariables) {
+            ($cleanupEnvironmentVariables)();
+            $this->cleanupEnvironmentVariables = null;
+        }
+    }
+
     public function test_it_can_get_the_number_of_cpu_cores(): void
     {
         $counter = new CpuCoreCounter();
@@ -154,19 +171,29 @@ final class CpuCoreCounterTest extends TestCase
     /**
      * @dataProvider availableCpuCoreProvider
      *
-     * @param list<CpuCoreFinder> $finders
-     * @param positive-int        $expected
+     * @param list<CpuCoreFinder>        $finders
+     * @param array<string, string|null> $environmentVariables
+     * @param positive-int               $expected
      */
     public function test_it_can_get_the_number_of_available_cpu_cores_for_parallelisation(
         array $finders,
+        array $environmentVariables,
         ?int $reservedCpus,
+        ?int $limit,
         int $expected
     ): void {
+        $this->setUpEnvironmentVariables($environmentVariables);
+
         $counter = new CpuCoreCounter($finders);
+
+        // Sanity check: this is due to not being able to use named parameters.
+        if (null === $reservedCpus) {
+            self::assertNull($limit);
+        }
 
         $actual = null === $reservedCpus
             ? $counter->getAvailableForParallelisation()
-            : $counter->getAvailableForParallelisation($reservedCpus);
+            : $counter->getAvailableForParallelisation($reservedCpus, $limit);
 
         self::assertSame($expected, $actual);
     }
@@ -175,23 +202,101 @@ final class CpuCoreCounterTest extends TestCase
     {
         yield 'no finder' => [
             [],
+            [],
+            null,
             null,
             1,
         ];
 
         yield 'no finder, multiple CPUs reserved' => [
             [],
+            [],
             3,
+            null,
             1,
         ];
+
+        yield 'CPU count found: kubernetes limit set and lower than the count found' => (static function () {
+            $finder = new DummyCpuCoreFinder(5);
+
+            return [
+                [$finder],
+                ['KUBERNETES_CPU_LIMIT' => 2],
+                null,
+                null,
+                2,
+            ];
+        })();
+
+        yield 'CPU count found: kubernetes limit set and higher than the count found' => (static function () {
+            $finder = new DummyCpuCoreFinder(5);
+
+            return [
+                [$finder],
+                ['KUBERNETES_CPU_LIMIT' => 8],
+                null,
+                null,
+                4,
+            ];
+        })();
+
+        yield 'CPU count found: kubernetes limit set and equal to the count found' => (static function () {
+            $finder = new DummyCpuCoreFinder(5);
+
+            return [
+                [$finder],
+                ['KUBERNETES_CPU_LIMIT' => 5],
+                null,
+                null,
+                4,
+            ];
+        })();
+
+        yield 'CPU count found: kubernetes limit set and equal to the count found after reserved CPUs' => (static function () {
+            $finder = new DummyCpuCoreFinder(5);
+
+            return [
+                [$finder],
+                ['KUBERNETES_CPU_LIMIT' => 4],
+                null,
+                null,
+                4,
+            ];
+        })();
+
+        yield 'CPU count found: kubernetes limit set and limit set' => (static function () {
+            $finder = new DummyCpuCoreFinder(5);
+
+            return [
+                [$finder],
+                ['KUBERNETES_CPU_LIMIT' => 2],
+                1,
+                3,
+                3,
+            ];
+        })();
 
         yield 'CPU count found' => (static function () {
             $finder = new DummyCpuCoreFinder(5);
 
             return [
                 [$finder],
+                [],
+                null,
                 null,
                 4,
+            ];
+        })();
+
+        yield 'CPU count found higher than the limit passed' => (static function () {
+            $finder = new DummyCpuCoreFinder(5);
+
+            return [
+                [$finder],
+                [],
+                1,
+                3,
+                3,
             ];
         })();
 
@@ -200,7 +305,9 @@ final class CpuCoreCounterTest extends TestCase
 
             return [
                 [$finder],
+                [],
                 2,
+                null,
                 3,
             ];
         })();
@@ -210,9 +317,39 @@ final class CpuCoreCounterTest extends TestCase
 
             return [
                 [$finder],
+                [],
                 5,
+                null,
                 1,
             ];
         })();
+    }
+
+    /**
+     * @param array<string, string|null> $environmentVariables
+     */
+    private function setUpEnvironmentVariables(array $environmentVariables): void
+    {
+        $cleanupCalls = [];
+
+        foreach ($environmentVariables as $environmentName => $environmentValue) {
+            putenv(
+                sprintf(
+                    '%s=%s',
+                    $environmentName,
+                    $environmentValue
+                )
+            );
+
+            $cleanupCalls[] = static function () use ($environmentName): void {
+                putenv($environmentName);
+            };
+        }
+
+        $this->cleanupEnvironmentVariables = static function () use ($cleanupCalls): void {
+            foreach ($cleanupCalls as $cleanupCall) {
+                $cleanupCall();
+            }
+        };
     }
 }

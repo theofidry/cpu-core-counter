@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
-use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use PHPUnit\Framework\TestCase;
-use function sprintf;
 use function Safe\putenv;
+use function sprintf;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\EnvVariableFinder
@@ -47,8 +46,7 @@ final class EnvVariableFinderTest extends TestCase
     public function test_it_tries_to_get_the_number_of_cores(
         string $envValue,
         ?int $expected
-    ): void
-    {
+    ): void {
         $finder = new EnvVariableFinder('CI_CPU_LIMIT');
 
         putenv(sprintf('CI_CPU_LIMIT=%s', $envValue));

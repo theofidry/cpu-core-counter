@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
-use function array_map;
 use function getenv;
-use function implode;
 use function preg_match;
 use function sprintf;
 use function var_export;
-use const PHP_EOL;
 
 final class EnvVariableFinder implements CpuCoreFinder
 {
