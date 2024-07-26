@@ -16,6 +16,9 @@ namespace Fidry\CpuCoreCounter;
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use Fidry\CpuCoreCounter\Finder\FinderRegistry;
+use function implode;
+use function sprintf;
+use const PHP_EOL;
 
 final class CpuCoreCounter
 {
@@ -89,6 +92,36 @@ final class CpuCoreCounter
         } catch (NumberOfCpuCoreNotFound $exception) {
             return $fallback;
         }
+    }
+
+    /**
+     * This method is mostly for debugging purposes. 
+     *
+     * @return positive-int
+     */
+    public function trace(): string
+    {
+        $output = [];
+
+        foreach ($this->finders as $finder) {
+            $output[] = sprintf(
+                'Executing the finder "%s":',
+                $finder->toString()
+            );
+            $output[] = $finder->diagnose();
+
+            $cores = $finder->find();
+
+            if (null !== $cores) {
+                $output[] = 'Result found: '.$cores;
+
+                break;
+            }
+
+            $output[] = '–––';
+        }
+
+        return implode(PHP_EOL, $output);
     }
 
     /**
