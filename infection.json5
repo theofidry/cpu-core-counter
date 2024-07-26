@@ -23,6 +23,13 @@
                 "Fidry\\CpuCoreCounter\\CpuCoreCounter::getDefaultFinders"
             ]
         },
+        "CastInt": {
+            "ignore": [
+                // This is a bug or case handled by strict types. Not sure why
+                // infection can't detect it.V
+                "Fidry\\CpuCoreCounter\\Finder\\EnvVariableFinder::isPositiveInteger"
+            ]
+        },
         "CastString": {
             "ignore": [
                 // I can't find a case in practice where this would happen
@@ -39,6 +46,12 @@
             "ignore": [
                 // I can't find a case in practice where this would happen
                 "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute"
+            ]
+        },
+        "GreaterThan": {
+            "ignore": [
+                // This is an actual false positive.
+                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation"
             ]
         },
         "IncrementInteger": {

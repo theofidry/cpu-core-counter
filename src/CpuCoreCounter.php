@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter;
 
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
+use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 
 final class CpuCoreCounter
@@ -37,14 +38,26 @@ final class CpuCoreCounter
     }
 
     /**
-     * @param positive-int $reservedCpus
+     * @param positive-int      $reservedCpus
+     * @param positive-int|null $limit        If no limit is given, all available CPUs will be returned.
      *
      * @return positive-int
      */
-    public function getAvailableForParallelisation(int $reservedCpus = 1): int
-    {
+    public function getAvailableForParallelisation(
+        int $reservedCpus = 1,
+        ?int $limit = null
+    ): int {
+        $limit = null === $limit
+            ? self::getKubernetesLimit()
+            : $limit;
+
         $count = $this->getCountWithFallback(1);
+
         $availableCpus = $count - $reservedCpus;
+
+        if (null !== $limit && $availableCpus > $limit) {
+            $availableCpus = $limit;
+        }
 
         return max(1, $availableCpus);
     }
@@ -112,5 +125,12 @@ final class CpuCoreCounter
         }
 
         throw NumberOfCpuCoreNotFound::create();
+    }
+
+    public static function getKubernetesLimit(): ?int
+    {
+        $finder = new EnvVariableFinder('KUBERNETES_CPU_LIMIT');
+
+        return $finder->find();
     }
 }
