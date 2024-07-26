@@ -44,12 +44,14 @@ final class EnvVariableFinderTest extends TestCase
      * @dataProvider envProvider
      */
     public function test_it_tries_to_get_the_number_of_cores(
-        string $envValue,
+        ?string $envValue,
         ?int $expected
     ): void {
         $finder = new EnvVariableFinder('CI_CPU_LIMIT');
 
-        putenv(sprintf('CI_CPU_LIMIT=%s', $envValue));
+        if (null !== $envValue) {
+            putenv(sprintf('CI_CPU_LIMIT=%s', $envValue));
+        }
 
         self::assertSame($expected, $finder->find());
     }
@@ -73,6 +75,11 @@ final class EnvVariableFinderTest extends TestCase
 
         yield 'no value' => [
             '',
+            null,
+        ];
+
+        yield 'no environment variable' => [
+            null,
             null,
         ];
 
