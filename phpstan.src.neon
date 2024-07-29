@@ -1,5 +1,4 @@
 parameters:
-	checkMissingIterableValueType: false
 	inferPrivatePropertyTypeFromConstructor: true
 
 	level: max
@@ -11,6 +10,8 @@ parameters:
 
 	ignoreErrors:
 
-		# This is a sanity check
 		- path: src/Finder/EnvVariableFinder.php
 		  message: '#find\(\) should return int\<1\, max\>\|null but returns int\|null\.#'
+
+		- path: src/CpuCoreCounter.php
+		  message: '#CpuCoreCounter::getAvailableForParallelisation\(\) should return int\<1\, max\> but returns int\.#'

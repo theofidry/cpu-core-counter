@@ -16,6 +16,7 @@ namespace Fidry\CpuCoreCounter;
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use Fidry\CpuCoreCounter\Finder\FinderRegistry;
+use function sys_getloadavg;
 use function implode;
 use function sprintf;
 use const PHP_EOL;
@@ -41,28 +42,45 @@ final class CpuCoreCounter
     }
 
     /**
-     * @param positive-int      $reservedCpus
-     * @param positive-int|null $limit        If no limit is given, all available CPUs will be returned.
+     * @param positive-int $reservedCpus
      *
      * @return positive-int
+     *
+     * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
     public function getAvailableForParallelisation(
         int $reservedCpus = 1,
-        ?int $limit = null
+        ?int $limit = null,
+        ?float $loadLimitPerCore = .9,
+        ?float $systemLoadAverage = null
     ): int {
-        $limit = null === $limit
+        $correctedLimit = null === $limit
             ? self::getKubernetesLimit()
             : $limit;
 
-        $count = $this->getCountWithFallback(1);
+        $totalCoresCount = $this->getCountWithFallback(1);
 
-        $availableCpus = $count - $reservedCpus;
+        $availableCpus = max(1, $totalCoresCount - $reservedCpus);
 
-        if (null !== $limit && $availableCpus > $limit) {
-            $availableCpus = $limit;
+        $correctedSystemLoadAverage = null === $systemLoadAverage
+            ? sys_getloadavg()[0] ?? 0.
+            : $systemLoadAverage;
+        $systemLoadAveragePerCore = $correctedSystemLoadAverage / $availableCpus;
+
+        // Adjust available CPUs based on current load
+        if (null !== $loadLimitPerCore && $systemLoadAveragePerCore > $loadLimitPerCore) {
+            $adjustedCpus = max(
+                1,
+                (1 - $systemLoadAveragePerCore) * $availableCpus
+            );
+            $availableCpus = min($availableCpus, $adjustedCpus);
         }
 
-        return max(1, $availableCpus);
+        if (null !== $correctedLimit && $availableCpus > $correctedLimit) {
+            $availableCpus = $correctedLimit;
+        }
+
+        return (int) $availableCpus;
     }
 
     /**
@@ -95,7 +113,7 @@ final class CpuCoreCounter
     }
 
     /**
-     * This method is mostly for debugging purposes. 
+     * This method is mostly for debugging purposes.
      *
      * @return positive-int
      */
