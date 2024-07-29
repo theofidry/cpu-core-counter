@@ -429,6 +429,91 @@ final class CpuCoreCounterTest extends TestCase
     }
 
     /**
+     * @dataProvider loadLimitPerCoreProvider
+     */
+    public function test_it_does_not_accept_invalid_load_limit_per_core(
+        float $loadLimitPerCore,
+        ?string $expectedExceptionMessage
+    ): void {
+        $cpuCoreCounter = new CpuCoreCounter();
+
+        if (null !== $expectedExceptionMessage) {
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        }
+
+        $cpuCoreCounter->getAvailableForParallelisation(
+            1,
+            null,
+            $loadLimitPerCore
+        );
+
+        if (null === $expectedExceptionMessage) {
+            $this->addToAssertionCount(1);
+        }
+    }
+
+    public static function loadLimitPerCoreProvider(): iterable
+    {
+        yield 'below limit' => [
+            -0.001,
+            'The load limit per core must be in the range [0., 1.], got "-0.001".',
+        ];
+
+        yield 'within the limit (min)' => [
+            0.,
+            null,
+        ];
+
+        yield 'within the limit (max)' => [
+            1.,
+            null,
+        ];
+
+        yield 'above limit' => [
+            1.001,
+            'The load limit per core must be in the range [0., 1.], got "1.001".',
+        ];
+    }
+
+    /**
+     * @dataProvider systemLoadAverageProvider
+     */
+    public function test_it_does_not_accept_invalid_system_load_average(
+        float $systemLoadAverage,
+        ?string $expectedExceptionMessage
+    ): void {
+        $cpuCoreCounter = new CpuCoreCounter();
+
+        if (null !== $expectedExceptionMessage) {
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        }
+
+        $cpuCoreCounter->getAvailableForParallelisation(
+            1,
+            null,
+            null,
+            $systemLoadAverage
+        );
+
+        if (null === $expectedExceptionMessage) {
+            $this->addToAssertionCount(1);
+        }
+    }
+
+    public static function systemLoadAverageProvider(): iterable
+    {
+        yield 'below limit' => [
+            -0.001,
+            'The system load average must be a positive float, got "-0.001".',
+        ];
+
+        yield 'within the limit' => [
+            0.,
+            null,
+        ];
+    }
+
+    /**
      * @param array<string, string|null> $environmentVariables
      */
     private function setUpEnvironmentVariables(array $environmentVariables): void
