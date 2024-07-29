@@ -56,16 +56,19 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
 
         return $failed
             ? sprintf(
-                'Executed the command "%s" which wrote the following output to the STDERR:%s%s',
+                'Executed the command "%s" which wrote the following output to the STDERR:%s%s%sWill return "null".',
                 $command,
                 PHP_EOL,
-                $stderr
+                $stderr,
+                PHP_EOL
             )
             : sprintf(
-                'Executed the command "%s" and got the following (STDOUT) output:%s%s',
+                'Executed the command "%s" and got the following (STDOUT) output:%s%s%sWill return "%s".',
                 $command,
                 PHP_EOL,
-                $stdout
+                $stdout,
+                PHP_EOL,
+                $this->countCpuCores($stdout) ?? 'null'
             );
     }
 

@@ -39,7 +39,9 @@
         "Coalesce": {
             "ignore": [
                 // Cannot test this case.
-                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation"
+                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation",
+                // Not interested in testing this case.
+                "Fidry\\CpuCoreCounter\\Finder\\ProcOpenBasedFinder::diagnose"
             ]
         },
         "Continue_": false,
