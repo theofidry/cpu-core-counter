@@ -14,4 +14,7 @@ parameters:
 		  message: '#find\(\) should return int\<1\, max\>\|null but returns int\|null\.#'
 
 		- path: src/CpuCoreCounter.php
-		  message: '#CpuCoreCounter::getAvailableForParallelisation\(\) should return int\<1\, max\> but returns int\.#'
+		  message: '#ParallelisationResult constructor expects int\<1\, max\>, int given\.#'
+
+		- path: src/ParallelisationResult.php
+		  message: '#\$correctedLimit \(int\<1\, max\>\|null\) does not accept int\|null#'
