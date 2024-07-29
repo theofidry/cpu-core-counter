@@ -132,8 +132,6 @@ final class CpuCoreCounter
 
     /**
      * This method is mostly for debugging purposes.
-     *
-     * @return positive-int
      */
     public function trace(): string
     {

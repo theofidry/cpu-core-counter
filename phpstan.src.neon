@@ -13,5 +13,8 @@ parameters:
 		- path: src/Finder/EnvVariableFinder.php
 		  message: '#find\(\) should return int\<1\, max\>\|null but returns int\|null\.#'
 
+		- path: src/CpuCoreCounter.php
+		  message: '#ParallelisationResult constructor expects int\<1\, max\>, int given\.#'
+
 		- path: src/ParallelisationResult.php
-		  message: '#CpuCoreCounter::getAvailableForParallelisation\(\) should return int\<1\, max\> but returns int\.#'
+		  message: '#\$correctedLimit \(int\<1\, max\>\|null\) does not accept int\|null#'
