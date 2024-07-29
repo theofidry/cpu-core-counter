@@ -34,7 +34,7 @@ final class ParallelisationResult
     public $passedLoadLimitPerCore;
 
     /**
-     * @var float<0, Infinity>|null
+     * @var float<0, max>|null
      */
     public $passedSystemLoadAverage;
 
@@ -44,7 +44,7 @@ final class ParallelisationResult
     public $correctedLimit;
 
     /**
-     * @var float<0, Infinity>
+     * @var float<0, max>
      */
     public $correctedSystemLoadAverage;
 
@@ -59,14 +59,14 @@ final class ParallelisationResult
     public $availableCpus;
 
     /**
-     * @param positive-int            $passedReservedCpus
-     * @param positive-int|null       $passedLimit
-     * @param float<0, 1>|null        $passedLoadLimitPerCore
-     * @param float<0, Infinity>|null $passedSystemLoadAverage
-     * @param positive-int|null       $correctedLimit
-     * @param float<0, Infinity>      $correctedSystemLoadAverage
-     * @param positive-int            $totalCoresCount
-     * @param positive-int            $availableCpus
+     * @param positive-int       $passedReservedCpus
+     * @param positive-int|null  $passedLimit
+     * @param float<0, 1>|null   $passedLoadLimitPerCore
+     * @param float<0, max>|null $passedSystemLoadAverage
+     * @param positive-int|null  $correctedLimit
+     * @param float<0, max>      $correctedSystemLoadAverage
+     * @param positive-int       $totalCoresCount
+     * @param positive-int       $availableCpus
      */
     public function __construct(
         int $passedReservedCpus,

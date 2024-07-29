@@ -13,5 +13,5 @@ parameters:
 		- path: src/Finder/EnvVariableFinder.php
 		  message: '#find\(\) should return int\<1\, max\>\|null but returns int\|null\.#'
 
-		- path: src/CpuCoreCounter.php
+		- path: src/ParallelisationResult.php
 		  message: '#CpuCoreCounter::getAvailableForParallelisation\(\) should return int\<1\, max\> but returns int\.#'
