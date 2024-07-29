@@ -16,9 +16,9 @@ namespace Fidry\CpuCoreCounter;
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use Fidry\CpuCoreCounter\Finder\FinderRegistry;
-use function sys_getloadavg;
 use function implode;
 use function sprintf;
+use function sys_getloadavg;
 use const PHP_EOL;
 
 final class CpuCoreCounter
@@ -42,9 +42,10 @@ final class CpuCoreCounter
     }
 
     /**
-     * @param positive-int $reservedCpus
-     *
-     * @return positive-int
+     * @param positive-int       $reservedCpus
+     * @param positive-int       $limit
+     * @param float<0, 1>        $loadLimitPerCore
+     * @param float<0, Infinity> $loadLimitPerCore
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
@@ -53,7 +54,7 @@ final class CpuCoreCounter
         ?int $limit = null,
         ?float $loadLimitPerCore = .9,
         ?float $systemLoadAverage = null
-    ): int {
+    ): ParallelisationResult {
         $correctedLimit = null === $limit
             ? self::getKubernetesLimit()
             : $limit;
@@ -80,7 +81,16 @@ final class CpuCoreCounter
             $availableCpus = $correctedLimit;
         }
 
-        return (int) $availableCpus;
+        return new ParallelisationResult(
+            $reservedCpus,
+            $limit,
+            $loadLimitPerCore,
+            $systemLoadAverage,
+            $correctedLimit,
+            $correctedSystemLoadAverage,
+            $totalCoresCount,
+            (int) $availableCpus
+        );
     }
 
     /**
