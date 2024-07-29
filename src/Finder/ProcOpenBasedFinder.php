@@ -68,7 +68,7 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
                 PHP_EOL,
                 $stdout,
                 PHP_EOL,
-                $this->countCpuCores($stdout)
+                $this->countCpuCores($stdout) ?? 'null'
             );
     }
 
