@@ -63,8 +63,8 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
 
     public static function diagnosisProvider(): iterable
     {
-        $stdoutResultRegex = '/^Executed the command ".*" and got the following \(STDOUT\) output:\nsmth in stdout$/';
-        $stderrResultRegex = '/^Executed the command ".*" which wrote the following output to the STDERR:\nsmth in stderr$/';
+        $stdoutResultRegex = '/^Executed the command ".*" and got the following \(STDOUT\) output:\nsmth in stdout\nWill return "(null|\d)"\.$/';
+        $stderrResultRegex = '/^Executed the command ".*" which wrote the following output to the STDERR:\nsmth in stderr\nWill return "(null|\d)"\.$/';
 
         yield 'could not execute command' => [
             null,
