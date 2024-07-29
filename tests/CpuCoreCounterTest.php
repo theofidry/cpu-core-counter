@@ -180,6 +180,8 @@ final class CpuCoreCounterTest extends TestCase
         array $environmentVariables,
         ?int $reservedCpus,
         ?int $limit,
+        ?float $maxLoadPerCore,
+        ?float $systemLoadAverage,
         int $expected
     ): void {
         $this->setUpEnvironmentVariables($environmentVariables);
@@ -187,13 +189,22 @@ final class CpuCoreCounterTest extends TestCase
         $counter = new CpuCoreCounter($finders);
 
         // Sanity check: this is due to not being able to use named parameters.
+        // If the reserved CPU is not set, then all other parameters should be
+        // the default values
         if (null === $reservedCpus) {
             self::assertNull($limit);
+            self::assertNull($maxLoadPerCore);
+            self::assertNull($systemLoadAverage);
         }
 
         $actual = null === $reservedCpus
             ? $counter->getAvailableForParallelisation()
-            : $counter->getAvailableForParallelisation($reservedCpus, $limit);
+            : $counter->getAvailableForParallelisation(
+                $reservedCpus,
+                $limit,
+                $maxLoadPerCore,
+                $systemLoadAverage
+            );
 
         self::assertSame($expected, $actual);
     }
@@ -205,6 +216,8 @@ final class CpuCoreCounterTest extends TestCase
             [],
             null,
             null,
+            null,
+            null,
             1,
         ];
 
@@ -212,6 +225,8 @@ final class CpuCoreCounterTest extends TestCase
             [],
             [],
             3,
+            null,
+            null,
             null,
             1,
         ];
@@ -222,6 +237,8 @@ final class CpuCoreCounterTest extends TestCase
             return [
                 [$finder],
                 ['KUBERNETES_CPU_LIMIT' => 2],
+                null,
+                null,
                 null,
                 null,
                 2,
@@ -236,6 +253,8 @@ final class CpuCoreCounterTest extends TestCase
                 ['KUBERNETES_CPU_LIMIT' => 8],
                 null,
                 null,
+                null,
+                null,
                 4,
             ];
         })();
@@ -246,6 +265,8 @@ final class CpuCoreCounterTest extends TestCase
             return [
                 [$finder],
                 ['KUBERNETES_CPU_LIMIT' => 5],
+                null,
+                null,
                 null,
                 null,
                 4,
@@ -260,6 +281,8 @@ final class CpuCoreCounterTest extends TestCase
                 ['KUBERNETES_CPU_LIMIT' => 4],
                 null,
                 null,
+                null,
+                null,
                 4,
             ];
         })();
@@ -272,6 +295,8 @@ final class CpuCoreCounterTest extends TestCase
                 ['KUBERNETES_CPU_LIMIT' => 2],
                 1,
                 3,
+                null,
+                null,
                 3,
             ];
         })();
@@ -282,6 +307,8 @@ final class CpuCoreCounterTest extends TestCase
             return [
                 [$finder],
                 [],
+                null,
+                null,
                 null,
                 null,
                 4,
@@ -296,6 +323,8 @@ final class CpuCoreCounterTest extends TestCase
                 [],
                 1,
                 3,
+                null,
+                null,
                 3,
             ];
         })();
@@ -307,6 +336,8 @@ final class CpuCoreCounterTest extends TestCase
                 [$finder],
                 [],
                 2,
+                null,
+                null,
                 null,
                 3,
             ];
@@ -320,7 +351,79 @@ final class CpuCoreCounterTest extends TestCase
                 [],
                 5,
                 null,
+                null,
+                null,
                 1,
+            ];
+        })();
+
+        yield 'CPU count found, over half the cores are used' => (static function () {
+            $finder = new DummyCpuCoreFinder(11);
+
+            return [
+                [$finder],
+                [],
+                1,
+                null,
+                .9,
+                6.,
+                10,
+            ];
+        })();
+
+        yield 'CPU count found, the CPUs are overloaded' => (static function () {
+            $finder = new DummyCpuCoreFinder(11);
+
+            return [
+                [$finder],
+                [],
+                1,
+                null,
+                .9,
+                9.5,
+                1,
+            ];
+        })();
+
+        yield 'CPU count found, the CPUs are being the limit set, but there is several CPUs available still' => (static function () {
+            $finder = new DummyCpuCoreFinder(11);
+
+            return [
+                [$finder],
+                [],
+                1,
+                null,
+                .5,
+                6.,
+                4,
+            ];
+        })();
+
+        yield 'CPU count found, the CPUs are at the limit of being overloaded' => (static function () {
+            $finder = new DummyCpuCoreFinder(11);
+
+            return [
+                [$finder],
+                [],
+                1,
+                null,
+                .9,
+                9.,
+                10,
+            ];
+        })();
+
+        yield 'CPU count found, the CPUs are overloaded but no load limit per CPU' => (static function () {
+            $finder = new DummyCpuCoreFinder(11);
+
+            return [
+                [$finder],
+                [],
+                1,
+                null,
+                null,
+                9.5,
+                10,
             ];
         })();
     }
