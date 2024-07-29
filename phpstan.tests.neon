@@ -1,5 +1,4 @@
 parameters:
-	checkMissingIterableValueType: false
 	inferPrivatePropertyTypeFromConstructor: true
 
 	level: 6
@@ -10,6 +9,7 @@ parameters:
 	tmpDir: .build/phpstan/tests/
 
 	ignoreErrors:
+		- identifier: missingType.iterableValue
 
 		# This is a sanity check
 		- path: tests/CpuCoreCounterTest.php
