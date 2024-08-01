@@ -17,8 +17,10 @@ use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 use InvalidArgumentException;
+use function implode;
 use function sprintf;
 use function sys_getloadavg;
+use const PHP_EOL;
 
 final class CpuCoreCounter
 {
@@ -63,7 +65,7 @@ final class CpuCoreCounter
         ?int $limit = null,
         ?float $loadLimitPerCore = .9,
         ?float $systemLoadAverage = null
-    ): int {
+    ): ParallelisationResult {
         self::checkLoadLimitPerCore($loadLimitPerCore);
         self::checkSystemLoadAverage($systemLoadAverage);
 
@@ -93,7 +95,16 @@ final class CpuCoreCounter
             $availableCpus = $correctedLimit;
         }
 
-        return (int) $availableCpus;
+        return new ParallelisationResult(
+            $reservedCpus,
+            $limit,
+            $loadLimitPerCore,
+            $systemLoadAverage,
+            $correctedLimit,
+            $correctedSystemLoadAverage,
+            $totalCoresCount,
+            (int) $availableCpus
+        );
     }
 
     /**
@@ -123,6 +134,34 @@ final class CpuCoreCounter
         } catch (NumberOfCpuCoreNotFound $exception) {
             return $fallback;
         }
+    }
+
+    /**
+     * This method is mostly for debugging purposes.
+     */
+    public function trace(): string
+    {
+        $output = [];
+
+        foreach ($this->finders as $finder) {
+            $output[] = sprintf(
+                'Executing the finder "%s":',
+                $finder->toString()
+            );
+            $output[] = $finder->diagnose();
+
+            $cores = $finder->find();
+
+            if (null !== $cores) {
+                $output[] = 'Result found: '.$cores;
+
+                break;
+            }
+
+            $output[] = '–––';
+        }
+
+        return implode(PHP_EOL, $output);
     }
 
     /**

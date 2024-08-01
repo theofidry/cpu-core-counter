@@ -206,7 +206,7 @@ final class CpuCoreCounterTest extends TestCase
                 $systemLoadAverage
             );
 
-        self::assertSame($expected, $actual);
+        self::assertSame($expected, $actual->availableCpus);
     }
 
     public static function availableCpuCoreProvider(): iterable
