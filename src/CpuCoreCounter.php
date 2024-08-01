@@ -43,14 +43,14 @@ final class CpuCoreCounter
     }
 
     /**
-     * @param positive-int $reservedCpus
-     * @param positive-int $limit
-     * @param float        $loadLimitPerCore  Limits the number of CPUs based on the system load
-     *                                        average per core in a range of [0., 1.].
-     * @param float        $systemLoadAverage The system load average. If not provided, it will be
-     *                                        retrieved using `sys_getloadavg()` to check the load
-     *                                        of the system in the past minute. Should be a positive
-     *                                        float.
+     * @param positive-int|0 $reservedCpus
+     * @param positive-int   $limit
+     * @param float          $loadLimitPerCore  Limits the number of CPUs based on the system load
+     *                                          average per core in a range of [0., 1.].
+     * @param float          $systemLoadAverage The system load average. If not provided, it will be
+     *                                          retrieved using `sys_getloadavg()` to check the load
+     *                                          of the system in the past minute. Should be a positive
+     *                                          float.
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */

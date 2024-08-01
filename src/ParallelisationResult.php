@@ -19,7 +19,7 @@ namespace Fidry\CpuCoreCounter;
 final class ParallelisationResult
 {
     /**
-     * @var positive-int
+     * @var positive-int|0
      */
     public $passedReservedCpus;
 
@@ -59,7 +59,7 @@ final class ParallelisationResult
     public $availableCpus;
 
     /**
-     * @param positive-int      $passedReservedCpus
+     * @param positive-int|0    $passedReservedCpus
      * @param positive-int|null $passedLimit
      * @param positive-int      $totalCoresCount
      * @param positive-int      $availableCpus
