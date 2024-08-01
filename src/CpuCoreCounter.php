@@ -43,6 +43,7 @@ final class CpuCoreCounter
     }
 
     /**
+<<<<<<< Updated upstream
      * @param positive-int|0 $reservedCpus Number of CPUs to reserve. This is useful when you want
      *                                     to reserve some CPUs for other processes. If the main
      *                                     process is going to be busy still, you may want to set
@@ -55,16 +56,27 @@ final class CpuCoreCounter
      *                                        retrieved using `sys_getloadavg()` to check the load
      *                                        of the system in the past minute. Should be a positive
      *                                        float.
+=======
+     * @param positive-int|0 $reservedCpus
+     * @param positive-int   $limit
+     * @param float          $loadLimit         Element of [0., 1.]. Limits the number of CPUs based on the system load
+     *                                          average. Set it to null or 1. to disable the check, it otherwise
+     *                                          will adjust the number of CPUs based on the system load average. For example if 3 cores out of 10 are busy and the load limit is set to 50%, only 2 cores will be available for parallelisation.
+     * @param float          $systemLoadAverage The system load average. If not provided, it will be
+     *                                          retrieved using `sys_getloadavg()` to check the load
+     *                                          of the system in the past minute. Should be a positive
+     *                                          float.
+>>>>>>> Stashed changes
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
     public function getAvailableForParallelisation(
         int $reservedCpus = 0,
         ?int $limit = null,
-        ?float $loadLimitPerCore = .9,
+        ?float $loadLimit = .9,
         ?float $systemLoadAverage = null
     ): ParallelisationResult {
-        self::checkLoadLimitPerCore($loadLimitPerCore);
+        self::checkLoadLimitPerCore($loadLimit);
         self::checkSystemLoadAverage($systemLoadAverage);
 
         $correctedLimit = null === $limit
@@ -81,7 +93,7 @@ final class CpuCoreCounter
         $systemLoadAveragePerCore = $correctedSystemLoadAverage / $availableCpus;
 
         // Adjust available CPUs based on current load
-        if (null !== $loadLimitPerCore && $systemLoadAveragePerCore > $loadLimitPerCore) {
+        if (null !== $loadLimit && $systemLoadAveragePerCore > $loadLimit) {
             $adjustedCpus = max(
                 1,
                 (1 - $systemLoadAveragePerCore) * $availableCpus
@@ -96,7 +108,7 @@ final class CpuCoreCounter
         return new ParallelisationResult(
             $reservedCpus,
             $limit,
-            $loadLimitPerCore,
+            $loadLimit,
             $systemLoadAverage,
             $correctedLimit,
             $correctedSystemLoadAverage,
