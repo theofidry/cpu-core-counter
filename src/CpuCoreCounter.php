@@ -41,7 +41,11 @@ final class CpuCoreCounter
     }
 
     /**
-     * @param positive-int $reservedCpus
+     * @param positive-int|0 $reservedCpus Number of CPUs to reserve. This is useful when you want
+     *                                     to reserve some CPUs for other processes. If the main
+     *                                     process is going to be busy still, you may want to set
+     *                                     this value to 1.
+     *
      * @param positive-int $limit
      * @param float        $loadLimitPerCore  Limits the number of CPUs based on the system load
      *                                        average per core in a range of [0., 1.].
@@ -55,7 +59,7 @@ final class CpuCoreCounter
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
     public function getAvailableForParallelisation(
-        int $reservedCpus = 1,
+        int $reservedCpus = 0,
         ?int $limit = null,
         ?float $loadLimitPerCore = .9,
         ?float $systemLoadAverage = null

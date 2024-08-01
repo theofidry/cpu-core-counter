@@ -251,7 +251,7 @@ final class CpuCoreCounterTest extends TestCase
             return [
                 [$finder],
                 ['KUBERNETES_CPU_LIMIT' => 8],
-                null,
+                1,
                 null,
                 null,
                 null,
@@ -265,7 +265,7 @@ final class CpuCoreCounterTest extends TestCase
             return [
                 [$finder],
                 ['KUBERNETES_CPU_LIMIT' => 5],
-                null,
+                1,
                 null,
                 null,
                 null,
@@ -279,7 +279,7 @@ final class CpuCoreCounterTest extends TestCase
             return [
                 [$finder],
                 ['KUBERNETES_CPU_LIMIT' => 4],
-                null,
+                1,
                 null,
                 null,
                 null,
@@ -301,7 +301,7 @@ final class CpuCoreCounterTest extends TestCase
             ];
         })();
 
-        yield 'CPU count found' => (static function () {
+        yield 'CPU count found: by default it reserves no CPU' => (static function () {
             $finder = new DummyCpuCoreFinder(5);
 
             return [
@@ -311,7 +311,7 @@ final class CpuCoreCounterTest extends TestCase
                 null,
                 null,
                 null,
-                4,
+                5,
             ];
         })();
 
