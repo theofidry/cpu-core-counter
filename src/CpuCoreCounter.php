@@ -56,8 +56,6 @@ final class CpuCoreCounter
      *                                        of the system in the past minute. Should be a positive
      *                                        float.
      *
-     * @return positive-int
-     *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
     public function getAvailableForParallelisation(
