@@ -43,77 +43,71 @@ final class CpuCoreCounter
     }
 
     /**
-<<<<<<< Updated upstream
-     * @param positive-int|0 $reservedCpus Number of CPUs to reserve. This is useful when you want
-     *                                     to reserve some CPUs for other processes. If the main
-     *                                     process is going to be busy still, you may want to set
-     *                                     this value to 1.
-     *
-     * @param positive-int $limit
-     * @param float        $loadLimitPerCore  Limits the number of CPUs based on the system load
-     *                                        average per core in a range of [0., 1.].
-     * @param float        $systemLoadAverage The system load average. If not provided, it will be
-     *                                        retrieved using `sys_getloadavg()` to check the load
-     *                                        of the system in the past minute. Should be a positive
-     *                                        float.
-=======
-     * @param positive-int|0 $reservedCpus
-     * @param positive-int   $limit
-     * @param float          $loadLimit         Element of [0., 1.]. Limits the number of CPUs based on the system load
-     *                                          average. Set it to null or 1. to disable the check, it otherwise
-     *                                          will adjust the number of CPUs based on the system load average. For example if 3 cores out of 10 are busy and the load limit is set to 50%, only 2 cores will be available for parallelisation.
-     * @param float          $systemLoadAverage The system load average. If not provided, it will be
+     * @param positive-int|0 $reservedCpus      Number of CPUs to reserve. This is useful when you want
+     *                                          to reserve some CPUs for other processes. If the main
+     *                                          process is going to be busy still, you may want to set
+     *                                          this value to 1.
+     * @param float|null $systemLoadLimit       Element of [0., 1.]. Limits the number of CPUs based
+     *                                          on the system load average. Set it to null or 1. to
+     *                                          disable the check, it otherwise will adjust the number
+     *                                          of CPUs based on the system load average. For example
+     *                                          if 3 cores out of 10 are busy and the load limit is
+     *                                          set to 50%, only 2 cores will be available for
+     *                                          parallelisation. The reserved cores are also taken
+     *                                          into consideration, i.e. if .7 is passed, it will
+     *                                          consider the max system load limit should not be
+     *                                          higher than 70% for the system cores minus the reserved
+     *                                          ones.
+     * @param float      $systemLoadAverage     The system load average. If not provided, it will be
      *                                          retrieved using `sys_getloadavg()` to check the load
      *                                          of the system in the past minute. Should be a positive
      *                                          float.
->>>>>>> Stashed changes
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
     public function getAvailableForParallelisation(
         int $reservedCpus = 0,
         ?int $limit = null,
-        ?float $loadLimit = .9,
+        ?float $systemLoadLimit = .9,
         ?float $systemLoadAverage = null
     ): ParallelisationResult {
-        self::checkLoadLimitPerCore($loadLimit);
+        self::checkLoadLimitPerCore($systemLoadLimit);
         self::checkSystemLoadAverage($systemLoadAverage);
 
         $correctedLimit = null === $limit
             ? self::getKubernetesLimit()
             : $limit;
 
-        $totalCoresCount = $this->getCountWithFallback(1);
-
-        $availableCpus = max(1, $totalCoresCount - $reservedCpus);
-
-        $correctedSystemLoadAverage = null === $systemLoadAverage
-            ? sys_getloadavg()[0] ?? 0.
-            : $systemLoadAverage;
-        $systemLoadAveragePerCore = $correctedSystemLoadAverage / $availableCpus;
+        $totalCoreCount = $this->getCountWithFallback(1);
+        $availableCores = max(1, $totalCoreCount - $reservedCpus);
 
         // Adjust available CPUs based on current load
-        if (null !== $loadLimit && $systemLoadAveragePerCore > $loadLimit) {
-            $adjustedCpus = max(
+        if (null !== $systemLoadLimit) {
+            $correctedSystemLoadAverage = null === $systemLoadAverage
+                ? sys_getloadavg()[0] ?? 0.
+                : $systemLoadAverage;
+
+            $numberOfFreeCores = max(
                 1,
-                (1 - $systemLoadAveragePerCore) * $availableCpus
+                $systemLoadLimit * $totalCoreCount - $correctedSystemLoadAverage
             );
-            $availableCpus = min($availableCpus, $adjustedCpus);
+
+            $availableCores = min($availableCores, $numberOfFreeCores);
         }
 
-        if (null !== $correctedLimit && $availableCpus > $correctedLimit) {
-            $availableCpus = $correctedLimit;
+        if (null !== $correctedLimit && $availableCores > $correctedLimit) {
+            $availableCores = $correctedLimit;
         }
 
         return new ParallelisationResult(
             $reservedCpus,
             $limit,
-            $loadLimit,
+            $systemLoadLimit,
             $systemLoadAverage,
             $correctedLimit,
-            $correctedSystemLoadAverage,
-            $totalCoresCount,
-            (int) $availableCpus
+            $correctedSystemLoadAverage ?? $systemLoadAverage,
+            $totalCoreCount,
+            (int) $availableCores
         );
     }
 

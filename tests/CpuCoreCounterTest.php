@@ -307,10 +307,10 @@ final class CpuCoreCounterTest extends TestCase
             return [
                 [$finder],
                 [],
+                0,
                 null,
                 null,
-                null,
-                null,
+                .0,
                 5,
             ];
         })();
@@ -367,7 +367,7 @@ final class CpuCoreCounterTest extends TestCase
                 null,
                 .9,
                 6.,
-                10,
+                3,
             ];
         })();
 
@@ -386,7 +386,7 @@ final class CpuCoreCounterTest extends TestCase
         })();
 
         yield 'CPU count found, the CPUs are being the limit set, but there is several CPUs available still' => (static function () {
-            $finder = new DummyCpuCoreFinder(11);
+            $finder = new DummyCpuCoreFinder(10);
 
             return [
                 [$finder],
@@ -424,6 +424,20 @@ final class CpuCoreCounterTest extends TestCase
                 null,
                 9.5,
                 10,
+            ];
+        })();
+
+        yield 'load limit doc example' => (static function () {
+            $finder = new DummyCpuCoreFinder(10);
+
+            return [
+                [$finder],
+                [],
+                0,
+                null,
+                .5,
+                3,
+                2,
             ];
         })();
     }

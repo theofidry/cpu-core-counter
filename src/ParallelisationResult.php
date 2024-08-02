@@ -70,7 +70,7 @@ final class ParallelisationResult
         ?float $passedLoadLimitPerCore,
         ?float $passedSystemLoadAverage,
         ?int $correctedLimit,
-        float $correctedSystemLoadAverage,
+        ?float $correctedSystemLoadAverage,
         int $totalCoresCount,
         int $availableCpus
     ) {
