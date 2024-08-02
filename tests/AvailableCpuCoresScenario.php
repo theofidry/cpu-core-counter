@@ -49,7 +49,7 @@ final class AvailableCpuCoresScenario
         array $environmentVariables,
         int $reservedCpus,
         ?int $limit,
-        ?float $loadLimitPerCore,
+        ?float $loadLimit,
         ?float $systemLoadAverage,
         int $expected
     ) {
@@ -57,7 +57,7 @@ final class AvailableCpuCoresScenario
         $this->environmentVariables = $environmentVariables;
         $this->reservedCpus = $reservedCpus;
         $this->limit = $limit;
-        $this->loadLimitPerCore = $loadLimitPerCore;
+        $this->loadLimitPerCore = $loadLimit;
         $this->systemLoadAverage = $systemLoadAverage;
         $this->expected = $expected;
     }
@@ -76,7 +76,7 @@ final class AvailableCpuCoresScenario
         array $environmentVariables,
         ?int $reservedCpus,
         ?int $limit,
-        ?float $loadLimitPerCore,
+        ?float $loadLimit,
         ?float $systemLoadAverage,
         int $expected
     ): array {
@@ -90,7 +90,7 @@ final class AvailableCpuCoresScenario
                 $environmentVariables,
                 $reservedCpus ?? 0,
                 $limit,
-                $loadLimitPerCore,
+                $loadLimit,
                 $systemLoadAverage ?? 0.,
                 $expected
             ),
