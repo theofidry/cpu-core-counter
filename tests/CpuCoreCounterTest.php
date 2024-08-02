@@ -299,14 +299,24 @@ final class CpuCoreCounterTest extends TestCase
             1
         );
 
-        yield 'CPU count found, over half the cores are used' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found, over half the cores are used and no limit is set' => AvailableCpuCoresScenario::create(
             11,
             [],
             1,
             null,
-            .9,
+            null,
             6.,
             10
+        );
+
+        yield 'CPU count found, over half the cores are used and a limit is set' => AvailableCpuCoresScenario::create(
+            11,
+            [],
+            1,
+            null,
+            1.,
+            6.,
+            4
         );
 
         yield 'CPU count found, the CPUs are overloaded' => AvailableCpuCoresScenario::create(
@@ -319,24 +329,24 @@ final class CpuCoreCounterTest extends TestCase
             1
         );
 
-        yield 'CPU count found, the CPUs are being the limit set, but there is several CPUs available still' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found, the load limit is set, but there is several CPUs available still' => AvailableCpuCoresScenario::create(
             11,
             [],
             1,
             null,
             .5,
             6.,
-            4
+            2
         );
 
-        yield 'CPU count found, the CPUs are at the limit of being overloaded' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found, the CPUs are at completely overloaded' => AvailableCpuCoresScenario::create(
             11,
             [],
             1,
             null,
-            .9,
-            9.,
-            10
+            .5,
+            11.,
+            1
         );
 
         yield 'CPU count found, the CPUs are overloaded but no load limit per CPU' => AvailableCpuCoresScenario::create(

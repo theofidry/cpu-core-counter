@@ -47,18 +47,18 @@ final class CpuCoreCounter
      *                                          to reserve some CPUs for other processes. If the main
      *                                          process is going to be busy still, you may want to set
      *                                          this value to 1.
-     * @param float|null $systemLoadLimit       Element of [0., 1.]. Limits the number of CPUs based
-     *                                          on the system load average. Set it to null or 1. to
-     *                                          disable the check, it otherwise will adjust the number
-     *                                          of CPUs based on the system load average. For example
-     *                                          if 3 cores out of 10 are busy and the load limit is
-     *                                          set to 50%, only 2 cores will be available for
-     *                                          parallelisation. The reserved cores are also taken
-     *                                          into consideration, i.e. if .7 is passed, it will
-     *                                          consider the max system load limit should not be
-     *                                          higher than 70% for the system cores minus the reserved
-     *                                          ones.
-     * @param float      $systemLoadAverage     The system load average. If not provided, it will be
+     * @param float|null     $loadLimit         Element of [0., 1.]. Percentage representing the
+     *                                          amount of cores that should be used among the available
+     *                                          resources. For instance, if set to 0.7, it will use 70%
+     *                                          of the available cores, i.e. if 1 core is reserved, 11
+     *                                          cores are available and 5 are busy, it will use 70%
+     *                                          of (11-1-5)=5 cores, so 3 cores. Set this parameter to null
+     *                                          to skip this check. Beware that 1 does not mean "no limit",
+     *                                          but 100% of the _available_ resources, i.e. with the
+     *                                          previous example, it will return 5 cores. How busy is
+     *                                          the system is determined by the system load average
+     *                                          (see $systemLoadAverage).
+     * @param float          $systemLoadAverage The system load average. If not provided, it will be
      *                                          retrieved using `sys_getloadavg()` to check the load
      *                                          of the system in the past minute. Should be a positive
      *                                          float.
@@ -68,10 +68,10 @@ final class CpuCoreCounter
     public function getAvailableForParallelisation(
         int $reservedCpus = 0,
         ?int $limit = null,
-        ?float $systemLoadLimit = .9,
+        ?float $loadLimit = null,
         ?float $systemLoadAverage = null
     ): ParallelisationResult {
-        self::checkLoadLimitPerCore($systemLoadLimit);
+        self::checkLoadLimit($loadLimit);
         self::checkSystemLoadAverage($systemLoadAverage);
 
         $correctedLimit = null === $limit
@@ -82,17 +82,15 @@ final class CpuCoreCounter
         $availableCores = max(1, $totalCoreCount - $reservedCpus);
 
         // Adjust available CPUs based on current load
-        if (null !== $systemLoadLimit) {
+        if (null !== $loadLimit) {
             $correctedSystemLoadAverage = null === $systemLoadAverage
                 ? sys_getloadavg()[0] ?? 0.
                 : $systemLoadAverage;
 
-            $numberOfFreeCores = max(
+            $availableCores = max(
                 1,
-                $systemLoadLimit * $totalCoreCount - $correctedSystemLoadAverage
+                $loadLimit * ($availableCores - $correctedSystemLoadAverage)
             );
-
-            $availableCores = min($availableCores, $numberOfFreeCores);
         }
 
         if (null !== $correctedLimit && $availableCores > $correctedLimit) {
@@ -102,7 +100,7 @@ final class CpuCoreCounter
         return new ParallelisationResult(
             $reservedCpus,
             $limit,
-            $systemLoadLimit,
+            $loadLimit,
             $systemLoadAverage,
             $correctedLimit,
             $correctedSystemLoadAverage ?? $systemLoadAverage,
@@ -211,7 +209,7 @@ final class CpuCoreCounter
         return $finder->find();
     }
 
-    private static function checkLoadLimitPerCore(?float $loadLimitPerCore): void
+    private static function checkLoadLimit(?float $loadLimitPerCore): void
     {
         if (null === $loadLimitPerCore) {
             return;
