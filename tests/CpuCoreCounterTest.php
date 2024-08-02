@@ -170,276 +170,184 @@ final class CpuCoreCounterTest extends TestCase
 
     /**
      * @dataProvider availableCpuCoreProvider
-     *
-     * @param list<CpuCoreFinder>        $finders
-     * @param array<string, string|null> $environmentVariables
-     * @param positive-int               $expected
      */
-    public function test_it_can_get_the_number_of_available_cpu_cores_for_parallelisation(
-        array $finders,
-        array $environmentVariables,
-        ?int $reservedCpus,
-        ?int $limit,
-        ?float $maxLoadPerCore,
-        ?float $systemLoadAverage,
-        int $expected
-    ): void {
-        $this->setUpEnvironmentVariables($environmentVariables);
+    public function test_it_can_get_the_number_of_available_cpu_cores_for_parallelisation(AvailableCpuCoresScenario $scenario): void
+    {
+        $this->setUpEnvironmentVariables($scenario->environmentVariables);
 
-        $counter = new CpuCoreCounter($finders);
+        $counter = new CpuCoreCounter($scenario->finders);
 
-        // Sanity check: this is due to not being able to use named parameters.
-        // If the reserved CPU is not set, then all other parameters should be
-        // the default values
-        if (null === $reservedCpus) {
-            self::assertNull($limit);
-            self::assertNull($maxLoadPerCore);
-            self::assertNull($systemLoadAverage);
-        }
+        $actual = $counter->getAvailableForParallelisation(
+            $scenario->reservedCpus,
+            $scenario->limit,
+            $scenario->loadLimitPerCore,
+            $scenario->systemLoadAverage
+        );
 
-        $actual = null === $reservedCpus
-            ? $counter->getAvailableForParallelisation()
-            : $counter->getAvailableForParallelisation(
-                $reservedCpus,
-                $limit,
-                $maxLoadPerCore,
-                $systemLoadAverage
-            );
-
-        self::assertSame($expected, $actual->availableCpus);
+        self::assertSame($scenario->expected, $actual->availableCpus);
     }
 
     public static function availableCpuCoreProvider(): iterable
     {
-        yield 'no finder' => [
+        yield 'no finder' => AvailableCpuCoresScenario::create(
+            null,
             [],
-            [],
-            null,
-            null,
-            null,
-            null,
             1,
-        ];
+            null,
+            null,
+            null,
+            1
+        );
 
-        yield 'no finder, multiple CPUs reserved' => [
-            [],
+        yield 'no finder, multiple CPUs reserved' => AvailableCpuCoresScenario::create(
+            null,
             [],
             3,
             null,
             null,
             null,
+            1
+        );
+
+        yield 'CPU count found: kubernetes limit set and lower than the count found' => AvailableCpuCoresScenario::create(
+            5,
+            ['KUBERNETES_CPU_LIMIT' => 2],
             1,
-        ];
+            null,
+            null,
+            null,
+            2
+        );
 
-        yield 'CPU count found: kubernetes limit set and lower than the count found' => (static function () {
-            $finder = new DummyCpuCoreFinder(5);
+        yield 'CPU count found: kubernetes limit set and higher than the count found' => AvailableCpuCoresScenario::create(
+            5,
+            ['KUBERNETES_CPU_LIMIT' => 8],
+            1,
+            null,
+            null,
+            null,
+            4
+        );
 
-            return [
-                [$finder],
-                ['KUBERNETES_CPU_LIMIT' => 2],
-                null,
-                null,
-                null,
-                null,
-                2,
-            ];
-        })();
+        yield 'CPU count found: kubernetes limit set and equal to the count found' => AvailableCpuCoresScenario::create(
+            5,
+            ['KUBERNETES_CPU_LIMIT' => 5],
+            1,
+            null,
+            null,
+            null,
+            4
+        );
 
-        yield 'CPU count found: kubernetes limit set and higher than the count found' => (static function () {
-            $finder = new DummyCpuCoreFinder(5);
+        yield 'CPU count found: kubernetes limit set and equal to the count found after reserved CPUs' => AvailableCpuCoresScenario::create(
+            5,
+            ['KUBERNETES_CPU_LIMIT' => 4],
+            1,
+            null,
+            null,
+            null,
+            4
+        );
 
-            return [
-                [$finder],
-                ['KUBERNETES_CPU_LIMIT' => 8],
-                1,
-                null,
-                null,
-                null,
-                4,
-            ];
-        })();
+        yield 'CPU count found: kubernetes limit set and limit set' => AvailableCpuCoresScenario::create(
+            5,
+            ['KUBERNETES_CPU_LIMIT' => 2],
+            1,
+            3,
+            null,
+            null,
+            3
+        );
 
-        yield 'CPU count found: kubernetes limit set and equal to the count found' => (static function () {
-            $finder = new DummyCpuCoreFinder(5);
+        yield 'CPU count found: by default it reserves no CPU' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            null,
+            null,
+            null,
+            null,
+            5
+        );
 
-            return [
-                [$finder],
-                ['KUBERNETES_CPU_LIMIT' => 5],
-                1,
-                null,
-                null,
-                null,
-                4,
-            ];
-        })();
+        yield 'CPU count found higher than the limit passed' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            1,
+            3,
+            null,
+            null,
+            3
+        );
 
-        yield 'CPU count found: kubernetes limit set and equal to the count found after reserved CPUs' => (static function () {
-            $finder = new DummyCpuCoreFinder(5);
+        yield 'CPU count found, multiple CPUs reserved' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            2,
+            null,
+            null,
+            null,
+            3
+        );
 
-            return [
-                [$finder],
-                ['KUBERNETES_CPU_LIMIT' => 4],
-                1,
-                null,
-                null,
-                null,
-                4,
-            ];
-        })();
+        yield 'CPU count found, all CPUs reserved' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            5,
+            null,
+            null,
+            null,
+            1
+        );
 
-        yield 'CPU count found: kubernetes limit set and limit set' => (static function () {
-            $finder = new DummyCpuCoreFinder(5);
+        yield 'CPU count found, over half the cores are used' => AvailableCpuCoresScenario::create(
+            11,
+            [],
+            1,
+            null,
+            .9,
+            6.,
+            10
+        );
 
-            return [
-                [$finder],
-                ['KUBERNETES_CPU_LIMIT' => 2],
-                1,
-                3,
-                null,
-                null,
-                3,
-            ];
-        })();
+        yield 'CPU count found, the CPUs are overloaded' => AvailableCpuCoresScenario::create(
+            11,
+            [],
+            1,
+            null,
+            .9,
+            9.5,
+            1
+        );
 
-        yield 'CPU count found: by default it reserves no CPU' => (static function () {
-            $finder = new DummyCpuCoreFinder(5);
+        yield 'CPU count found, the CPUs are being the limit set, but there is several CPUs available still' => AvailableCpuCoresScenario::create(
+            11,
+            [],
+            1,
+            null,
+            .5,
+            6.,
+            4
+        );
 
-            return [
-                [$finder],
-                [],
-                0,
-                null,
-                null,
-                .0,
-                5,
-            ];
-        })();
+        yield 'CPU count found, the CPUs are at the limit of being overloaded' => AvailableCpuCoresScenario::create(
+            11,
+            [],
+            1,
+            null,
+            .9,
+            9.,
+            10
+        );
 
-        yield 'CPU count found higher than the limit passed' => (static function () {
-            $finder = new DummyCpuCoreFinder(5);
-
-            return [
-                [$finder],
-                [],
-                1,
-                3,
-                null,
-                null,
-                3,
-            ];
-        })();
-
-        yield 'CPU count found, multiple CPUs reserved' => (static function () {
-            $finder = new DummyCpuCoreFinder(5);
-
-            return [
-                [$finder],
-                [],
-                2,
-                null,
-                null,
-                null,
-                3,
-            ];
-        })();
-
-        yield 'CPU count found, all CPUs reserved' => (static function () {
-            $finder = new DummyCpuCoreFinder(5);
-
-            return [
-                [$finder],
-                [],
-                5,
-                null,
-                null,
-                null,
-                1,
-            ];
-        })();
-
-        yield 'CPU count found, over half the cores are used' => (static function () {
-            $finder = new DummyCpuCoreFinder(11);
-
-            return [
-                [$finder],
-                [],
-                1,
-                null,
-                .9,
-                6.,
-                3,
-            ];
-        })();
-
-        yield 'CPU count found, the CPUs are overloaded' => (static function () {
-            $finder = new DummyCpuCoreFinder(11);
-
-            return [
-                [$finder],
-                [],
-                1,
-                null,
-                .9,
-                9.5,
-                1,
-            ];
-        })();
-
-        yield 'CPU count found, the CPUs are being the limit set, but there is several CPUs available still' => (static function () {
-            $finder = new DummyCpuCoreFinder(10);
-
-            return [
-                [$finder],
-                [],
-                1,
-                null,
-                .5,
-                6.,
-                4,
-            ];
-        })();
-
-        yield 'CPU count found, the CPUs are at the limit of being overloaded' => (static function () {
-            $finder = new DummyCpuCoreFinder(11);
-
-            return [
-                [$finder],
-                [],
-                1,
-                null,
-                .9,
-                9.,
-                10,
-            ];
-        })();
-
-        yield 'CPU count found, the CPUs are overloaded but no load limit per CPU' => (static function () {
-            $finder = new DummyCpuCoreFinder(11);
-
-            return [
-                [$finder],
-                [],
-                1,
-                null,
-                null,
-                9.5,
-                10,
-            ];
-        })();
-
-        yield 'load limit doc example' => (static function () {
-            $finder = new DummyCpuCoreFinder(10);
-
-            return [
-                [$finder],
-                [],
-                0,
-                null,
-                .5,
-                3,
-                2,
-            ];
-        })();
+        yield 'CPU count found, the CPUs are overloaded but no load limit per CPU' => AvailableCpuCoresScenario::create(
+            11,
+            [],
+            1,
+            null,
+            null,
+            9.5,
+            10
+        );
     }
 
     /**
