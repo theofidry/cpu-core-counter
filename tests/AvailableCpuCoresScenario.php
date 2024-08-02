@@ -38,11 +38,11 @@ final class AvailableCpuCoresScenario
     public $expected;
 
     /**
-     * @param list<CpuCoreFinder>        $finders
-     * @param array<string, string|null> $environmentVariables
-     * @param positive-int|0             $reservedCpus
-     * @param positive-int               $limit
-     * @param positive-int               $expected
+     * @param list<CpuCoreFinder>            $finders
+     * @param array<string, string|int|null> $environmentVariables
+     * @param positive-int|0                 $reservedCpus
+     * @param positive-int                   $limit
+     * @param positive-int                   $expected
      */
     public function __construct(
         array $finders,
@@ -54,6 +54,7 @@ final class AvailableCpuCoresScenario
         int $expected
     ) {
         $this->finders = $finders;
+        $this->environmentVariables = $environmentVariables;
         $this->reservedCpus = $reservedCpus;
         $this->limit = $limit;
         $this->loadLimitPerCore = $loadLimitPerCore;
@@ -62,10 +63,13 @@ final class AvailableCpuCoresScenario
     }
 
     /**
-     * @param positive-int|null          $coresCountFound
-     * @param array<string, string|null> $environmentVariables
-     * @param positive-int|0             $reservedCpus
-     * @param positive-int               $limit
+     * @param positive-int|null              $coresCountFound
+     * @param array<string, string|int|null> $environmentVariables
+     * @param positive-int|0                 $reservedCpus
+     * @param positive-int                   $limit
+     * @param positive-int                   $expected
+     *
+     * @return array{self}
      */
     public static function create(
         ?int $coresCountFound,
@@ -75,7 +79,7 @@ final class AvailableCpuCoresScenario
         ?float $loadLimitPerCore,
         ?float $systemLoadAverage,
         int $expected
-    ) {
+    ): array {
         $finders = null === $coresCountFound
             ? []
             : [new DummyCpuCoreFinder($coresCountFound)];
@@ -84,7 +88,7 @@ final class AvailableCpuCoresScenario
             new self(
                 $finders,
                 $environmentVariables,
-                $reservedCpus,
+                $reservedCpus ?? 0,
                 $limit,
                 $loadLimitPerCore,
                 $systemLoadAverage ?? 0.,
