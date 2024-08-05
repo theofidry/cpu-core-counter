@@ -361,6 +361,52 @@ final class CpuCoreCounterTest extends TestCase
     }
 
     /**
+     * @dataProvider limitProvider
+     */
+    public function test_it_does_not_accept_invalid_limit(
+        int $countLimit,
+        ?string $expectedExceptionMessage
+    ): void {
+        $cpuCoreCounter = new CpuCoreCounter();
+
+        if (null !== $expectedExceptionMessage) {
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        }
+
+        $cpuCoreCounter->getAvailableForParallelisation(
+            1,
+            $countLimit
+        );
+
+        if (null === $expectedExceptionMessage) {
+            $this->addToAssertionCount(1);
+        }
+    }
+
+    public static function limitProvider(): iterable
+    {
+        yield 'below limit' => [
+            -2,
+            'The limit must be a positive integer. Got "-2".',
+        ];
+
+        yield 'invalid limit' => [
+            0,
+            'The limit must be a positive integer. Got "0".',
+        ];
+
+        yield 'within the limit (upper)' => [
+            1,
+            null,
+        ];
+
+        yield 'above limit' => [
+            2,
+            null,
+        ];
+    }
+
+    /**
      * @dataProvider loadLimitProvider
      */
     public function test_it_does_not_accept_invalid_load_limit(

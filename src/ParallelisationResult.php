@@ -61,6 +61,7 @@ final class ParallelisationResult
     /**
      * @param positive-int|0    $passedReservedCpus
      * @param positive-int|null $passedLimit
+     * @param positive-int|null $correctedLimit
      * @param positive-int      $totalCoresCount
      * @param positive-int      $availableCpus
      */
