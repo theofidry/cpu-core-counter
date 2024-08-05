@@ -43,28 +43,28 @@ final class CpuCoreCounter
     }
 
     /**
-     * @param positive-int|0 $reservedCpus      Number of CPUs to reserve. This is useful when you want
-     *                                          to reserve some CPUs for other processes. If the main
-     *                                          process is going to be busy still, you may want to set
-     *                                          this value to 1.
-     * @param positive-int   $countLimit        The maximum number of CPUs to return. If not provided, it
-     *                                          may look for a limit in the environment variables, e.g.
-     *                                          KUBERNETES_CPU_LIMIT.
-     * @param float|null     $loadLimit         Element of [0., 1.]. Percentage representing the
-     *                                          amount of cores that should be used among the available
-     *                                          resources. For instance, if set to 0.7, it will use 70%
-     *                                          of the available cores, i.e. if 1 core is reserved, 11
-     *                                          cores are available and 5 are busy, it will use 70%
-     *                                          of (11-1-5)=5 cores, so 3 cores. Set this parameter to null
-     *                                          to skip this check. Beware that 1 does not mean "no limit",
-     *                                          but 100% of the _available_ resources, i.e. with the
-     *                                          previous example, it will return 5 cores. How busy is
-     *                                          the system is determined by the system load average
-     *                                          (see $systemLoadAverage).
-     * @param float|null     $systemLoadAverage The system load average. If not provided, it will be
-     *                                          retrieved using `sys_getloadavg()` to check the load
-     *                                          of the system in the past minute. Should be a positive
-     *                                          float.
+     * @param positive-int|0    $reservedCpus      Number of CPUs to reserve. This is useful when you want
+     *                                             to reserve some CPUs for other processes. If the main
+     *                                             process is going to be busy still, you may want to set
+     *                                             this value to 1.
+     * @param positive-int|null $countLimit        The maximum number of CPUs to return. If not provided, it
+     *                                             may look for a limit in the environment variables, e.g.
+     *                                             KUBERNETES_CPU_LIMIT.
+     * @param float|null        $loadLimit         Element of [0., 1.]. Percentage representing the
+     *                                             amount of cores that should be used among the available
+     *                                             resources. For instance, if set to 0.7, it will use 70%
+     *                                             of the available cores, i.e. if 1 core is reserved, 11
+     *                                             cores are available and 5 are busy, it will use 70%
+     *                                             of (11-1-5)=5 cores, so 3 cores. Set this parameter to null
+     *                                             to skip this check. Beware that 1 does not mean "no limit",
+     *                                             but 100% of the _available_ resources, i.e. with the
+     *                                             previous example, it will return 5 cores. How busy is
+     *                                             the system is determined by the system load average
+     *                                             (see $systemLoadAverage).
+     * @param float|null        $systemLoadAverage The system load average. If not provided, it will be
+     *                                             retrieved using `sys_getloadavg()` to check the load
+     *                                             of the system in the past minute. Should be a positive
+     *                                             float.
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
@@ -74,6 +74,7 @@ final class CpuCoreCounter
         ?float $loadLimit = null,
         ?float $systemLoadAverage = null
     ): ParallelisationResult {
+        self::checkCountLimit($countLimit);
         self::checkLoadLimit($loadLimit);
         self::checkSystemLoadAverage($systemLoadAverage);
 
@@ -205,6 +206,9 @@ final class CpuCoreCounter
         throw NumberOfCpuCoreNotFound::create();
     }
 
+    /**
+     * @return positive-int|null
+     */
     public static function getKubernetesLimit(): ?int
     {
         $finder = new EnvVariableFinder('KUBERNETES_CPU_LIMIT');
@@ -212,17 +216,29 @@ final class CpuCoreCounter
         return $finder->find();
     }
 
-    private static function checkLoadLimit(?float $loadLimitPerCore): void
+    private static function checkCountLimit(?int $countLimit): void
     {
-        if (null === $loadLimitPerCore) {
+        if (null !== $countLimit && 0 >= $countLimit) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The count limit must be a positive integer. Got "%s".',
+                    $countLimit
+                )
+            );
+        }
+    }
+
+    private static function checkLoadLimit(?float $loadLimit): void
+    {
+        if (null === $loadLimit) {
             return;
         }
 
-        if ($loadLimitPerCore < 0. || $loadLimitPerCore > 1.) {
+        if ($loadLimit < 0. || $loadLimit > 1.) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'The load limit per core must be in the range [0., 1.], got "%s".',
-                    $loadLimitPerCore
+                    'The load limit must be in the range [0., 1.], got "%s".',
+                    $loadLimit
                 )
             );
         }
