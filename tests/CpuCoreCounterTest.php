@@ -361,10 +361,10 @@ final class CpuCoreCounterTest extends TestCase
     }
 
     /**
-     * @dataProvider loadLimitPerCoreProvider
+     * @dataProvider loadLimitProvider
      */
-    public function test_it_does_not_accept_invalid_load_limit_per_core(
-        float $loadLimitPerCore,
+    public function test_it_does_not_accept_invalid_load_limit(
+        float $loadLimit,
         ?string $expectedExceptionMessage
     ): void {
         $cpuCoreCounter = new CpuCoreCounter();
@@ -376,7 +376,7 @@ final class CpuCoreCounterTest extends TestCase
         $cpuCoreCounter->getAvailableForParallelisation(
             1,
             null,
-            $loadLimitPerCore
+            $loadLimit
         );
 
         if (null === $expectedExceptionMessage) {
@@ -384,11 +384,11 @@ final class CpuCoreCounterTest extends TestCase
         }
     }
 
-    public static function loadLimitPerCoreProvider(): iterable
+    public static function loadLimitProvider(): iterable
     {
         yield 'below limit' => [
             -0.001,
-            'The load limit per core must be in the range [0., 1.], got "-0.001".',
+            'The load limit must be in the range [0., 1.], got "-0.001".',
         ];
 
         yield 'within the limit (min)' => [
@@ -403,7 +403,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'above limit' => [
             1.001,
-            'The load limit per core must be in the range [0., 1.], got "1.001".',
+            'The load limit must be in the range [0., 1.], got "1.001".',
         ];
     }
 
