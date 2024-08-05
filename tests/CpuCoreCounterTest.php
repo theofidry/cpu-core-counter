@@ -279,6 +279,16 @@ final class CpuCoreCounterTest extends TestCase
             3
         );
 
+        yield 'CPU count found, negative limit passed' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            1,
+            -2,
+            null,
+            null,
+            3
+        );
+
         yield 'CPU count found, multiple CPUs reserved' => AvailableCpuCoresScenario::create(
             5,
             [],
@@ -361,10 +371,61 @@ final class CpuCoreCounterTest extends TestCase
     }
 
     /**
-     * @dataProvider loadLimitPerCoreProvider
+     * @dataProvider countLimitProvider
      */
-    public function test_it_does_not_accept_invalid_load_limit_per_core(
-        float $loadLimitPerCore,
+    public function test_it_does_not_accept_invalid_count_limit(
+        int $countLimit,
+        ?string $expectedExceptionMessage
+    ): void {
+        $cpuCoreCounter = new CpuCoreCounter();
+
+        if (null !== $expectedExceptionMessage) {
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        }
+
+        $cpuCoreCounter->getAvailableForParallelisation(
+            1,
+            $countLimit
+        );
+
+        if (null === $expectedExceptionMessage) {
+            $this->addToAssertionCount(1);
+        }
+    }
+
+    public static function countLimitProvider(): iterable
+    {
+        yield 'below limit' => [
+            -2,
+            null,
+        ];
+
+        yield 'within the limit (lower)' => [
+            -1,
+            null,
+        ];
+
+        yield 'invalid limit' => [
+            0,
+            'The count limit must be a non zero integer. Got 0.',
+        ];
+
+        yield 'within the limit (upper)' => [
+            1,
+            null,
+        ];
+
+        yield 'above limit' => [
+            2,
+            null,
+        ];
+    }
+
+    /**
+     * @dataProvider loadLimitProvider
+     */
+    public function test_it_does_not_accept_invalid_load_limit(
+        float $loadLimit,
         ?string $expectedExceptionMessage
     ): void {
         $cpuCoreCounter = new CpuCoreCounter();
@@ -376,7 +437,7 @@ final class CpuCoreCounterTest extends TestCase
         $cpuCoreCounter->getAvailableForParallelisation(
             1,
             null,
-            $loadLimitPerCore
+            $loadLimit
         );
 
         if (null === $expectedExceptionMessage) {
@@ -384,11 +445,11 @@ final class CpuCoreCounterTest extends TestCase
         }
     }
 
-    public static function loadLimitPerCoreProvider(): iterable
+    public static function loadLimitProvider(): iterable
     {
         yield 'below limit' => [
             -0.001,
-            'The load limit per core must be in the range [0., 1.], got "-0.001".',
+            'The load limit must be in the range [0., 1.], got "-0.001".',
         ];
 
         yield 'within the limit (min)' => [
@@ -403,7 +464,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'above limit' => [
             1.001,
-            'The load limit per core must be in the range [0., 1.], got "1.001".',
+            'The load limit must be in the range [0., 1.], got "1.001".',
         ];
     }
 

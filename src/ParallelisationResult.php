@@ -24,9 +24,9 @@ final class ParallelisationResult
     public $passedReservedCpus;
 
     /**
-     * @var positive-int|null
+     * @var non-zero-int|null
      */
-    public $passedLimit;
+    public $passedCountLimit;
 
     /**
      * @var float|null
@@ -39,9 +39,9 @@ final class ParallelisationResult
     public $passedSystemLoadAverage;
 
     /**
-     * @var positive-int|null
+     * @var non-zero-int|null
      */
-    public $correctedLimit;
+    public $correctedCountLimit;
 
     /**
      * @var float|null
@@ -60,25 +60,26 @@ final class ParallelisationResult
 
     /**
      * @param positive-int|0    $passedReservedCpus
-     * @param positive-int|null $passedLimit
+     * @param non-zero-int|null $passedCountLimit
+     * @param non-zero-int|null $correctedCountLimit
      * @param positive-int      $totalCoresCount
      * @param positive-int      $availableCpus
      */
     public function __construct(
         int $passedReservedCpus,
-        ?int $passedLimit,
+        ?int $passedCountLimit,
         ?float $passedLoadLimit,
         ?float $passedSystemLoadAverage,
-        ?int $correctedLimit,
+        ?int $correctedCountLimit,
         ?float $correctedSystemLoadAverage,
         int $totalCoresCount,
         int $availableCpus
     ) {
         $this->passedReservedCpus = $passedReservedCpus;
-        $this->passedLimit = $passedLimit;
+        $this->passedCountLimit = $passedCountLimit;
         $this->passedLoadLimit = $passedLoadLimit;
         $this->passedSystemLoadAverage = $passedSystemLoadAverage;
-        $this->correctedLimit = $correctedLimit;
+        $this->correctedCountLimit = $correctedCountLimit;
         $this->correctedSystemLoadAverage = $correctedSystemLoadAverage;
         $this->totalCoresCount = $totalCoresCount;
         $this->availableCpus = $availableCpus;
