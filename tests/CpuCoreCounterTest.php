@@ -179,8 +179,8 @@ final class CpuCoreCounterTest extends TestCase
 
         $actual = $counter->getAvailableForParallelisation(
             $scenario->reservedCpus,
-            $scenario->limit,
-            $scenario->loadLimitPerCore,
+            $scenario->countLimit,
+            $scenario->loadLimit,
             $scenario->systemLoadAverage
         );
 
@@ -269,7 +269,7 @@ final class CpuCoreCounterTest extends TestCase
             5
         );
 
-        yield 'CPU count found higher than the limit passed' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found higher than the count limit passed' => AvailableCpuCoresScenario::create(
             5,
             [],
             1,
@@ -280,6 +280,26 @@ final class CpuCoreCounterTest extends TestCase
         );
 
         yield 'CPU count found, negative limit passed' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            0,
+            -2,
+            null,
+            null,
+            3
+        );
+
+        yield 'CPU count found, negative limit beyond available resources' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            0,
+            -10,
+            null,
+            null,
+            1
+        );
+
+        yield 'CPU count found, with reserved CPU, negative limit passed' => AvailableCpuCoresScenario::create(
             5,
             [],
             1,
@@ -407,7 +427,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'invalid limit' => [
             0,
-            'The count limit must be a non zero integer. Got 0.',
+            'The count limit must be a non zero integer. Got "0".',
         ];
 
         yield 'within the limit (upper)' => [

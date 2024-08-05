@@ -15,6 +15,3 @@ parameters:
 
 		- path: src/CpuCoreCounter.php
 		  message: '#ParallelisationResult constructor expects int\<1\, max\>, int given\.#'
-
-		- path: src/ParallelisationResult.php
-		  message: '#\$correctedLimit \(int\<1\, max\>\|null\) does not accept int\|null#'

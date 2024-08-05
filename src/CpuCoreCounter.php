@@ -18,6 +18,7 @@ use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 use InvalidArgumentException;
 use function implode;
+use function max;
 use function sprintf;
 use function sys_getloadavg;
 use const PHP_EOL;
@@ -101,7 +102,7 @@ final class CpuCoreCounter
         } else {
             $correctedCountLimit = $countLimit > 0
                 ? $countLimit
-                : $totalCoreCount + $countLimit;
+                : max(1, $totalCoreCount + $countLimit);
         }
 
         if (null !== $correctedCountLimit && $availableCores > $correctedCountLimit) {
@@ -213,6 +214,9 @@ final class CpuCoreCounter
         throw NumberOfCpuCoreNotFound::create();
     }
 
+    /**
+     * @return positive-int|null
+     */
     public static function getKubernetesLimit(): ?int
     {
         $finder = new EnvVariableFinder('KUBERNETES_CPU_LIMIT');
@@ -224,7 +228,7 @@ final class CpuCoreCounter
     {
         if (0 === $countLimit) {
             throw new InvalidArgumentException(
-                'The count limit must be a non zero integer. Got 0.'
+                'The count limit must be a non zero integer. Got "0".'
             );
         }
     }
