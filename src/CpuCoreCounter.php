@@ -210,17 +210,17 @@ final class CpuCoreCounter
         return $finder->find();
     }
 
-    private static function checkLoadLimit(?float $loadLimitPerCore): void
+    private static function checkLoadLimit(?float $loadLimit): void
     {
-        if (null === $loadLimitPerCore) {
+        if (null === $loadLimit) {
             return;
         }
 
-        if ($loadLimitPerCore < 0. || $loadLimitPerCore > 1.) {
+        if ($loadLimit < 0. || $loadLimit > 1.) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'The load limit per core must be in the range [0., 1.], got "%s".',
-                    $loadLimitPerCore
+                    'The load limit must be in the range [0., 1.], got "%s".',
+                    $loadLimit
                 )
             );
         }
