@@ -28,10 +28,10 @@ final class AvailableCpuCoresScenario
     public $environmentVariables;
     /** @var positive-int|0 */
     public $reservedCpus;
-    /** @var positive-int */
+    /** @var non-zero-int|null */
     public $countLimit;
     /** @var float|null */
-    public $loadLimitPerCore;
+    public $loadLimit;
     /** @var float|null */
     public $systemLoadAverage;
     /** @var positive-int */
@@ -41,14 +41,14 @@ final class AvailableCpuCoresScenario
      * @param list<CpuCoreFinder>            $finders
      * @param array<string, string|int|null> $environmentVariables
      * @param positive-int|0                 $reservedCpus
-     * @param positive-int                   $limit
+     * @param non-zero-int|null              $countLimit
      * @param positive-int                   $expected
      */
     public function __construct(
         array $finders,
         array $environmentVariables,
         int $reservedCpus,
-        ?int $limit,
+        ?int $countLimit,
         ?float $loadLimit,
         ?float $systemLoadAverage,
         int $expected
@@ -56,8 +56,8 @@ final class AvailableCpuCoresScenario
         $this->finders = $finders;
         $this->environmentVariables = $environmentVariables;
         $this->reservedCpus = $reservedCpus;
-        $this->countLimit = $limit;
-        $this->loadLimitPerCore = $loadLimit;
+        $this->countLimit = $countLimit;
+        $this->loadLimit = $loadLimit;
         $this->systemLoadAverage = $systemLoadAverage;
         $this->expected = $expected;
     }
@@ -66,7 +66,7 @@ final class AvailableCpuCoresScenario
      * @param positive-int|null              $coresCountFound
      * @param array<string, string|int|null> $environmentVariables
      * @param positive-int|0|null            $reservedCpus
-     * @param positive-int|null              $countLimit
+     * @param non-zero-int|null              $countLimit
      * @param positive-int                   $expected
      *
      * @return array{self}

@@ -24,7 +24,7 @@ final class ParallelisationResult
     public $passedReservedCpus;
 
     /**
-     * @var positive-int|null
+     * @var non-zero-int|null
      */
     public $passedCountLimit;
 
@@ -39,7 +39,7 @@ final class ParallelisationResult
     public $passedSystemLoadAverage;
 
     /**
-     * @var positive-int|null
+     * @var non-zero-int|null
      */
     public $correctedCountLimit;
 
@@ -60,8 +60,8 @@ final class ParallelisationResult
 
     /**
      * @param positive-int|0    $passedReservedCpus
-     * @param positive-int|null $passedCountLimit
-     * @param positive-int|null $correctedCountLimit
+     * @param non-zero-int|null $passedCountLimit
+     * @param non-zero-int|null $correctedCountLimit
      * @param positive-int      $totalCoresCount
      * @param positive-int      $availableCpus
      */

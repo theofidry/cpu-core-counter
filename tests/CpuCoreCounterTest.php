@@ -180,7 +180,7 @@ final class CpuCoreCounterTest extends TestCase
         $actual = $counter->getAvailableForParallelisation(
             $scenario->reservedCpus,
             $scenario->countLimit,
-            $scenario->loadLimitPerCore,
+            $scenario->loadLimit,
             $scenario->systemLoadAverage
         );
 
@@ -279,6 +279,36 @@ final class CpuCoreCounterTest extends TestCase
             3
         );
 
+        yield 'CPU count found, negative limit passed' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            0,
+            -2,
+            null,
+            null,
+            3
+        );
+
+        yield 'CPU count found, negative limit beyond available resources' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            0,
+            -10,
+            null,
+            null,
+            1
+        );
+
+        yield 'CPU count found, with reserved CPU, negative limit passed' => AvailableCpuCoresScenario::create(
+            5,
+            [],
+            1,
+            -2,
+            null,
+            null,
+            3
+        );
+
         yield 'CPU count found, multiple CPUs reserved' => AvailableCpuCoresScenario::create(
             5,
             [],
@@ -361,9 +391,9 @@ final class CpuCoreCounterTest extends TestCase
     }
 
     /**
-     * @dataProvider limitProvider
+     * @dataProvider countLimitProvider
      */
-    public function test_it_does_not_accept_invalid_limit(
+    public function test_it_does_not_accept_invalid_count_limit(
         int $countLimit,
         ?string $expectedExceptionMessage
     ): void {
@@ -383,16 +413,21 @@ final class CpuCoreCounterTest extends TestCase
         }
     }
 
-    public static function limitProvider(): iterable
+    public static function countLimitProvider(): iterable
     {
         yield 'below limit' => [
             -2,
-            'The count limit must be a positive integer. Got "-2".',
+            null,
+        ];
+
+        yield 'within the limit (lower)' => [
+            -1,
+            null,
         ];
 
         yield 'invalid limit' => [
             0,
-            'The count limit must be a positive integer. Got "0".',
+            'The count limit must be a non zero integer. Got "0".',
         ];
 
         yield 'within the limit (upper)' => [

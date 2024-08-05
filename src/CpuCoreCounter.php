@@ -18,6 +18,7 @@ use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 use InvalidArgumentException;
 use function implode;
+use function max;
 use function sprintf;
 use function sys_getloadavg;
 use const PHP_EOL;
@@ -47,9 +48,12 @@ final class CpuCoreCounter
      *                                             to reserve some CPUs for other processes. If the main
      *                                             process is going to be busy still, you may want to set
      *                                             this value to 1.
-     * @param positive-int|null $countLimit        The maximum number of CPUs to return. If not provided, it
+     * @param non-zero-int|null $countLimit        The maximum number of CPUs to return. If not provided, it
      *                                             may look for a limit in the environment variables, e.g.
-     *                                             KUBERNETES_CPU_LIMIT.
+     *                                             KUBERNETES_CPU_LIMIT. If negative, the limit will be
+     *                                             the total number of cores found minus the absolute value.
+     *                                             For instance if the system has 10 cores and countLimit=-2,
+     *                                             then the effective limit considered will be 8.
      * @param float|null        $loadLimit         Element of [0., 1.]. Percentage representing the
      *                                             amount of cores that should be used among the available
      *                                             resources. For instance, if set to 0.7, it will use 70%
@@ -93,9 +97,13 @@ final class CpuCoreCounter
             );
         }
 
-        $correctedCountLimit = null === $countLimit
-            ? self::getKubernetesLimit()
-            : $countLimit;
+        if (null === $countLimit) {
+            $correctedCountLimit = self::getKubernetesLimit();
+        } else {
+            $correctedCountLimit = $countLimit > 0
+                ? $countLimit
+                : max(1, $totalCoreCount + $countLimit);
+        }
 
         if (null !== $correctedCountLimit && $availableCores > $correctedCountLimit) {
             $availableCores = $correctedCountLimit;
@@ -218,12 +226,9 @@ final class CpuCoreCounter
 
     private static function checkCountLimit(?int $countLimit): void
     {
-        if (null !== $countLimit && 0 >= $countLimit) {
+        if (0 === $countLimit) {
             throw new InvalidArgumentException(
-                sprintf(
-                    'The count limit must be a positive integer. Got "%s".',
-                    $countLimit
-                )
+                'The count limit must be a non zero integer. Got "0".'
             );
         }
     }
