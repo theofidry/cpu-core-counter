@@ -43,26 +43,26 @@ final class CpuCoreCounter
     }
 
     /**
-     * @param positive-int|0 $reservedCpus      Number of CPUs to reserve. This is useful when you want
-     *                                          to reserve some CPUs for other processes. If the main
-     *                                          process is going to be busy still, you may want to set
-     *                                          this value to 1.
-     * @param positive-int   $limit
-     * @param float|null     $loadLimit         Element of [0., 1.]. Percentage representing the
-     *                                          amount of cores that should be used among the available
-     *                                          resources. For instance, if set to 0.7, it will use 70%
-     *                                          of the available cores, i.e. if 1 core is reserved, 11
-     *                                          cores are available and 5 are busy, it will use 70%
-     *                                          of (11-1-5)=5 cores, so 3 cores. Set this parameter to null
-     *                                          to skip this check. Beware that 1 does not mean "no limit",
-     *                                          but 100% of the _available_ resources, i.e. with the
-     *                                          previous example, it will return 5 cores. How busy is
-     *                                          the system is determined by the system load average
-     *                                          (see $systemLoadAverage).
-     * @param float|null     $systemLoadAverage The system load average. If not provided, it will be
-     *                                          retrieved using `sys_getloadavg()` to check the load
-     *                                          of the system in the past minute. Should be a positive
-     *                                          float.
+     * @param positive-int|0    $reservedCpus      Number of CPUs to reserve. This is useful when you want
+     *                                             to reserve some CPUs for other processes. If the main
+     *                                             process is going to be busy still, you may want to set
+     *                                             this value to 1.
+     * @param positive-int|null $limit
+     * @param float|null        $loadLimit         Element of [0., 1.]. Percentage representing the
+     *                                             amount of cores that should be used among the available
+     *                                             resources. For instance, if set to 0.7, it will use 70%
+     *                                             of the available cores, i.e. if 1 core is reserved, 11
+     *                                             cores are available and 5 are busy, it will use 70%
+     *                                             of (11-1-5)=5 cores, so 3 cores. Set this parameter to null
+     *                                             to skip this check. Beware that 1 does not mean "no limit",
+     *                                             but 100% of the _available_ resources, i.e. with the
+     *                                             previous example, it will return 5 cores. How busy is
+     *                                             the system is determined by the system load average
+     *                                             (see $systemLoadAverage).
+     * @param float|null        $systemLoadAverage The system load average. If not provided, it will be
+     *                                             retrieved using `sys_getloadavg()` to check the load
+     *                                             of the system in the past minute. Should be a positive
+     *                                             float.
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
@@ -72,6 +72,7 @@ final class CpuCoreCounter
         ?float $loadLimit = null,
         ?float $systemLoadAverage = null
     ): ParallelisationResult {
+        self::checkLimit($limit);
         self::checkLoadLimit($loadLimit);
         self::checkSystemLoadAverage($systemLoadAverage);
 
@@ -203,11 +204,26 @@ final class CpuCoreCounter
         throw NumberOfCpuCoreNotFound::create();
     }
 
+    /**
+     * @return positive-int|null
+     */
     public static function getKubernetesLimit(): ?int
     {
         $finder = new EnvVariableFinder('KUBERNETES_CPU_LIMIT');
 
         return $finder->find();
+    }
+
+    private static function checkLimit(?int $limit): void
+    {
+        if (null !== $limit && 0 >= $limit) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The limit must be a positive integer. Got "%s".',
+                    $limit
+                )
+            );
+        }
     }
 
     private static function checkLoadLimit(?float $loadLimit): void
