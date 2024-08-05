@@ -47,7 +47,9 @@ final class CpuCoreCounter
      *                                          to reserve some CPUs for other processes. If the main
      *                                          process is going to be busy still, you may want to set
      *                                          this value to 1.
-     * @param positive-int   $limit
+     * @param positive-int   $countLimit        The maximum number of CPUs to return. If not provided, it
+     *                                          may look for a limit in the environment variables, e.g.
+     *                                          KUBERNETES_CPU_LIMIT.
      * @param float|null     $loadLimit         Element of [0., 1.]. Percentage representing the
      *                                          amount of cores that should be used among the available
      *                                          resources. For instance, if set to 0.7, it will use 70%
@@ -68,16 +70,12 @@ final class CpuCoreCounter
      */
     public function getAvailableForParallelisation(
         int $reservedCpus = 0,
-        ?int $limit = null,
+        ?int $countLimit = null,
         ?float $loadLimit = null,
         ?float $systemLoadAverage = null
     ): ParallelisationResult {
         self::checkLoadLimit($loadLimit);
         self::checkSystemLoadAverage($systemLoadAverage);
-
-        $correctedLimit = null === $limit
-            ? self::getKubernetesLimit()
-            : $limit;
 
         $totalCoreCount = $this->getCountWithFallback(1);
         $availableCores = max(1, $totalCoreCount - $reservedCpus);
@@ -94,16 +92,20 @@ final class CpuCoreCounter
             );
         }
 
-        if (null !== $correctedLimit && $availableCores > $correctedLimit) {
-            $availableCores = $correctedLimit;
+        $correctedCountLimit = null === $countLimit
+            ? self::getKubernetesLimit()
+            : $countLimit;
+
+        if (null !== $correctedCountLimit && $availableCores > $correctedCountLimit) {
+            $availableCores = $correctedCountLimit;
         }
 
         return new ParallelisationResult(
             $reservedCpus,
-            $limit,
+            $countLimit,
             $loadLimit,
             $systemLoadAverage,
-            $correctedLimit,
+            $correctedCountLimit,
             $correctedSystemLoadAverage ?? $systemLoadAverage,
             $totalCoreCount,
             (int) $availableCores

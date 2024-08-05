@@ -179,7 +179,7 @@ final class CpuCoreCounterTest extends TestCase
 
         $actual = $counter->getAvailableForParallelisation(
             $scenario->reservedCpus,
-            $scenario->limit,
+            $scenario->countLimit,
             $scenario->loadLimitPerCore,
             $scenario->systemLoadAverage
         );
@@ -269,7 +269,7 @@ final class CpuCoreCounterTest extends TestCase
             5
         );
 
-        yield 'CPU count found higher than the limit passed' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found higher than the count limit passed' => AvailableCpuCoresScenario::create(
             5,
             [],
             1,
