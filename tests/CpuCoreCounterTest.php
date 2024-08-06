@@ -388,6 +388,36 @@ final class CpuCoreCounterTest extends TestCase
             9.5,
             10
         );
+
+        yield 'it rounds the available cores to the lower int (less than half)' => AvailableCpuCoresScenario::create(
+            32,
+            [],
+            0,
+            null,
+            .1,
+            0.,
+            3
+        );
+
+        yield 'it rounds the available cores to the lower int (perfect half)' => AvailableCpuCoresScenario::create(
+            7,
+            [],
+            0,
+            null,
+            .5,
+            0.,
+            3
+        );
+
+        yield 'it rounds the available cores to the lower int (more than half)' => AvailableCpuCoresScenario::create(
+            36,
+            [],
+            0,
+            null,
+            .1,
+            0.,
+            3
+        );
     }
 
     /**
