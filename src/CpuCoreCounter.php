@@ -65,10 +65,15 @@ final class CpuCoreCounter
      *                                             previous example, it will return 5 cores. How busy is
      *                                             the system is determined by the system load average
      *                                             (see $systemLoadAverage).
-     * @param float|null        $systemLoadAverage The system load average. If not provided, it will be
-     *                                             retrieved using `sys_getloadavg()` to check the load
-     *                                             of the system in the past minute. Should be a positive
-     *                                             float.
+     * @param float|null        $systemLoadAverage The system load average. If passed, it will use
+     *                                             this information to limit the available cores based
+     *                                             on the _available_ resources. For instance, if there
+     *                                             is 10 cores but 3 are busy, then only 7 cores will
+     *                                             be considered for further calculation. If set to
+     *                                             `null`, it will use `sys_getloadavg()` to check the
+     *                                             load of the system in the past minute. You can
+     *                                             otherwise pass an arbitrary value. Should be a
+     *                                             positive float.
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
@@ -76,7 +81,7 @@ final class CpuCoreCounter
         int $reservedCpus = 0,
         ?int $countLimit = null,
         ?float $loadLimit = null,
-        ?float $systemLoadAverage = null
+        ?float $systemLoadAverage = 0.
     ): ParallelisationResult {
         self::checkCountLimit($countLimit);
         self::checkLoadLimit($loadLimit);
