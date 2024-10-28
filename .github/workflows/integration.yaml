@@ -18,7 +18,7 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.1"
+                uses: "actions/checkout@v4.2.2"
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@2.31.1"
@@ -54,7 +54,7 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.1"
+                uses: "actions/checkout@v4.2.2"
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@2.31.1"
@@ -83,7 +83,7 @@ jobs:
                     - "8.4"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.1"
+                uses: "actions/checkout@v4.2.2"
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@2.31.1"
@@ -107,7 +107,7 @@ jobs:
                     - "7.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.1"
+                uses: "actions/checkout@v4.2.2"
 
             -   name: "Remove incompatible dev dependencies"
                 run: |
@@ -136,7 +136,7 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.1"
+                uses: "actions/checkout@v4.2.2"
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@2.31.1"
@@ -172,7 +172,7 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.1"
+                uses: "actions/checkout@v4.2.2"
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@2.31.1"
@@ -199,7 +199,7 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.1"
+                uses: "actions/checkout@v4.2.2"
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@2.31.1"
@@ -226,7 +226,7 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.1"
+                uses: "actions/checkout@v4.2.2"
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@2.31.1"
@@ -253,7 +253,7 @@ jobs:
                     - "8.2"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.1"
+                uses: "actions/checkout@v4.2.2"
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@2.31.1"
