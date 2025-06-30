@@ -114,6 +114,7 @@ jobs:
                     composer remove --dev fidry/makefile --no-update --no-install;
                     composer remove --dev fidry/php-cs-fixer-config --no-update --no-install;
                     composer remove --dev webmozarts/strict-phpunit --no-update --no-install;
+                    composer remove --dev phpstan/* --no-update --no-install;
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@2.34.1"
