@@ -92,6 +92,8 @@ final class CpuCoreCounter
 
         // Adjust available CPUs based on current load
         if (null !== $loadLimit) {
+            // https://github.com/phpstan/phpstan/issues/13198
+            /** @var float $correctedSystemLoadAverage */
             $correctedSystemLoadAverage = null === $systemLoadAverage
                 ? sys_getloadavg()[0] ?? 0.
                 : $systemLoadAverage;
