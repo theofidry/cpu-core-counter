@@ -39,7 +39,8 @@ final class ProcOpenExecutor implements ProcessExecutor
             ],
             $pipes
         );
-
+        // https://github.com/phpstan/phpstan/issues/13197
+        /** @var array{resource, resource, resource} $pipes */
         if (!is_resource($process)) {
             return null;
         }
