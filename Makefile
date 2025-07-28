@@ -13,7 +13,7 @@ COVERAGE_INFECTION = $(COVERAGE_XML) $(COVERAGE_JUNIT)
 TARGET_MSI = 100
 
 INFECTION_BIN = tools/infection
-INFECTION = $(INFECTION_BIN) --skip-initial-tests --coverage=$(COVERAGE_DIR) --only-covered --show-mutations --ansi
+INFECTION = $(INFECTION_BIN) --skip-initial-tests --coverage=$(COVERAGE_DIR) --show-mutations --ansi
 INFECTION_WITH_INITIAL_TESTS = $(INFECTION_BIN) --only-covered --show-mutations --ansi
 
 PHPUNIT_BIN = vendor/bin/phpunit
