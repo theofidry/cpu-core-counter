@@ -47,8 +47,8 @@ final class ProcOpenExecutor implements ProcessExecutor
 
         fclose($pipes[0]);
 
-        $stdout = (string) stream_get_contents($pipes[1]);
-        $stderr = (string) stream_get_contents($pipes[2]);
+        $stdout = stream_get_contents($pipes[1]);
+        $stderr = stream_get_contents($pipes[2]);
 
         proc_close($process);
 
