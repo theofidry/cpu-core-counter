@@ -47,7 +47,9 @@
         "Continue_": false,
         "DecrementInteger": {
             "ignore": [
-                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation"
+                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation",
+                // False-positive: in this case there is no distinction between (int) "1000m" and (int) "1000"
+                "Fidry\\CpuCoreCounter\\Finder\\EnvVariableFinder::find"
             ]
         },
         "FunctionCallRemoval": {
@@ -74,12 +76,6 @@
             ]
         },
         "PublicVisibility": false,
-        "ReturnRemoval": {
-            "ignore": [
-                // This is a perf improvement
-                "Fidry\\CpuCoreCounter\\CpuCoreCounter::checkLoadLimit"
-            ]
-        },
         "TrueValue": {
             "ignore": [
                 // This is a case where the value does not matter.

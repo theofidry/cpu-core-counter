@@ -96,5 +96,30 @@ final class EnvVariableFinderTest extends TestCase
             '"something 18"',
             null,
         ];
+
+        yield 'Kubernetes limit set using millicores' => [
+            '3000m',
+            3,
+        ];
+
+        yield 'Kubernetes limit set using millicores with trailing characters' => [
+            '3000mA',
+            null,
+        ];
+
+        yield 'Kubernetes limit set using millicores with leading characters' => [
+            'A3000m',
+            null,
+        ];
+
+        yield 'millicores with non integer value' => [
+            '30.50m',
+            null,
+        ];
+
+        yield 'Kubernetes limit rounded' => [
+            '2500m',
+            2,
+        ];
     }
 }
