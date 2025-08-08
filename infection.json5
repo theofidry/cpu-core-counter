@@ -74,6 +74,12 @@
             ]
         },
         "PublicVisibility": false,
+        "ReturnRemoval": {
+            "ignore": [
+                // This is a perf improvement
+                "Fidry\\CpuCoreCounter\\CpuCoreCounter::checkLoadLimit"
+            ]
+        },
         "TrueValue": {
             "ignore": [
                 // This is a case where the value does not matter.
