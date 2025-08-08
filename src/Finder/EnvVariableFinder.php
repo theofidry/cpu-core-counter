@@ -44,6 +44,11 @@ final class EnvVariableFinder implements CpuCoreFinder
     {
         $value = getenv($this->environmentVariableName);
 
+        if (is_string($value) && 1 === preg_match('/^(\d+)m$/', $value, $matches)) {
+            $millicores = $matches[1];
+            $value = (string) floor($millicores / 1000);
+        }
+
         return self::isPositiveInteger($value)
             ? (int) $value
             : null;

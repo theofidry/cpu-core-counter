@@ -239,6 +239,36 @@ final class CpuCoreCounterTest extends TestCase
             4
         );
 
+        yield 'CPU count found: Kubernetes limit set using millicores' => AvailableCpuCoresScenario::create(
+            5,
+            ['KUBERNETES_CPU_LIMIT' => '2500m'],
+            1,
+            null,
+            null,
+            null,
+            2
+        );
+
+        yield 'CPU count not found: Kubernetes limit set using millicores with trailing characters' => AvailableCpuCoresScenario::create(
+            5,
+            ['KUBERNETES_CPU_LIMIT' => '2500mA'],
+            1,
+            null,
+            null,
+            null,
+            4
+        );
+
+        yield 'CPU count not found: Kubernetes limit set using millicores with leading characters' => AvailableCpuCoresScenario::create(
+            5,
+            ['KUBERNETES_CPU_LIMIT' => 'A2500m'],
+            1,
+            null,
+            null,
+            null,
+            4
+        );
+
         yield 'CPU count found: kubernetes limit set and equal to the count found after reserved CPUs' => AvailableCpuCoresScenario::create(
             5,
             ['KUBERNETES_CPU_LIMIT' => 4],
