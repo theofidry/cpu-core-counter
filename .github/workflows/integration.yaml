@@ -18,10 +18,10 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
@@ -54,10 +54,10 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
@@ -83,10 +83,10 @@ jobs:
                     - "8.4"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
@@ -107,7 +107,7 @@ jobs:
                     - "7.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Remove incompatible dev dependencies"
                 run: |
@@ -117,7 +117,7 @@ jobs:
                     composer remove --dev phpstan/* --no-update --no-install;
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
@@ -137,10 +137,10 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
@@ -173,10 +173,10 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
@@ -200,10 +200,10 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
@@ -227,10 +227,10 @@ jobs:
                     - "8.3"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
@@ -254,10 +254,10 @@ jobs:
                     - "8.2"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"

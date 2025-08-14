@@ -27,10 +27,10 @@ jobs:
                       image: "macos-14"
         steps:
             -   name: "Checkout"
-                uses: "actions/checkout@v4.2.2"
+                uses: "actions/checkout@v5.0.0"
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@2.35.2"
+                uses: "shivammathur/setup-php@2.35.3"
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
