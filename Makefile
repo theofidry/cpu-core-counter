@@ -90,7 +90,7 @@ php_cs_fixer: $(PHP_CS_FIXER_BIN) .build/php-cs-fixer
 
 .PHONY: php_cs_fixer_lint
 php_cs_fixer_lint: $(PHP_CS_FIXER_BIN) .build/php-cs-fixer
-	$(PHP_CS_FIXER) --dry-run
+	$(PHP_CS_FIXER) --dry-run --diff
 
 .PHONY: yaml_lint
 yaml_lint:

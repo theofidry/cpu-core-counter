@@ -33,6 +33,7 @@ $config->addRules([
     'heredoc_indentation' => false,
     'trailing_comma_in_multiline' => false,
     'use_arrow_functions' => false,
+    'no_whitespace_before_comma_in_array' => false,
 
     'mb_str_functions' => false,
     'no_trailing_whitespace_in_string' => false,
