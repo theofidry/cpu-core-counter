@@ -40,7 +40,8 @@ NumberOfLogicalProcessors
 -------------------------
 8
 
-EOF,
+EOF
+                ,
                 '',
             ],
             8,
@@ -52,7 +53,8 @@ EOF,
 NumberOfLogicalProcessors
 -------------------------
 8
-EOF,
+EOF
+                ,
                 '',
             ],
             8,

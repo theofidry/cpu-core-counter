@@ -39,7 +39,8 @@ final class WmicLogicalFinderTest extends ProcOpenBasedFinderTestCase
 NumberOfLogicalProcessors  
 
 2  
-EOF,
+EOF
+                ,
                 '',
             ],
             2,
@@ -50,7 +51,8 @@ EOF,
                 <<<'EOF'
 NumberOfLogicalProcessors  
 8  
-EOF,
+EOF
+                ,
                 '',
             ],
             8,

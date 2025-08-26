@@ -39,7 +39,8 @@ final class WmicPhysicalFinderTest extends ProcOpenBasedFinderTestCase
 NumberOfCores  
 
 2  
-EOF,
+EOF
+                ,
                 '',
             ],
             2,

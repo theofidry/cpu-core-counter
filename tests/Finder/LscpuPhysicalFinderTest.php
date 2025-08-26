@@ -103,7 +103,8 @@ final class LscpuPhysicalFinderTest extends ProcOpenBasedFinderTestCase
 2,0,0,0,,0,0,0,0
 3,1,0,0,,1,1,1,0
 
-EOF,
+EOF
+                ,
                 ''
             ],
             2
@@ -119,7 +120,8 @@ EOF,
 0,0,0,0,,0,0,0
 1,1,0,0,,1,1,1
 
-EOF,
+EOF
+                ,
                 ''
             ],
             2
@@ -135,7 +137,8 @@ EOF,
 0,0,0,0,,0,0,0
 1,-,0,0,,1,1,1
 
-EOF,
+EOF
+                ,
                 ''
             ],
             1
