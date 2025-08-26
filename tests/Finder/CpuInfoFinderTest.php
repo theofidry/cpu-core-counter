@@ -63,16 +63,14 @@ final class CpuInfoFinderTest extends TestCase
         yield 'empty' => [
             <<<'EOF'
 
-EOF
-            ,
+EOF,
             null,
         ];
 
         yield 'whitespace' => [
             <<<'EOF'
  
-EOF
-            ,
+EOF,
             null,
         ];
 
@@ -106,8 +104,7 @@ CPU variant	: 0x0
 CPU part	: 0x000
 CPU revision	: 0
 
-EOF
-            ,
+EOF,
             3,
         ];
 
@@ -167,8 +164,7 @@ cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
 power management:
 
-EOF
-            ,
+EOF,
             2,
         ];
     }

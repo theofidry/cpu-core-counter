@@ -49,8 +49,7 @@ HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\1
 HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\2
 HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\3
 
-EOF
-                ,
+EOF,
                 '',
             ],
             4,
@@ -62,8 +61,7 @@ EOF
 [HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0]
 [HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\2]
 
-EOF
-                ,
+EOF,
                 '',
             ],
             2,

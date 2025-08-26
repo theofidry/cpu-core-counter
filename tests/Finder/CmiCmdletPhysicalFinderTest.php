@@ -40,8 +40,7 @@ NumberOfCores
 -------------
 4
 
-EOF
-                ,
+EOF,
                 '',
             ],
             4,
@@ -53,8 +52,7 @@ EOF
 NumberOfCores
 -------------
 4
-EOF
-                ,
+EOF,
                 '',
             ],
             4,
