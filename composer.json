@@ -17,7 +17,7 @@
         "php": "^7.2 || ^8.0"
     },
     "require-dev": {
-        "fidry/makefile": "^0.2.0 || ^1.0",
+        "fidry/makefile": "^0.2.0 || ^1.1.1",
         "fidry/php-cs-fixer-config": "^1.1.2",
         "phpstan/extension-installer": "^1.2.0",
         "phpstan/phpstan": "^2.0",
