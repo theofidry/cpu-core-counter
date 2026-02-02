@@ -40,6 +40,7 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
 
     protected function tearDown(): void
     {
+        // @phpstan-ignore unset.possiblyHookedProperty
         unset($this->executor, $this->finder);
     }
 
