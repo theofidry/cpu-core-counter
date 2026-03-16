@@ -21,14 +21,14 @@ jobs:
                 uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # 2.36.0
+                uses: "shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f" # 2.37.0
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
+                uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
             -   name: "Install ComposerNormalize"
                 run: "phive install composer-normalize --trust-gpg-keys C00543248C87FB13"
@@ -57,14 +57,14 @@ jobs:
                 uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # 2.36.0
+                uses: "shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f" # 2.37.0
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
+                uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
             -   name: "Run Auto-Review tests"
                 run: "make autoreview"
@@ -87,13 +87,13 @@ jobs:
                 uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # 2.36.0
+                uses: "shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f" # 2.37.0
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
+                uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
             -   name: "Run the PHPUnit tests"
                 run: "make phpunit"
@@ -118,13 +118,13 @@ jobs:
                     composer remove --dev phpstan/* --no-update --no-install;
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # 2.36.0
+                uses: "shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f" # 2.37.0
                 with:
                     coverage: "none"
                     php-version: "${{ matrix.php-version }}"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
+                uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
             -   name: "Run the PHPUnit tests"
                 run: "vendor/bin/phpunit --configuration phpunit_legacy.xml.dist"
@@ -141,14 +141,14 @@ jobs:
                 uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # 2.36.0
+                uses: "shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f" # 2.37.0
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
+                uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
             -   name: "Install Infection"
                 run: "phive install infection --trust-gpg-keys C5095986493B4AA0"
@@ -177,14 +177,14 @@ jobs:
                 uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # 2.36.0
+                uses: "shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f" # 2.37.0
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
+                uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
             -   name: "Setup the expected output"
                 run: "mv e2e/expected-output-ubuntu e2e/expected-output"
@@ -204,14 +204,14 @@ jobs:
                 uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # 2.36.0
+                uses: "shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f" # 2.37.0
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
+                uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
             -   name: "Setup the expected output"
                 run: "mv e2e/expected-output-osx e2e/expected-output"
@@ -231,14 +231,14 @@ jobs:
                 uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # 2.36.0
+                uses: "shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f" # 2.37.0
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
+                uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
             -   name: "Setup the expected output"
                 run: "mv e2e/expected-output-windows e2e/expected-output"
@@ -258,14 +258,14 @@ jobs:
                 uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
 
             -   name: "Set up PHP"
-                uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # 2.36.0
+                uses: "shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f" # 2.37.0
                 with:
                     coverage: "xdebug"
                     php-version: "${{ matrix.php-version }}"
                     tools: "phive"
 
             -   name: "Install Composer dependencies"
-                uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
+                uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
             -   name: "Setup the expected output"
                 run: "mv e2e/expected-output-ubuntu-restricted e2e/expected-output"
