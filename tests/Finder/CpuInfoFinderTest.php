@@ -185,7 +185,7 @@ processor 1: version = FF,  identification = 32C5C2,  machine = 2097
 
 EOF
             ,
-            3, // Should be 2
+            2,
         ];
 
         // Source: https://bugs.launchpad.net/checkbox-support/+bug/1709892
@@ -225,7 +225,7 @@ cpu MHz static  : 5000
 
 EOF
             ,
-            5, // Should be 4
+            4,
         ];
 
         // Source: https://github.com/Checkmk/checkmk/blob/6121001975f8dc57d152d80dee0c6b442d9dbfa4/tests/unit/cmk/plugins/collection/agent_based/test_inventory_lnx_cpuinfo.py#L16-L183
@@ -404,7 +404,7 @@ power management:
 
 EOF
             ,
-            12, // Should be 6
+            6,
         ];
     }
 }
