@@ -26,7 +26,7 @@ try {
     return 1;   // Fallback value
 }
 
-// An alternative form where we not want to catch the exception:
+// Alternatively, to avoid having to catch the exception:
 
 $counter = new CpuCoreCounter([
     ...CpuCoreCounter::getDefaultFinders(),
@@ -46,9 +46,8 @@ $counter->getCount();   // e.g. 8
 
 ### Changing the finders
 
-When creating `CpuCoreCounter`, you may want to change the order of the finders
-used or disable a specific finder. You can easily do so by passing the finders
-you want
+When creating `CpuCoreCounter`, you can change the order of the finders or
+disable specific ones by passing the list of finders to use:
 
 ```php
 // Remove WindowsWmicFinder 
@@ -80,59 +79,65 @@ $cores = (new CpuCoreCounter($finders))->getCount();
 - `::getDefaultPhysicalFinders()`: gives an ordered list of finders that will
   look for the _physical_ CPU cores count.
 
-By default, when using `CpuCoreCounter`, it will use the logical finders since
-it is more likely what you are looking for and is what is used by PHP source to
-build the PHP binary.
+By default, `CpuCoreCounter` uses the logical finders, since this is usually
+what you need and is also what the PHP source uses when building the PHP binary.
 
 
-### Checks what finders find what on your system
+### Inspecting what the finders find on your system
 
-You have three scrips available that provides insight about what the finders
-can find:
+Three scripts provide insight into what the finders find:
 
 ```shell
-# Checks what each given finder will find on your system with details about the
-# information it had.
-make diagnose                                     # From this repository
-./vendor/fidry/cpu-core-counter/bin/diagnose.php  # From the library
-```
-
-And:
-```shell
-# Execute all finders and display the result they found.
+# Executes every finder and displays the result it found.
 make execute                                     # From this repository
 ./vendor/fidry/cpu-core-counter/bin/execute.php  # From the library
+
+# Executes every finder with details about how the result was obtained.
+make diagnose                                     # From this repository
+./vendor/fidry/cpu-core-counter/bin/diagnose.php  # From the library
+
+# Displays the trace of CpuCoreCounter with all finders, then with the default ones.
+php bin/trace.php                              # From this repository
+./vendor/fidry/cpu-core-counter/bin/trace.php  # From the library
 ```
 
 
-### Debug the results found
+### Debugging the results
 
-You have 3 methods available to help you find out what happened:
+Three approaches help understand how a result was obtained:
 
-1. If you are using the default configuration of finder registries, you can check
-   the previous section which will provide plenty of information.
-2. If what you are interested in is how many CPU cores were found, you can use
-   the `CpuCoreCounter::trace()` method.
-3. If what you are interested in is how the calculation of CPU cores available
-   for parallelisation was done, you can inspect the values of `ParallelisationResult`
-   returned by `CpuCoreCounter::getAvailableForParallelisation()`.
+1. If you use the default finder registries, the scripts described in the
+   previous section provide detailed information.
+2. To understand how the number of CPU cores was found, use
+   `CpuCoreCounter::trace()`.
+3. To understand how the number of CPU cores available for parallelisation was
+   calculated, inspect the `ParallelisationResult` returned by
+   `CpuCoreCounter::getAvailableForParallelisation()`.
 
 
 ## Backward Compatibility Promise (BCP)
 
-The policy is for the major part following the same as [Symfony's one][symfony-bc-policy].
-Note that the code marked as `@private` or `@internal` are excluded from the BCP.
+The policy largely follows [Symfony's][symfony-bc-policy]. Code marked as
+`@private` or `@internal` is excluded from the BCP.
 
 The following elements are also excluded:
 
-- The `diagnose` and `execute` commands: those are for debugging/inspection purposes only
-- `FinderRegistry::get*Finders()`: new finders may be added or the order of finders changed at any time
+- The `diagnose`, `execute` and `trace` scripts: they are intended for debugging
+  and inspection only.
+- `FinderRegistry::get*Finders()`: finders may be added or reordered at any
+  time.
+
+
+## Contributing
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for how to set up the project, run the
+tests, and understand the end-to-end tests and inspection builds.
 
 
 ## License
 
 This package is licensed using the MIT License.
 
-Please have a look at [`LICENSE.md`](LICENSE.md).
+See [`LICENSE.md`](LICENSE.md) for details.
 
 [symfony-bc-policy]: https://symfony.com/doc/current/contributing/code/bc.html

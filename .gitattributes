@@ -11,6 +11,7 @@
 /.yamllint.yaml                 export-ignore
 /composer-require-checker.json  export-ignore
 /composer.lock                  export-ignore
+/CONTRIBUTING.md                export-ignore
 /infection.json5                export-ignore
 /Makefile                       export-ignore
 /phpstan.src.neon               export-ignore
