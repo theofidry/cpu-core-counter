@@ -15,8 +15,8 @@ namespace Fidry\CpuCoreCounter\Finder;
 
 use function file_get_contents;
 use function is_file;
+use function preg_match_all;
 use function sprintf;
-use function substr_count;
 use const PHP_EOL;
 
 /**
@@ -29,6 +29,9 @@ use const PHP_EOL;
 final class CpuInfoFinder implements CpuCoreFinder
 {
     private const CPU_INFO_PATH = '/proc/cpuinfo';
+
+    // Matches "processor : 0" and the s390x form "processor 0: ...".
+    private const PROCESSOR_LINE_REGEX = '/^processor\s*\d*\s*:/m';
 
     public function diagnose(): string
     {
@@ -93,8 +96,8 @@ final class CpuInfoFinder implements CpuCoreFinder
      */
     public static function countCpuCores(string $cpuInfo): ?int
     {
-        $processorCount = substr_count($cpuInfo, 'processor');
+        $processorCount = preg_match_all(self::PROCESSOR_LINE_REGEX, $cpuInfo);
 
-        return $processorCount > 0 ? $processorCount : null;
+        return false !== $processorCount && $processorCount > 0 ? $processorCount : null;
     }
 }
