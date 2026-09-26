@@ -50,6 +50,8 @@ final class MakefileTest extends BaseMakefileTestCase
 [33minfection:[0m  Runs infection
 [33msecurity:[0m	 Runs the security check
 [33mcomposer_audit:[0m  Runs a security analysis with Composer
+[33mzizmor:[0m	    Fixes the GitHub Actions security issues (via Docker)
+[33mzizmor_lint:[0m  Lints the GitHub Actions security (via Docker)
 
 EOF;
     }
