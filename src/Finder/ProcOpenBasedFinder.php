@@ -15,6 +15,7 @@ namespace Fidry\CpuCoreCounter\Finder;
 
 use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Executor\ProcOpenExecutor;
+use function explode;
 use function filter_var;
 use function function_exists;
 use function is_int;
@@ -101,6 +102,29 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
         $cpuCount = filter_var($process, FILTER_VALIDATE_INT);
 
         return is_int($cpuCount) && $cpuCount > 0 ? $cpuCount : null;
+    }
+
+    /**
+     * Sums the lines that are a number, e.g. for commands that output one row
+     * per CPU socket. Other lines, such as headers, are ignored.
+     *
+     * @internal
+     *
+     * @return positive-int|null
+     */
+    protected function sumCpuCoresPerLine(string $process): ?int
+    {
+        $cpuCount = 0;
+
+        foreach (explode("\n", $process) as $line) {
+            $lineCpuCount = filter_var($line, FILTER_VALIDATE_INT);
+
+            if (is_int($lineCpuCount) && $lineCpuCount > 0) {
+                $cpuCount += $lineCpuCount;
+            }
+        }
+
+        return $cpuCount > 0 ? $cpuCount : null;
     }
 
     abstract protected function getCommand(): string;

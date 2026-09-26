@@ -23,6 +23,11 @@ final class DummyExecutor implements ProcessExecutor
     private $output;
 
     /**
+     * @var string|null
+     */
+    private $lastCommand;
+
+    /**
      * @param array{string, string}|null $output
      */
     public function setOutput(?array $output): void
@@ -32,6 +37,13 @@ final class DummyExecutor implements ProcessExecutor
 
     public function execute(string $command): ?array
     {
+        $this->lastCommand = $command;
+
         return $this->output ?? null;
+    }
+
+    public function getLastCommand(): ?string
+    {
+        return $this->lastCommand;
     }
 }

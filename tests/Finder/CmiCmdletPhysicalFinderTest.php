@@ -29,35 +29,31 @@ final class CmiCmdletPhysicalFinderTest extends ProcOpenBasedFinderTestCase
         return new CmiCmdletPhysicalFinder($executor);
     }
 
+    public function test_it_runs_the_cmdlet_through_powershell(): void
+    {
+        $this->executor->setOutput(['1', '']);
+
+        $this->createFinder($this->executor)->find();
+
+        $command = $this->executor->getLastCommand();
+
+        self::assertNotNull($command);
+        self::assertStringStartsWith('powershell ', $command);
+        self::assertStringContainsString('Win32_Processor', $command);
+    }
+
     public static function processResultProvider(): iterable
     {
         yield from parent::processResultProvider();
 
-        yield 'example #1' => [
-            [
-                <<<'EOF'
-NumberOfCores
--------------
-4
-
-EOF
-                ,
-                '',
-            ],
+        yield 'example from Windows' => [
+            ["4\r\n", ''],
             4,
         ];
 
-        yield 'example #1 without empty line return' => [
-            [
-                <<<'EOF'
-NumberOfCores
--------------
-4
-EOF
-                ,
-                '',
-            ],
-            4,
+        yield 'example from Windows with two sockets' => [
+            ["8\r\n8\r\n", ''],
+            16,
         ];
     }
 }
