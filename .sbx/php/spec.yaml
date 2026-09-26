@@ -1,0 +1,59 @@
+schemaVersion: "2"
+kind: "mixin"
+name: "cpu-core-counter-php"
+displayName: "CpuCoreCounter PHP"
+description: "Setup of PHP and Composer."
+
+permissions:
+    network:
+        allow:
+            # Ubuntu apt mirrors, to install PHP at startup.
+            # ports.ubuntu.com serves arm64; archive/security serve amd64.
+            - "ports.ubuntu.com"
+            - "archive.ubuntu.com"
+            - "security.ubuntu.com"
+
+            # The claude template image ships a NodeSource apt source; without
+            # this, `apt-get update` gets a 403 from the proxy and aborts the
+            # PHP install.
+            - "deb.nodesource.com:443"
+
+            # The public Composer package repository.
+            - "repo.packagist.org:443"
+
+            # Dist downloads for Composer packages, hosted on GitHub.
+            - "api.github.com:443"
+            - "codeload.github.com:443"
+            - "objects.githubusercontent.com:443"
+setup:
+    install:
+        - command: |
+              set -e
+              export DEBIAN_FRONTEND=noninteractive
+
+              # The claude kit runs its own `apt-get update` on first boot, so this
+              # step can start while the apt lock is held. Retry until the lock frees
+              # up (or ~5 minutes pass).
+              apt_retry() {
+                  i=0
+                  until "$@"; do
+                      i=$((i + 1))
+                      [ "$i" -ge 60 ] && return 1
+                      sleep 5
+                  done
+              }
+
+              apt_retry apt-get update
+              # php-cli already bundles ctype, iconv, pcntl, phar, posix and
+              # tokenizer. mbstring + xml (dom, xmlwriter) are required by PHPUnit,
+              # curl speeds up Composer, pcov provides code coverage.
+              apt_retry apt-get install -y --no-install-recommends \
+                  php-cli \
+                  php-mbstring \
+                  php-xml \
+                  php-curl \
+                  php-pcov \
+                  unzip \
+                  composer
+          user: "0"
+          description: "Install PHP and Composer."
