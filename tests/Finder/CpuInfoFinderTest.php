@@ -171,5 +171,240 @@ EOF
             ,
             2,
         ];
+
+        // Source: https://github.com/prometheus/procfs/issues/256
+        // Format: https://github.com/torvalds/linux/blob/v6.10/arch/s390/kernel/processor.c#L138-L159
+        yield 'example from an s390x machine' => [
+            <<<'EOF'
+vendor_id       : IBM/S390
+# processors    : 2
+bogomips per cpu: 11061.00
+features	: esan3 zarch stfle msa ldisp eimm dfp etf3eh highgprs 
+processor 0: version = FF,  identification = 32C5C2,  machine = 2097
+processor 1: version = FF,  identification = 32C5C2,  machine = 2097
+
+EOF
+            ,
+            3, // Should be 2
+        ];
+
+        // Source: https://bugs.launchpad.net/checkbox-support/+bug/1709892
+        yield 'example from an s390x IBM z13 machine' => [
+            <<<'EOF'
+vendor_id       : IBM/S390
+# processors    : 4
+bogomips per cpu: 3033.00
+max thread id   : 0
+features	: esan3 zarch stfle msa ldisp eimm dfp etf3eh highgprs sie
+cache0          : level=1 type=Data scope=Private size=128K line_size=256 associativity=8
+cache1          : level=1 type=Instruction scope=Private size=96K line_size=256 associativity=6
+cache2          : level=2 type=Data scope=Private size=2048K line_size=256 associativity=8
+cache3          : level=2 type=Instruction scope=Private size=2048K line_size=256 associativity=8
+cache4          : level=3 type=Unified scope=Shared size=65536K line_size=256 associativity=16
+cache5          : level=4 type=Unified scope=Shared size=491520K line_size=256 associativity=30
+processor 0: version = FF,  identification = 128F67,  machine = 2964
+processor 1: version = FF,  identification = 128F67,  machine = 2964
+processor 2: version = FF,  identification = 128F67,  machine = 2964
+processor 3: version = FF,  identification = 128F67,  machine = 2964
+
+cpu number      : 0
+cpu MHz dynamic : 5000
+cpu MHz static  : 5000
+
+cpu number      : 1
+cpu MHz dynamic : 5000
+cpu MHz static  : 5000
+
+cpu number      : 2
+cpu MHz dynamic : 5000
+cpu MHz static  : 5000
+
+cpu number      : 3
+cpu MHz dynamic : 5000
+cpu MHz static  : 5000
+
+EOF
+            ,
+            5, // Should be 4
+        ];
+
+        // Source: https://github.com/Checkmk/checkmk/blob/6121001975f8dc57d152d80dee0c6b442d9dbfa4/tests/unit/cmk/plugins/collection/agent_based/test_inventory_lnx_cpuinfo.py#L16-L183
+        // The Checkmk agent removes the whitespace around ":". It is restored
+        // here as printed by https://github.com/torvalds/linux/blob/v6.10/arch/x86/kernel/cpu/proc.c
+        yield 'example from a QEMU/KVM VM with the kvm64 CPU model' => [
+            <<<'EOF'
+processor	: 0
+vendor_id	: AuthenticAMD
+cpu family	: 15
+model		: 6
+model name	: Common KVM processor
+stepping	: 1
+microcode	: 0x1000065
+cpu MHz		: 2799.998
+cache size	: 512 KB
+physical id	: 0
+siblings	: 2
+core id		: 0
+cpu cores	: 2
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx lm rep_good nopl cpuid extd_apicid tsc_known_freq pni cx16 x2apic hypervisor cmp_legacy 3dnowprefetch vmmcall
+bugs		: fxsave_leak sysret_ss_attrs null_seg swapgs_fence spectre_v1 spectre_v2
+bogomips	: 5599.99
+TLB size	: 1024 4K pages
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: AuthenticAMD
+cpu family	: 15
+model		: 6
+model name	: Common KVM processor
+stepping	: 1
+microcode	: 0x1000065
+cpu MHz		: 2799.998
+cache size	: 512 KB
+physical id	: 0
+siblings	: 2
+core id		: 1
+cpu cores	: 2
+apicid		: 1
+initial apicid	: 1
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx lm rep_good nopl cpuid extd_apicid tsc_known_freq pni cx16 x2apic hypervisor cmp_legacy 3dnowprefetch vmmcall
+bugs		: fxsave_leak sysret_ss_attrs null_seg swapgs_fence spectre_v1 spectre_v2
+bogomips	: 5599.99
+TLB size	: 1024 4K pages
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 2
+vendor_id	: AuthenticAMD
+cpu family	: 15
+model		: 6
+model name	: Common KVM processor
+stepping	: 1
+microcode	: 0x1000065
+cpu MHz		: 2799.998
+cache size	: 512 KB
+physical id	: 1
+siblings	: 2
+core id		: 0
+cpu cores	: 2
+apicid		: 2
+initial apicid	: 2
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx lm rep_good nopl cpuid extd_apicid tsc_known_freq pni cx16 x2apic hypervisor cmp_legacy 3dnowprefetch vmmcall
+bugs		: fxsave_leak sysret_ss_attrs null_seg swapgs_fence spectre_v1 spectre_v2
+bogomips	: 5599.99
+TLB size	: 1024 4K pages
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 3
+vendor_id	: AuthenticAMD
+cpu family	: 15
+model		: 6
+model name	: Common KVM processor
+stepping	: 1
+microcode	: 0x1000065
+cpu MHz		: 2799.998
+cache size	: 512 KB
+physical id	: 1
+siblings	: 2
+core id		: 1
+cpu cores	: 2
+apicid		: 3
+initial apicid	: 3
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx lm rep_good nopl cpuid extd_apicid tsc_known_freq pni cx16 x2apic hypervisor cmp_legacy 3dnowprefetch vmmcall
+bugs		: fxsave_leak sysret_ss_attrs null_seg swapgs_fence spectre_v1 spectre_v2
+bogomips	: 5599.99
+TLB size	: 1024 4K pages
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 4
+vendor_id	: AuthenticAMD
+cpu family	: 15
+model		: 6
+model name	: Common KVM processor
+stepping	: 1
+microcode	: 0x1000065
+cpu MHz		: 2799.998
+cache size	: 512 KB
+physical id	: 2
+siblings	: 2
+core id		: 0
+cpu cores	: 2
+apicid		: 4
+initial apicid	: 4
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx lm rep_good nopl cpuid extd_apicid tsc_known_freq pni cx16 x2apic hypervisor cmp_legacy 3dnowprefetch vmmcall
+bugs		: fxsave_leak sysret_ss_attrs null_seg swapgs_fence spectre_v1 spectre_v2
+bogomips	: 5599.99
+TLB size	: 1024 4K pages
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 5
+vendor_id	: AuthenticAMD
+cpu family	: 15
+model		: 6
+model name	: Common KVM processor
+stepping	: 1
+microcode	: 0x1000065
+cpu MHz		: 2799.998
+cache size	: 512 KB
+physical id	: 2
+siblings	: 2
+core id		: 1
+cpu cores	: 2
+apicid		: 5
+initial apicid	: 5
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx lm rep_good nopl cpuid extd_apicid tsc_known_freq pni cx16 x2apic hypervisor cmp_legacy 3dnowprefetch vmmcall
+bugs		: fxsave_leak sysret_ss_attrs null_seg swapgs_fence spectre_v1 spectre_v2
+bogomips	: 5599.99
+TLB size	: 1024 4K pages
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+
+EOF
+            ,
+            12, // Should be 6
+        ];
     }
 }
