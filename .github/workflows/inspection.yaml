@@ -24,10 +24,10 @@ jobs:
                       image: "ubuntu-latest"
                     - name: "Windows Inspection"
                       image: "windows-latest"
-                    - name: "OSX (Apple Silicon) Inspection"
+                    - name: "OSX Inspection"
                       image: "macos-latest"
-                    - name: "OSX (Intel) Inspection"
-                      image: "macos-15-intel"
+                    - name: "OSX 15 Inspection"
+                      image: "macos-15"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
