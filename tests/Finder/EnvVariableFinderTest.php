@@ -87,21 +87,23 @@ final class EnvVariableFinderTest extends TestCase
             null,
         ];
 
-        // Desired: 18 (18.3 CPUs = 18300m, so it should follow the millicores rule).
         yield 'numeric value' => [
             '18.3',
-            null,
+            18,
         ];
 
-        // Desired: 1.
         yield 'decimal value' => [
             '1.5',
-            null,
+            1,
         ];
 
-        // Desired: 1 (clamped to at least one core).
         yield 'decimal value below one' => [
             '0.5',
+            1,
+        ];
+
+        yield 'decimal value with leading characters' => [
+            '1.2.5',
             null,
         ];
 
@@ -140,17 +142,19 @@ final class EnvVariableFinderTest extends TestCase
             2,
         ];
 
-        // Desired: 1 (clamped to at least one core). The limit is otherwise
-        // silently ignored.
-        yield 'Kubernetes limit below one core' => [
-            '500m',
-            null,
+        yield 'Kubernetes limit just below two cores' => [
+            '1999m',
+            1,
         ];
 
-        // Desired: 1 (clamped to at least one core).
+        yield 'Kubernetes limit below one core' => [
+            '500m',
+            1,
+        ];
+
         yield 'Kubernetes limit of one millicore' => [
             '1m',
-            null,
+            1,
         ];
 
         yield 'Kubernetes limit of zero millicores' => [
@@ -192,22 +196,19 @@ final class EnvVariableFinderTest extends TestCase
             "parse(getenv(CI_CPU_LIMIT)='0')=null",
         ];
 
-        // Desired: "parse(getenv(CI_CPU_LIMIT)='3000m')=3", i.e. the same result as find().
         yield 'Kubernetes limit set using millicores' => [
             '3000m',
-            "parse(getenv(CI_CPU_LIMIT)='3000m')=null",
+            "parse(getenv(CI_CPU_LIMIT)='3000m')=3",
         ];
 
-        // Desired: "parse(getenv(CI_CPU_LIMIT)='500m')=1".
         yield 'Kubernetes limit below one core' => [
             '500m',
-            "parse(getenv(CI_CPU_LIMIT)='500m')=null",
+            "parse(getenv(CI_CPU_LIMIT)='500m')=1",
         ];
 
-        // Desired: "parse(getenv(CI_CPU_LIMIT)='1.5')=1".
         yield 'decimal value' => [
             '1.5',
-            "parse(getenv(CI_CPU_LIMIT)='1.5')=null",
+            "parse(getenv(CI_CPU_LIMIT)='1.5')=1",
         ];
     }
 }
