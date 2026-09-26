@@ -35,6 +35,10 @@ YAMLLINT = yamllint
 PHPSTAN_BIN = vendor/bin/phpstan
 PHPSTAN = $(PHPSTAN_BIN)
 
+# Keep in sync with the zizmor version in .github/workflows/zizmor.yaml.
+ZIZMOR_VERSION = 1.30.1
+ZIZMOR = docker run --rm --volume "$(CURDIR):/app" --workdir /app ghcr.io/zizmorcore/zizmor:$(ZIZMOR_VERSION)
+
 
 #
 # Commands
@@ -162,6 +166,14 @@ security: composer_audit
 composer_audit: ## Runs a security analysis with Composer
 composer_audit:
 	composer audit
+
+.PHONY: zizmor
+zizmor:	   ## Fixes the GitHub Actions security issues (via Docker)
+	$(ZIZMOR) --offline --fix .
+
+.PHONY: zizmor_lint
+zizmor_lint: ## Lints the GitHub Actions security (via Docker)
+	$(ZIZMOR) --offline .
 
 
 #

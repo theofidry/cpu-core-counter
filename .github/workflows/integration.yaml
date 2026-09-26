@@ -8,6 +8,9 @@ on: # yamllint disable-line rule:truthy
     schedule:
         - cron: "0 0 1 * *"
 
+permissions:
+    contents: "read"
+
 jobs:
     coding-standards:
         name: "Coding Standards"
@@ -19,6 +22,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+                with:
+                    persist-credentials: false
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # 2.37.2
@@ -55,6 +60,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+                with:
+                    persist-credentials: false
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # 2.37.2
@@ -85,6 +92,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+                with:
+                    persist-credentials: false
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # 2.37.2
@@ -109,6 +118,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+                with:
+                    persist-credentials: false
 
             -   name: "Remove incompatible dev dependencies"
                 run: |
@@ -139,6 +150,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+                with:
+                    persist-credentials: false
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # 2.37.2
@@ -175,6 +188,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+                with:
+                    persist-credentials: false
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # 2.37.2
@@ -202,6 +217,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+                with:
+                    persist-credentials: false
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # 2.37.2
@@ -229,6 +246,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+                with:
+                    persist-credentials: false
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # 2.37.2
@@ -256,6 +275,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+                with:
+                    persist-credentials: false
 
             -   name: "Set up PHP"
                 uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # 2.37.2
