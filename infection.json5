@@ -23,13 +23,6 @@
                 "Fidry\\CpuCoreCounter\\CpuCoreCounter::getDefaultFinders"
             ]
         },
-        "CastInt": {
-            "ignore": [
-                // This is a bug or case handled by strict types. Not sure why
-                // infection can't detect it.
-                "Fidry\\CpuCoreCounter\\Finder\\EnvVariableFinder::isPositiveInteger"
-            ]
-        },
         "CastString": {
             "ignore": [
                 // I can't find a case in practice where this would happen.
@@ -47,9 +40,7 @@
         "Continue_": false,
         "DecrementInteger": {
             "ignore": [
-                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation",
-                // False-positive: in this case there is no distinction between (int) "1000m" and (int) "1000"
-                "Fidry\\CpuCoreCounter\\Finder\\EnvVariableFinder::find"
+                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation"
             ]
         },
         "FunctionCallRemoval": {
