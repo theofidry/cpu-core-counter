@@ -1,0 +1,31 @@
+schemaVersion: "2"
+kind: "mixin"
+name: "cpu-core-counter"
+displayName: "CpuCoreCounter OpenTelemetry"
+description: "Project for the Composer package `fidry/cpu-core-counter`."
+
+permissions:
+    network:
+        allow:
+            # The Node fragment adds NodeSource's apt repository. Without this,
+            # `just build claude` silently falls back to Ubuntu's nodejs, which
+            # ships no npm, and dies on the next step.
+            - "deb.nodesource.com:443"
+            # sury's apt repository, where the claude-php image gets PHP and its
+            # extensions. Without this, `just build claude-php` dies at apt-get
+            # update — the proxy answers the repository with a 403.
+            - "packages.sury.org:443"
+            # For OpenTelemetry
+            - "host.docker.internal:4318"
+
+environment:
+    variables:
+        OTEL_RESOURCE_ATTRIBUTES: "project=cpu-core-counter,deployment.environment=sandbox"
+        CLAUDE_CODE_ENABLE_TELEMETRY: "1"
+        CLAUDE_CODE_ENHANCED_TELEMETRY_BETA: "1"
+        OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
+        OTEL_EXPORTER_OTLP_ENDPOINT: "http://host.docker.internal:4318"
+        OTEL_TRACES_EXPORTER: "otlp"
+        OTEL_METRICS_EXPORTER: "otlp"
+        OTEL_LOGS_EXPORTER: "otlp"
+        OTEL_SERVICE_NAME: "claude-code"

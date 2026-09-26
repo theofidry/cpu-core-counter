@@ -1,5 +1,6 @@
 /.github/                       export-ignore
 /.phive/                        export-ignore
+/.sbx/                          export-ignore
 /e2e/                           export-ignore
 /stubs/                         export-ignore
 /tests/                         export-ignore
