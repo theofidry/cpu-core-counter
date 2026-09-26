@@ -60,6 +60,13 @@
                 "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation"
             ]
         },
+        "LogicalOr": {
+            "ignore": [
+                // False positive: the mutant only differs when exactly one
+                // stream_get_contents() call fails, which cannot be reproduced.
+                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute"
+            ]
+        },
         "OneZeroFloat": {
             "ignore": [
                 // Cannot test this case.
