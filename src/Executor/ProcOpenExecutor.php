@@ -18,13 +18,23 @@ use function function_exists;
 use function is_resource;
 use function proc_close;
 use function proc_open;
+use function rewind;
 use function stream_get_contents;
+use function tmpfile;
 
 final class ProcOpenExecutor implements ProcessExecutor
 {
     public function execute(string $command): ?array
     {
         if (!function_exists('proc_open')) {
+            return null;
+        }
+
+        // Do not use a pipe for the STDERR: reading the STDOUT to the end
+        // first would block forever if the command fills the STDERR pipe.
+        $stderrFile = tmpfile();
+
+        if (false === $stderrFile) {
             return null;
         }
 
@@ -35,22 +45,32 @@ final class ProcOpenExecutor implements ProcessExecutor
             [
                 ['pipe', 'rb'],
                 ['pipe', 'wb'], // stdout
-                ['pipe', 'wb'], // stderr
+                $stderrFile,
             ],
             $pipes
         );
         // https://github.com/phpstan/phpstan/issues/13197
-        /** @var array{resource, resource, resource} $pipes */
+        /** @var array{resource, resource} $pipes */
         if (!is_resource($process)) {
+            fclose($stderrFile);
+
             return null;
         }
 
         fclose($pipes[0]);
 
         $stdout = stream_get_contents($pipes[1]);
-        $stderr = stream_get_contents($pipes[2]);
 
         proc_close($process);
+
+        rewind($stderrFile);
+        $stderr = stream_get_contents($stderrFile);
+
+        fclose($stderrFile);
+
+        if (false === $stdout || false === $stderr) {
+            return null;
+        }
 
         return [$stdout, $stderr];
     }
