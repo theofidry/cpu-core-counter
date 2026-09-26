@@ -45,5 +45,10 @@ EOF
             ],
             2,
         ];
+
+        yield 'example from Windows with two sockets' => [
+            ["NumberOfCores  \r\r\n8  \r\r\n8  \r\r\n\r\r\n", ''],
+            16,
+        ];
     }
 }

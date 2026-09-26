@@ -29,34 +29,25 @@ final class CmiCmdletLogicalFinderTest extends ProcOpenBasedFinderTestCase
         return new CmiCmdletLogicalFinder($executor);
     }
 
+    public function test_it_runs_the_cmdlet_through_powershell(): void
+    {
+        $this->executor->setOutput(['1', '']);
+
+        $this->createFinder($this->executor)->find();
+
+        $command = $this->executor->getLastCommand();
+
+        self::assertNotNull($command);
+        self::assertStringStartsWith('powershell ', $command);
+        self::assertStringContainsString('Win32_ComputerSystem', $command);
+    }
+
     public static function processResultProvider(): iterable
     {
         yield from parent::processResultProvider();
 
-        yield 'example #1' => [
-            [
-                <<<'EOF'
-NumberOfLogicalProcessors
--------------------------
-8
-
-EOF
-                ,
-                '',
-            ],
-            8,
-        ];
-
-        yield 'example #1 without empty line return' => [
-            [
-                <<<'EOF'
-NumberOfLogicalProcessors
--------------------------
-8
-EOF
-                ,
-                '',
-            ],
+        yield 'example from Windows' => [
+            ["8\r\n", ''],
             8,
         ];
     }

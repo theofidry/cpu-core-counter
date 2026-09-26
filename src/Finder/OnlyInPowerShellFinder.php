@@ -16,6 +16,11 @@ namespace Fidry\CpuCoreCounter\Finder;
 use function getenv;
 use function sprintf;
 
+/**
+ * @deprecated Use OnlyOnOSFamilyFinder::forWindows() instead. The PSModulePath
+ *             environment variable is set system-wide on Windows and is not a
+ *             sign that commands run in PowerShell.
+ */
 final class OnlyInPowerShellFinder implements CpuCoreFinder
 {
     /**

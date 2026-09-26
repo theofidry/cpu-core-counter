@@ -38,8 +38,8 @@ final class FinderRegistry
             OnlyOnOSFamilyFinder::forWindows(
                 new DummyCpuCoreFinder(1)
             ),
-            new OnlyInPowerShellFinder(new CmiCmdletLogicalFinder()),
-            new OnlyInPowerShellFinder(new CmiCmdletPhysicalFinder()),
+            new CmiCmdletLogicalFinder(),
+            new CmiCmdletPhysicalFinder(),
             new WindowsRegistryLogicalFinder(),
             new WmicPhysicalFinder(),
             new WmicLogicalFinder(),
@@ -52,12 +52,8 @@ final class FinderRegistry
     public static function getDefaultLogicalFinders(): array
     {
         return [
-            OnlyOnOSFamilyFinder::forWindows(
-                new OnlyInPowerShellFinder(
-                    new CmiCmdletLogicalFinder()
-                )
-            ),
             OnlyOnOSFamilyFinder::forWindows(new WindowsRegistryLogicalFinder()),
+            OnlyOnOSFamilyFinder::forWindows(new CmiCmdletLogicalFinder()),
             OnlyOnOSFamilyFinder::forWindows(new WmicLogicalFinder()),
             new NProcFinder(),
             new HwLogicalFinder(),
@@ -74,11 +70,7 @@ final class FinderRegistry
     public static function getDefaultPhysicalFinders(): array
     {
         return [
-            OnlyOnOSFamilyFinder::forWindows(
-                new OnlyInPowerShellFinder(
-                    new CmiCmdletPhysicalFinder()
-                )
-            ),
+            OnlyOnOSFamilyFinder::forWindows(new CmiCmdletPhysicalFinder()),
             OnlyOnOSFamilyFinder::forWindows(new WmicPhysicalFinder()),
             new HwPhysicalFinder(),
             new LscpuPhysicalFinder(),
