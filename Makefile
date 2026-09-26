@@ -169,10 +169,12 @@ composer_audit:
 
 .PHONY: zizmor
 zizmor:	   ## Fixes the GitHub Actions security issues (via Docker)
+zizmor:
 	$(ZIZMOR) --offline --fix .
 
 .PHONY: zizmor_lint
 zizmor_lint: ## Lints the GitHub Actions security (via Docker)
+zizmor_lint:
 	$(ZIZMOR) --offline .
 
 
