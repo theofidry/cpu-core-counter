@@ -96,7 +96,7 @@
         "UnwrapArrayValues": {
             "ignore": [
                 // False positive: the keys are never used, it is only to get a list.
-                "Fidry\\CpuCoreCounter\\Finder\\LowestCpuCoreFinder::__construct"
+                "Fidry\\CpuCoreCounter\\Finder\\FirstCpuCoreFinder::__construct"
             ]
         }
     }

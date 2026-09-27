@@ -15,18 +15,16 @@ namespace Fidry\CpuCoreCounter\Finder;
 
 use function array_map;
 use function array_values;
-use function count;
 use function implode;
-use function min;
 use function sprintf;
 use const PHP_EOL;
 
 /**
- * Executes all the decorated finders and returns the lowest result found.
- * Unlike the list of finders given to CpuCoreCounter, which stops at the
- * first result, this suits limits, of which the strictest one applies.
+ * Executes the decorated finders in order and returns the first result found,
+ * like the list of finders given to CpuCoreCounter. Use it where a single
+ * finder is expected, to give a finder one or more fallbacks.
  */
-final class LowestCpuCoreFinder implements CpuCoreFinder
+final class FirstCpuCoreFinder implements CpuCoreFinder
 {
     /**
      * @var list<CpuCoreFinder>
@@ -57,23 +55,21 @@ final class LowestCpuCoreFinder implements CpuCoreFinder
 
     public function find(): ?int
     {
-        $cores = [];
-
         foreach ($this->decoratedFinders as $finder) {
-            $result = $finder->find();
+            $cores = $finder->find();
 
-            if (null !== $result) {
-                $cores[] = $result;
+            if (null !== $cores) {
+                return $cores;
             }
         }
 
-        return 0 === count($cores) ? null : min($cores);
+        return null;
     }
 
     public function toString(): string
     {
         return sprintf(
-            'LowestCpuCoreFinder(%s)',
+            'FirstCpuCoreFinder(%s)',
             implode(
                 ',',
                 array_map(

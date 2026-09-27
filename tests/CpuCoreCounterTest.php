@@ -15,6 +15,7 @@ namespace Fidry\CpuCoreCounter\Test;
 
 use Exception;
 use Fidry\CpuCoreCounter\CpuCoreCounter;
+use Fidry\CpuCoreCounter\Finder\CgroupCpuQuotaFinder;
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\NullCpuCoreFinder;
@@ -412,8 +413,10 @@ final class CpuCoreCounterTest extends TestCase
 
     public function test_it_uses_the_kubernetes_limit_as_count_limit_by_default(): void
     {
-        // One core is the lowest possible CPU quota, so the quota of the
-        // machine running the tests cannot win.
+        if (null !== (new CgroupCpuQuotaFinder())->find()) {
+            self::markTestSkipped('The CPU quota of the cgroup takes precedence over KUBERNETES_CPU_LIMIT.');
+        }
+
         putenv('KUBERNETES_CPU_LIMIT=1');
 
         $counter = new CpuCoreCounter([new DummyCpuCoreFinder(8)]);
