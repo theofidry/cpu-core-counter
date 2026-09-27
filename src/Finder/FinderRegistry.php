@@ -59,8 +59,8 @@ final class FinderRegistry
             OnlyOnOSFamilyFinder::forWindows(new CmiCmdletLogicalFinder()),
             OnlyOnOSFamilyFinder::forWindows(new WmicLogicalFinder()),
             // Keep after the other Windows finders: any parent process can
-            // override it, and before Windows 11 it counts only the processor
-            // group of the process.
+            // override it, and before Windows 11 22H2 it may count only the
+            // processor group of the process.
             OnlyOnOSFamilyFinder::forWindows(new EnvVariableFinder('NUMBER_OF_PROCESSORS')),
             // Keep before the finders that ignore pinned CPUs, e.g. getconf with glibc.
             new CpuAffinityFinder(),

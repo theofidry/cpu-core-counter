@@ -2,6 +2,7 @@ CgroupCpuQuotaFinder: F
 CpuAffinityFinder: F
 CpuInfoFinder: F
 DummyCpuCoreFinder(value=1): .
+getenv(NUMBER_OF_PROCESSORS): F
 HwLogicalFinder: .
 HwPhysicalFinder: .
 LscpuLogicalFinder: F
