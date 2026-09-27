@@ -17,6 +17,7 @@ use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 use InvalidArgumentException;
+use function function_exists;
 use function implode;
 use function max;
 use function sprintf;
@@ -83,7 +84,8 @@ final class CpuCoreCounter
      *                                             there are 10 cores but 3 are busy, then only 7 cores
      *                                             will be considered for further calculation. If set to
      *                                             `null`, it will use `sys_getloadavg()` to check the
-     *                                             load of the system in the past minute. You can
+     *                                             load of the system in the past minute, or 0 if
+     *                                             it is unavailable (e.g. on Windows). You can
      *                                             otherwise pass an arbitrary value. Should be a
      *                                             positive float. Inside a virtual machine, the
      *                                             load average excludes the host's load. Inside
@@ -106,10 +108,8 @@ final class CpuCoreCounter
 
         // Adjust available CPUs based on current load
         if (null !== $loadLimit) {
-            // https://github.com/phpstan/phpstan/issues/13198
-            /** @var float $correctedSystemLoadAverage */
             $correctedSystemLoadAverage = null === $systemLoadAverage
-                ? sys_getloadavg()[0] ?? 0.
+                ? self::getSystemLoadAverage()
                 : $systemLoadAverage;
 
             $availableCores = max(
@@ -287,5 +287,17 @@ final class CpuCoreCounter
                 )
             );
         }
+    }
+
+    /**
+     * sys_getloadavg() is not available on Windows, and it can be disabled.
+     */
+    private static function getSystemLoadAverage(): float
+    {
+        if (!function_exists('sys_getloadavg')) {
+            return 0.;
+        }
+
+        return sys_getloadavg()[0] ?? 0.;
     }
 }
