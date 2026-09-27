@@ -144,6 +144,83 @@ EOF
             1
         ];
 
+        yield 'example with unknown physical core' => [
+            [
+                <<<'EOF'
+# The following is the parsable format, which can be fed to other
+# programs. Each different item in every column has an unique ID
+# starting usually from zero.
+# CPU,Core,Socket,Node,,L1d,L1i,L2
+0,0,0,0,,0,0,0
+1,,1,0,,1,1,1
+
+EOF
+                ,
+                ''
+            ],
+            1
+        ];
+
+        yield 'example with only unknown physical cores' => [
+            [
+                <<<'EOF'
+# The following is the parsable format, which can be fed to other
+# programs. Each different item in every column has an unique ID
+# starting usually from zero.
+# CPU,Core,Socket,Node,,L1d,L1i,L2
+0,,0,0,,0,0,0
+1,,1,0,,1,1,1
+
+EOF
+                ,
+                ''
+            ],
+            null
+        ];
+
+        yield 'example with a line which is not a CPU' => [
+            [
+                <<<'EOF'
+# The following is the parsable format, which can be fed to other
+# programs. Each different item in every column has an unique ID
+# starting usually from zero.
+# CPU,Core,Socket,Node,,L1d,L1i,L2
+0,0,0,0,,0,0,0
+1a,1,0,0,,1,1,1
+
+EOF
+                ,
+                ''
+            ],
+            1
+        ];
+
+        // Known limitation: lscpu numbers the cores of each CPU type from
+        // zero, so this 8-core CPU is reported as 3 cores.
+        // See https://github.com/util-linux/util-linux/blob/53cd4fb62b027bc25437c06a1e3a002574c00972/tests/expected/lscpu/lscpu-arm-A510-A710-A715-X3
+        yield 'example with several CPU types (ARM Cortex-A510/A710/A715/X3)' => [
+            [
+                <<<'EOF'
+# The following is the parsable format, which can be fed to other
+# programs. Each different item in every column has an unique ID
+# starting usually from zero.
+# CPU,Core,Socket,Node,,L1d,L1i,L2,L3
+0,0,0,,,0,0,0,0
+1,1,0,,,1,1,1,0
+2,2,0,,,2,2,1,0
+3,0,0,,,3,3,2,0
+4,1,0,,,4,4,3,0
+5,0,0,,,5,5,4,0
+6,1,0,,,6,6,5,0
+7,0,0,,,7,7,6,0
+
+EOF
+                ,
+                ''
+            ],
+            3
+        ];
+
         yield 'handling lscpu failure' => [
             [
                 '',
