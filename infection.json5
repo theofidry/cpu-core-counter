@@ -30,6 +30,13 @@
                 "Fidry\\CpuCoreCounter\\Finder\\CgroupCpuQuotaFinder::findQuotas"
             ]
         },
+        "CastInt": {
+            "ignore": [
+                // False positive: PHP handles the numeric strings the same way,
+                // the cast is for PHPStan.
+                "Fidry\\CpuCoreCounter\\Finder\\CpuAffinityFinder::countCpuCores"
+            ]
+        },
         "CastString": {
             "ignore": [
                 // I can't find a case in practice where this would happen.
@@ -59,7 +66,9 @@
         "GreaterThan": {
             "ignore": [
                 // This is an actual false positive.
-                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation"
+                "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation",
+                // False positive: the count is never 0, the check is for PHPStan.
+                "Fidry\\CpuCoreCounter\\Finder\\CpuAffinityFinder::countCpuCores"
             ]
         },
         "IncrementInteger": {
