@@ -15,7 +15,6 @@ namespace Fidry\CpuCoreCounter\Finder;
 
 use Fidry\CpuCoreCounter\FileReader\FileReader;
 use Fidry\CpuCoreCounter\FileReader\NativeFileReader;
-use function explode;
 use function preg_match;
 use function sprintf;
 use function trim;
@@ -43,8 +42,6 @@ final class CpuAffinityFinder implements CpuCoreFinder
 
     // E.g. "Cpus_allowed_list:	0-1,4" for the CPUs 0, 1 and 4.
     private const CPUS_ALLOWED_LIST_REGEX = '/^Cpus_allowed_list:\s*(\S+)\s*$/m';
-
-    private const CPU_RANGE_REGEX = '/^(?<first>\d+)(?:-(?<last>\d+))?$/';
 
     /**
      * @var FileReader
@@ -101,23 +98,6 @@ final class CpuAffinityFinder implements CpuCoreFinder
             return null;
         }
 
-        $count = 0;
-
-        foreach (explode(',', $matches[1]) as $item) {
-            if (1 !== preg_match(self::CPU_RANGE_REGEX, $item, $range)) {
-                return null;
-            }
-
-            $first = (int) $range['first'];
-            $last = isset($range['last']) ? (int) $range['last'] : $first;
-
-            if ($last < $first) {
-                return null;
-            }
-
-            $count += $last - $first + 1;
-        }
-
-        return $count > 0 ? $count : null;
+        return CpuList::count($matches[1]);
     }
 }

@@ -8,6 +8,8 @@ HwLogicalFinder: F
 HwPhysicalFinder: F
 LscpuLogicalFinder: F
 LscpuPhysicalFinder: F
+LscpuRawLogicalFinder: F
+LscpuRawPhysicalFinder: F
 _NProcessorFinder: F
 NProcessorFinder: F
 NProcFinder(all=true): F
