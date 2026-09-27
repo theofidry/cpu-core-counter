@@ -117,6 +117,7 @@
         "TrueValue": {
             "ignore": [
                 // This is a case where the value does not matter.
+                "Fidry\\CpuCoreCounter\\Finder\\CpuInfoPhysicalFinder::countCpuCores",
                 "Fidry\\CpuCoreCounter\\Finder\\LscpuPhysicalFinder::countCpuCores"
             ]
         },
