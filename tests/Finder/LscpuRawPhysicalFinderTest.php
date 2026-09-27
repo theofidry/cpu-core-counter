@@ -16,6 +16,7 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\LscpuRawPhysicalFinder;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
+use const PHP_OS_FAMILY;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\LscpuRawPhysicalFinder
@@ -320,6 +321,28 @@ EOF
             ["Core(s) per socket:      4\nX_Socket(s):             2\nSocket(s):               1\n", ''],
             4
         ];
+    }
+
+    public function test_it_sets_the_locale_with_the_posix_shell_syntax(): void
+    {
+        if ('Windows' === PHP_OS_FAMILY) {
+            self::markTestSkipped();
+        }
+
+        (new LscpuRawPhysicalFinder($this->executor))->find();
+
+        self::assertSame('LC_ALL=C lscpu', $this->executor->getLastCommand());
+    }
+
+    public function test_it_sets_the_locale_with_the_cmd_syntax_on_windows(): void
+    {
+        if ('Windows' !== PHP_OS_FAMILY) {
+            self::markTestSkipped();
+        }
+
+        (new LscpuRawPhysicalFinder($this->executor))->find();
+
+        self::assertSame('set "LC_ALL=C" && lscpu', $this->executor->getLastCommand());
     }
 
     protected function createFinder(ProcessExecutor $executor): ProcOpenBasedFinder

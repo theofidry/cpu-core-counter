@@ -16,6 +16,7 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\LscpuRawLogicalFinder;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
+use const PHP_OS_FAMILY;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\LscpuRawLogicalFinder
@@ -300,6 +301,28 @@ EOF
             ["CPU(s):              8\nOn-line CPU(s) list: 0-3 4-7\n", ''],
             null
         ];
+    }
+
+    public function test_it_sets_the_locale_with_the_posix_shell_syntax(): void
+    {
+        if ('Windows' === PHP_OS_FAMILY) {
+            self::markTestSkipped();
+        }
+
+        (new LscpuRawLogicalFinder($this->executor))->find();
+
+        self::assertSame('LC_ALL=C lscpu', $this->executor->getLastCommand());
+    }
+
+    public function test_it_sets_the_locale_with_the_cmd_syntax_on_windows(): void
+    {
+        if ('Windows' !== PHP_OS_FAMILY) {
+            self::markTestSkipped();
+        }
+
+        (new LscpuRawLogicalFinder($this->executor))->find();
+
+        self::assertSame('set "LC_ALL=C" && lscpu', $this->executor->getLastCommand());
     }
 
     protected function createFinder(ProcessExecutor $executor): ProcOpenBasedFinder
