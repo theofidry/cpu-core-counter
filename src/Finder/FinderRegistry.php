@@ -66,6 +66,11 @@ final class FinderRegistry
     }
 
     /**
+     * Inside a virtual machine, these finders count the cores of the CPU layout
+     * the hypervisor shows the VM, not the physical cores of the host. There is
+     * no reliable way to detect a VM on every platform, so the library does not
+     * try: it is up to you to decide whether to trust this count in a VM.
+     *
      * @return list<CpuCoreFinder>
      */
     public static function getDefaultPhysicalFinders(): array

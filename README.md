@@ -83,6 +83,27 @@ By default, `CpuCoreCounter` uses the logical finders, since this is usually
 what you need and is also what the PHP source uses when building the PHP binary.
 
 
+### Virtual machines
+
+Inside a virtual machine (VM), for example a micro-VM such as a Docker Sandbox,
+a CI runner or a cloud instance, the library only sees the CPUs of the VM, not
+the CPUs of the host. This has a few consequences:
+
+- The count is the number of virtual CPUs (vCPUs) given to the VM. If the host
+  gives the VM more vCPUs than it has cores, the count is higher than what can
+  really run in parallel. Nothing inside the VM shows this, so the fix is to
+  give the VM at most as many vCPUs as the host has cores.
+- A CPU limit that the host puts on the VM is not visible. The cgroup CPU quota
+  check (see `getAvailableForParallelisation()`) only sees the cgroups of the
+  VM's own kernel, e.g. a `docker run --cpus=2` inside the VM.
+- The physical count comes from the CPU layout the hypervisor shows the VM,
+  which it can choose freely. It does not tell you how many physical cores the
+  host has, or whether two vCPUs share a core (SMT) or run on slower cores.
+- The load average only covers the processes inside the VM. When the host is
+  busy, the VM can report a low load and the `$loadLimit` of
+  `getAvailableForParallelisation()` will not reduce the result.
+
+
 ### Inspecting what the finders find on your system
 
 Three scripts provide insight into what the finders find:
