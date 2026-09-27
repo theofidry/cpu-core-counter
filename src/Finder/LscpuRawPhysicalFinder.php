@@ -19,6 +19,7 @@ use function is_int;
 use function preg_match;
 use function strtolower;
 use const FILTER_VALIDATE_INT;
+use const PHP_OS_FAMILY;
 
 /**
  * The number of physical cores, read from the default output of lscpu. Unlike
@@ -37,8 +38,11 @@ final class LscpuRawPhysicalFinder extends ProcOpenBasedFinder
 
     public function getCommand(): string
     {
-        // util-linux translates the labels.
-        return 'LC_ALL=C lscpu';
+        // util-linux translates the labels. On Windows, the command runs in
+        // cmd.exe, which does not understand the "VAR=value command" syntax.
+        return 'Windows' === PHP_OS_FAMILY
+            ? 'set "LC_ALL=C" && lscpu'
+            : 'LC_ALL=C lscpu';
     }
 
     protected function countCpuCores(string $process): ?int

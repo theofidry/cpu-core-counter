@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Finder;
 
 use function preg_match;
+use const PHP_OS_FAMILY;
 
 /**
  * The number of logical cores, read from the default output of lscpu. Unlike
@@ -26,8 +27,11 @@ final class LscpuRawLogicalFinder extends ProcOpenBasedFinder
 {
     public function getCommand(): string
     {
-        // util-linux translates the labels.
-        return 'LC_ALL=C lscpu';
+        // util-linux translates the labels. On Windows, the command runs in
+        // cmd.exe, which does not understand the "VAR=value command" syntax.
+        return 'Windows' === PHP_OS_FAMILY
+            ? 'set "LC_ALL=C" && lscpu'
+            : 'LC_ALL=C lscpu';
     }
 
     protected function countCpuCores(string $process): ?int
