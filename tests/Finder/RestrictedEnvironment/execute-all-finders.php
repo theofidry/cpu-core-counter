@@ -17,7 +17,7 @@ use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use Fidry\CpuCoreCounter\Finder\FinderRegistry;
 use Fidry\CpuCoreCounter\Finder\OnlyInPowerShellFinder;
 
-require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../../../vendor/autoload.php';
 
 set_error_handler(
     static function (int $level, string $message): bool {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Fidry\CpuCoreCounter\Test\Finder;
+namespace Fidry\CpuCoreCounter\Test\Finder\RestrictedEnvironment;
 
 use PHPUnit\Framework\TestCase;
 use function escapeshellarg;
@@ -73,7 +73,7 @@ final class RestrictedEnvironmentTest extends TestCase
 
         yield 'open_basedir' => [
             'open_basedir',
-            __DIR__.'/../..'.PATH_SEPARATOR.sys_get_temp_dir(),
+            __DIR__.'/../../..'.PATH_SEPARATOR.sys_get_temp_dir(),
         ];
     }
 }
