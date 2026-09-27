@@ -57,6 +57,12 @@
                 "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation"
             ]
         },
+        "FalseValue": {
+            "ignore": [
+                // False positive: any non-string value is parsed as no value.
+                "Fidry\\CpuCoreCounter\\Finder\\EnvVariableFinder::getEnv"
+            ]
+        },
         "FunctionCallRemoval": {
             "ignore": [
                 // I can't find a case in practice where this would happen.

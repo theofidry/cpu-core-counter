@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\CpuInfoFinder;
+use Fidry\CpuCoreCounter\Test\FileReader\DummyFileReader;
 use PHPUnit\Framework\TestCase;
+use function implode;
+use const PHP_EOL;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\CpuInfoFinder
@@ -43,6 +46,74 @@ final class CpuInfoFinderTest extends TestCase
         self::assertSame(
             FinderShortClassName::get($this->finder),
             $this->finder->toString()
+        );
+    }
+
+    public function test_it_finds_the_number_of_cpu_cores_from_the_cpuinfo_file(): void
+    {
+        $finder = new CpuInfoFinder(
+            new DummyFileReader([
+                '/proc/cpuinfo' => "processor\t: 0\nprocessor\t: 1\n",
+            ])
+        );
+
+        self::assertSame(2, $finder->find());
+    }
+
+    public function test_it_cannot_find_the_number_of_cpu_cores_without_the_cpuinfo_file(): void
+    {
+        $finder = new CpuInfoFinder(new DummyFileReader([]));
+
+        self::assertNull($finder->find());
+    }
+
+    public function test_it_can_diagnose_the_cpu_cores_found(): void
+    {
+        $finder = new CpuInfoFinder(
+            new DummyFileReader([
+                '/proc/cpuinfo' => "processor\t: 0\nprocessor\t: 1",
+            ])
+        );
+
+        $expected = implode(
+            PHP_EOL,
+            [
+                'Found the file "/proc/cpuinfo" with the content:',
+                "processor\t: 0\nprocessor\t: 1",
+                'Will return "2".',
+            ]
+        );
+
+        self::assertSame($expected, $finder->diagnose());
+    }
+
+    public function test_it_can_diagnose_the_absence_of_cpu_cores(): void
+    {
+        $finder = new CpuInfoFinder(
+            new DummyFileReader([
+                '/proc/cpuinfo' => 'foo',
+            ])
+        );
+
+        $expected = implode(
+            PHP_EOL,
+            [
+                'Found the file "/proc/cpuinfo" with the content:',
+                'foo',
+                'Will return "null".',
+            ]
+        );
+
+        self::assertSame($expected, $finder->diagnose());
+    }
+
+    public function test_it_can_diagnose_the_absence_of_the_cpuinfo_file(): void
+    {
+        $finder = new CpuInfoFinder(new DummyFileReader([]));
+
+        self::assertSame(
+            'Could not read the file "/proc/cpuinfo".',
+            $finder->diagnose()
         );
     }
 

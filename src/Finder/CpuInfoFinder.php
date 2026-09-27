@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
-use function file_get_contents;
-use function is_file;
+use Fidry\CpuCoreCounter\FileReader\FileReader;
+use Fidry\CpuCoreCounter\FileReader\NativeFileReader;
 use function preg_match_all;
 use function sprintf;
 use const PHP_EOL;
@@ -33,20 +33,23 @@ final class CpuInfoFinder implements CpuCoreFinder
     // Matches "processor : 0" and the s390x form "processor 0: ...".
     private const PROCESSOR_LINE_REGEX = '/^processor\s*\d*\s*:/m';
 
+    /**
+     * @var FileReader
+     */
+    private $fileReader;
+
+    public function __construct(?FileReader $fileReader = null)
+    {
+        $this->fileReader = $fileReader ?? new NativeFileReader();
+    }
+
     public function diagnose(): string
     {
-        if (!is_file(self::CPU_INFO_PATH)) {
-            return sprintf(
-                'The file "%s" could not be found.',
-                self::CPU_INFO_PATH
-            );
-        }
+        $cpuInfo = $this->fileReader->read(self::CPU_INFO_PATH);
 
-        $cpuInfo = file_get_contents(self::CPU_INFO_PATH);
-
-        if (false === $cpuInfo) {
+        if (null === $cpuInfo) {
             return sprintf(
-                'Could not get the content of the file "%s".',
+                'Could not read the file "%s".',
                 self::CPU_INFO_PATH
             );
         }
@@ -57,7 +60,7 @@ final class CpuInfoFinder implements CpuCoreFinder
             PHP_EOL,
             $cpuInfo,
             PHP_EOL,
-            self::countCpuCores($cpuInfo)
+            self::countCpuCores($cpuInfo) ?? 'null'
         );
     }
 
@@ -66,7 +69,7 @@ final class CpuInfoFinder implements CpuCoreFinder
      */
     public function find(): ?int
     {
-        $cpuInfo = self::getCpuInfo();
+        $cpuInfo = $this->fileReader->read(self::CPU_INFO_PATH);
 
         return null === $cpuInfo ? null : self::countCpuCores($cpuInfo);
     }
@@ -74,19 +77,6 @@ final class CpuInfoFinder implements CpuCoreFinder
     public function toString(): string
     {
         return 'CpuInfoFinder';
-    }
-
-    private static function getCpuInfo(): ?string
-    {
-        if (!@is_file(self::CPU_INFO_PATH)) {
-            return null;
-        }
-
-        $cpuInfo = @file_get_contents(self::CPU_INFO_PATH);
-
-        return false === $cpuInfo
-            ? null
-            : $cpuInfo;
     }
 
     /**

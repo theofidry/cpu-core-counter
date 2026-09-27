@@ -26,13 +26,20 @@ final class ProcOpenExecutor implements ProcessExecutor
 {
     public function execute(string $command): ?array
     {
-        if (!function_exists('proc_open')) {
+        // Any of them may be disabled, e.g. with disable_functions.
+        if (!function_exists('proc_open')
+            || !function_exists('proc_close')
+            || !function_exists('tmpfile')
+            || !function_exists('fclose')
+            || !function_exists('rewind')
+            || !function_exists('stream_get_contents')
+        ) {
             return null;
         }
 
         // Do not use a pipe for the STDERR: reading the STDOUT to the end
         // first would block forever if the command fills the STDERR pipe.
-        $stderrFile = tmpfile();
+        $stderrFile = @tmpfile();
 
         if (false === $stderrFile) {
             return null;

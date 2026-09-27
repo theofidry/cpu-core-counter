@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\FileReader;
 
 use function file_get_contents;
+use function function_exists;
 use function is_file;
 
 /**
@@ -23,6 +24,14 @@ final class NativeFileReader implements FileReader
 {
     public function read(string $path): ?string
     {
+        // The functions may be disabled, e.g. with disable_functions.
+        if (
+            !function_exists('is_file')
+            || !function_exists('file_get_contents')
+        ) {
+            return null;
+        }
+
         // The files may be missing or out of reach, e.g. with open_basedir.
         if (!@is_file($path)) {
             return null;

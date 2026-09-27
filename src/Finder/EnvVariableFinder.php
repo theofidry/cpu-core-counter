@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Finder;
 
 use function floor;
+use function function_exists;
 use function getenv;
 use function is_string;
 use function max;
@@ -33,7 +34,7 @@ final class EnvVariableFinder implements CpuCoreFinder
 
     public function diagnose(): string
     {
-        $value = getenv($this->environmentVariableName);
+        $value = self::getEnv($this->environmentVariableName);
 
         return sprintf(
             'parse(getenv(%s)=%s)=%s',
@@ -45,7 +46,7 @@ final class EnvVariableFinder implements CpuCoreFinder
 
     public function find(): ?int
     {
-        return self::parse(getenv($this->environmentVariableName));
+        return self::parse(self::getEnv($this->environmentVariableName));
     }
 
     public function toString(): string
@@ -83,5 +84,14 @@ final class EnvVariableFinder implements CpuCoreFinder
         return $cpus > 0
             ? max(1, (int) floor($cpus))
             : null;
+    }
+
+    /**
+     * @return string|false
+     */
+    private static function getEnv(string $name)
+    {
+        // The function may be disabled, e.g. with disable_functions.
+        return function_exists('getenv') ? getenv($name) : false;
     }
 }
