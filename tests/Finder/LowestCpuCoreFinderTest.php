@@ -61,17 +61,28 @@ final class LowestCpuCoreFinderTest extends TestCase
         ];
 
         yield 'no finder finds a result' => [
-            [new NullCpuCoreFinder(), new NullCpuCoreFinder()],
+            [
+                new NullCpuCoreFinder(),
+                new NullCpuCoreFinder(),
+                ],
             null,
         ];
 
         yield 'one finder finds a result' => [
-            [new NullCpuCoreFinder(), new DummyCpuCoreFinder(3)],
+            [
+                new NullCpuCoreFinder(),
+                new DummyCpuCoreFinder(3),
+            ],
             3,
         ];
 
         yield 'several finders find a result' => [
-            [new DummyCpuCoreFinder(4), new NullCpuCoreFinder(), new DummyCpuCoreFinder(2), new DummyCpuCoreFinder(3)],
+            [
+                new DummyCpuCoreFinder(4),
+                new NullCpuCoreFinder(),
+                new DummyCpuCoreFinder(2),
+                new DummyCpuCoreFinder(3),
+            ],
             2,
         ];
     }
