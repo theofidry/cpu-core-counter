@@ -15,3 +15,8 @@ parameters:
 
 		- path: src/CpuCoreCounter.php
 		  message: '#ParallelisationResult constructor expects int\<1\, max\>, int given\.#'
+
+		# getUnavailabilityReason() is only declared with a @method tag.
+		- path: src/Finder/ProcOpenBasedFinder.php
+		  identifier: function.alreadyNarrowedType
+		  reportUnmatched: false

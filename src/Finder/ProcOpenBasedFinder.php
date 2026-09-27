@@ -40,7 +40,6 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
     {
         // Keep this check until getUnavailabilityReason() is declared in
         // ProcessExecutor: implementations written before it may not have it.
-        // @phpstan-ignore function.alreadyNarrowedType
         if (method_exists($this->executor, 'getUnavailabilityReason')) {
             $unavailabilityReason = $this->executor->getUnavailabilityReason();
 
