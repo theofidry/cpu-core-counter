@@ -31,6 +31,8 @@ final class FinderRegistry
             new HwPhysicalFinder(),
             new LscpuLogicalFinder(),
             new LscpuPhysicalFinder(),
+            new LscpuRawLogicalFinder(),
+            new LscpuRawPhysicalFinder(),
             new _NProcessorFinder(),
             new NProcessorFinder(),
             new NProcFinder(true),
@@ -70,6 +72,7 @@ final class FinderRegistry
             new _NProcessorFinder(),
             new NProcessorFinder(),
             new LscpuLogicalFinder(),
+            new LscpuRawLogicalFinder(),
             new CpuInfoFinder(),
         ];
     }
@@ -91,6 +94,7 @@ final class FinderRegistry
             OnlyOnOSFamilyFinder::forWindows(new WmicPhysicalFinder()),
             new HwPhysicalFinder(),
             new LscpuPhysicalFinder(),
+            new LscpuRawPhysicalFinder(),
             new CpuInfoPhysicalFinder(),
         ];
     }

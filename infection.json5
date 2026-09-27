@@ -34,7 +34,7 @@
             "ignore": [
                 // False positive: PHP handles the numeric strings the same way,
                 // the cast is for PHPStan.
-                "Fidry\\CpuCoreCounter\\Finder\\CpuAffinityFinder::countCpuCores"
+                "Fidry\\CpuCoreCounter\\Finder\\CpuList::count"
             ]
         },
         "CastString": {
@@ -82,7 +82,7 @@
                 // This is an actual false positive.
                 "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation",
                 // False positive: the count is never 0, the check is for PHPStan.
-                "Fidry\\CpuCoreCounter\\Finder\\CpuAffinityFinder::countCpuCores"
+                "Fidry\\CpuCoreCounter\\Finder\\CpuList::count"
             ]
         },
         "IncrementInteger": {
