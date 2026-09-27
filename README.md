@@ -19,7 +19,9 @@ $counter = new CpuCoreCounter();
 // For knowing the number of cores you can use for launching parallel processes:
 $counter->getAvailableForParallelisation()->availableCpus;
 
-// Get the number of CPU cores (by default it will use the logical cores count):
+// Get the number of CPU cores (by default it will use the logical cores count).
+// This count does not account for CPU quotas or limits, e.g. `docker run --cpus=2`
+// or KUBERNETES_CPU_LIMIT. Use ::getAvailableForParallelisation() to account for them.
 try {
     $counter->getCount();   // e.g. 8
 } catch (NumberOfCpuCoreNotFound) {

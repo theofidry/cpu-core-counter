@@ -143,6 +143,11 @@ final class CpuCoreCounter
     }
 
     /**
+     * The count does not account for CPU quotas or limits, e.g. the CPU quota
+     * of the cgroup set with `docker run --cpus=2` or KUBERNETES_CPU_LIMIT.
+     * To know how many CPUs to use for parallel processes, use
+     * getAvailableForParallelisation() instead.
+     *
      * @throws NumberOfCpuCoreNotFound
      *
      * @return positive-int
