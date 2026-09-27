@@ -17,8 +17,8 @@ use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Executor\ProcOpenExecutor;
 use function explode;
 use function filter_var;
-use function function_exists;
 use function is_int;
+use function method_exists;
 use function sprintf;
 use function trim;
 use const FILTER_VALIDATE_INT;
@@ -38,8 +38,14 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
 
     public function diagnose(): string
     {
-        if (!function_exists('proc_open')) {
-            return 'The function "proc_open" is not available.';
+        // Keep this check until getUnavailabilityReason() is declared in
+        // ProcessExecutor: implementations written before it may not have it.
+        if (method_exists($this->executor, 'getUnavailabilityReason')) {
+            $unavailabilityReason = $this->executor->getUnavailabilityReason();
+
+            if (null !== $unavailabilityReason) {
+                return $unavailabilityReason;
+            }
         }
 
         $command = $this->getCommand();

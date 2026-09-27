@@ -43,6 +43,11 @@ final class ProcOpenExecutorTest extends TestCase
         unset($this->executor);
     }
 
+    public function test_it_can_be_used_when_proc_open_is_available(): void
+    {
+        self::assertNull($this->executor->getUnavailabilityReason());
+    }
+
     public function test_it_can_execute_a_command_writing_output_to_the_stdout(): void
     {
         $command = 'echo "Hello world!"';
