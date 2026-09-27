@@ -64,6 +64,13 @@
                 "Fidry\\CpuCoreCounter\\Env::get"
             ]
         },
+        "Foreach_": {
+            "ignore": [
+                // Cannot test this case: it requires one of the functions to
+                // be disabled, which is only covered by RestrictedEnvironmentTest.
+                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::getUnavailabilityReason"
+            ]
+        },
         "FunctionCallRemoval": {
             "ignore": [
                 // I can't find a case in practice where this would happen.

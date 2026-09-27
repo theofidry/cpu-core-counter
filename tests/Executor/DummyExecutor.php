@@ -18,6 +18,11 @@ use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 final class DummyExecutor implements ProcessExecutor
 {
     /**
+     * @var string|null
+     */
+    private $unavailabilityReason;
+
+    /**
      * @var array{string, string}|null
      */
     private $output;
@@ -33,6 +38,16 @@ final class DummyExecutor implements ProcessExecutor
     public function setOutput(?array $output): void
     {
         $this->output = $output;
+    }
+
+    public function setUnavailabilityReason(?string $unavailabilityReason): void
+    {
+        $this->unavailabilityReason = $unavailabilityReason;
+    }
+
+    public function getUnavailabilityReason(): ?string
+    {
+        return $this->unavailabilityReason;
     }
 
     public function execute(string $command): ?array
