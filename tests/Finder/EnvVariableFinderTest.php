@@ -15,6 +15,7 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\EnvVariableFinder;
 use PHPUnit\Framework\TestCase;
+use function putenv;
 use function sprintf;
 
 /**

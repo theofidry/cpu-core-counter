@@ -19,6 +19,7 @@ use Fidry\CpuCoreCounter\Finder\NullCpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\SkipOnOSFamilyFinder;
 use PHPUnit\Framework\TestCase;
 use function sprintf;
+use const PHP_OS_FAMILY;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\SkipOnOSFamilyFinder

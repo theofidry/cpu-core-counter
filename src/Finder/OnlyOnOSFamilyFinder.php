@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Finder;
 
 use function implode;
+use function in_array;
 use function sprintf;
 use const PHP_OS_FAMILY;
 
