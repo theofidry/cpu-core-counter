@@ -113,11 +113,12 @@ not the host's. As a result:
 A container, such as Docker or LXC, shares the host's kernel, so the library
 sees the host's CPUs. As a result:
 
-- Only `NProcFinder` restricts the count to the CPUs the container may use,
-  e.g. with `docker run --cpuset-cpus`. Other finders, including all physical
-  ones, may count every CPU of the host. On Linux, `NProcFinder` is the first
-  default logical finder, so the default count is affected only when `nproc`
-  is unavailable or when you use other finders.
+- Only `NProcFinder` and `CpuAffinityFinder` restrict the count to the CPUs the
+  container may use, e.g. with `docker run --cpuset-cpus`. Other finders,
+  including all physical ones, may count every CPU of the host. On Linux, they
+  are the first default logical finders, so the default count is affected only
+  when neither `nproc` nor `/proc/self/status` is available, or when you use
+  other finders.
 - A CPU quota set outside the container's cgroup namespace is not detected,
   e.g. with Proxmox VE LXC containers. Use `$countLimit` instead.
 - The load average may be the host's, unless the container virtualises it
