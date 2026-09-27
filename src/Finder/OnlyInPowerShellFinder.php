@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
-use function getenv;
+use Fidry\CpuCoreCounter\Env;
 use function sprintf;
 
 /**
@@ -35,7 +35,7 @@ final class OnlyInPowerShellFinder implements CpuCoreFinder
 
     public function diagnose(): string
     {
-        $powerShellModulePath = getenv('PSModulePath');
+        $powerShellModulePath = Env::get('PSModulePath');
 
         return $this->skip()
             ? sprintf(
@@ -62,6 +62,6 @@ final class OnlyInPowerShellFinder implements CpuCoreFinder
 
     private function skip(): bool
     {
-        return false === getenv('PSModulePath');
+        return false === Env::get('PSModulePath');
     }
 }

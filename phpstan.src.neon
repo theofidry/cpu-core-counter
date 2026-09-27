@@ -20,3 +20,8 @@ parameters:
 		- path: src/Finder/ProcOpenBasedFinder.php
 		  identifier: function.alreadyNarrowedType
 		  reportUnmatched: false
+
+		# The functions may be disabled, e.g. with disable_functions.
+		- path: src/Executor/ProcOpenExecutor.php
+		  identifier: function.alreadyNarrowedType
+		  reportUnmatched: false

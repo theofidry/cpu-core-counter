@@ -19,16 +19,34 @@ use function is_resource;
 use function proc_close;
 use function proc_open;
 use function rewind;
+use function sprintf;
 use function stream_get_contents;
 use function tmpfile;
 
 final class ProcOpenExecutor implements ProcessExecutor
 {
+    private const REQUIRED_FUNCTIONS = [
+        'proc_open',
+        'proc_close',
+        'tmpfile',
+        'fclose',
+        'rewind',
+        'stream_get_contents',
+    ];
+
     public function getUnavailabilityReason(): ?string
     {
-        return function_exists('proc_open')
-            ? null
-            : 'The function "proc_open" is not available.';
+        // Any of them may be disabled, e.g. with disable_functions.
+        foreach (self::REQUIRED_FUNCTIONS as $function) {
+            if (!function_exists($function)) {
+                return sprintf(
+                    'The function "%s" is not available.',
+                    $function
+                );
+            }
+        }
+
+        return null;
     }
 
     public function execute(string $command): ?array
@@ -39,7 +57,7 @@ final class ProcOpenExecutor implements ProcessExecutor
 
         // Do not use a pipe for the STDERR: reading the STDOUT to the end
         // first would block forever if the command fills the STDERR pipe.
-        $stderrFile = tmpfile();
+        $stderrFile = @tmpfile();
 
         if (false === $stderrFile) {
             return null;

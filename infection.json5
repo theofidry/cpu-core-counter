@@ -57,6 +57,20 @@
                 "Fidry\\CpuCoreCounter\\CpuCoreCounter::getAvailableForParallelisation"
             ]
         },
+        "FalseValue": {
+            "ignore": [
+                // Cannot test this case: it requires getenv() to be disabled,
+                // which is only covered by RestrictedEnvironmentTest.
+                "Fidry\\CpuCoreCounter\\Env::get"
+            ]
+        },
+        "Foreach_": {
+            "ignore": [
+                // Cannot test this case: it requires one of the functions to
+                // be disabled, which is only covered by RestrictedEnvironmentTest.
+                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::getUnavailabilityReason"
+            ]
+        },
         "FunctionCallRemoval": {
             "ignore": [
                 // I can't find a case in practice where this would happen.
@@ -80,7 +94,11 @@
             "ignore": [
                 // False positive: the mutant only differs when exactly one
                 // stream_get_contents() call fails, which cannot be reproduced.
-                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute"
+                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute",
+                // Cannot test this case: it requires exactly one of the
+                // functions to be disabled, which is only covered by
+                // RestrictedEnvironmentTest.
+                "Fidry\\CpuCoreCounter\\FileReader\\NativeFileReader::read"
             ]
         },
         "OneZeroFloat": {
