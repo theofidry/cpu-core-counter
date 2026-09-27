@@ -59,8 +59,9 @@
         },
         "FalseValue": {
             "ignore": [
-                // False positive: any non-string value is parsed as no value.
-                "Fidry\\CpuCoreCounter\\Finder\\EnvVariableFinder::getEnv"
+                // Cannot test this case: it requires getenv() to be disabled,
+                // which is only covered by RestrictedEnvironmentTest.
+                "Fidry\\CpuCoreCounter\\Env::get"
             ]
         },
         "FunctionCallRemoval": {
