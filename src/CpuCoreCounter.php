@@ -232,6 +232,8 @@ final class CpuCoreCounter
     }
 
     /**
+     * @deprecated Since 1.4.0. The limit finder is injected in the constructor instead.
+     *
      * @return positive-int|null
      */
     public static function getKubernetesLimit(): ?int
