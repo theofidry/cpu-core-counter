@@ -124,6 +124,26 @@ sees the host's CPUs. As a result:
   (e.g. with LXCFS). Use `$systemLoadAverage` instead.
 
 
+### Ignoring the system load
+
+By default, `getAvailableForParallelisation()` ignores the system load. You
+can use it only to get the number of CPU cores and the CPU limit, e.g. the
+cgroup CPU quota:
+
+```php
+$result = $counter->getAvailableForParallelisation();
+
+$result->totalCoresCount;       // e.g. 8
+$result->correctedCountLimit;   // e.g. 2, or null if there is no limit
+$result->availableCpus;         // e.g. 2
+```
+
+`sys_getloadavg()` is not available on Windows, and it can be disabled with
+`disable_functions`. If you pass a `$loadLimit` and set `$systemLoadAverage`
+to `null` there, the load average is treated as 0: `$loadLimit` still
+applies, but the current load does not reduce the result.
+
+
 ### Inspecting what the finders find on your system
 
 Three scripts provide insight into what the finders find:
