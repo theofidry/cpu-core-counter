@@ -15,6 +15,7 @@ namespace Fidry\CpuCoreCounter\Test;
 
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
+use Fidry\CpuCoreCounter\Finder\NullCpuCoreFinder;
 
 /**
  * @internal
@@ -24,8 +25,8 @@ final class AvailableCpuCoresScenario
 {
     /** @var list<CpuCoreFinder> */
     public $finders;
-    /** @var array<string, string|null> */
-    public $environmentVariables;
+    /** @var CpuCoreFinder */
+    public $countLimitFinder;
     /** @var positive-int|0 */
     public $reservedCpus;
     /** @var non-zero-int|null */
@@ -38,15 +39,14 @@ final class AvailableCpuCoresScenario
     public $expected;
 
     /**
-     * @param list<CpuCoreFinder>            $finders
-     * @param array<string, string|int|null> $environmentVariables
-     * @param positive-int|0                 $reservedCpus
-     * @param non-zero-int|null              $countLimit
-     * @param positive-int                   $expected
+     * @param list<CpuCoreFinder> $finders
+     * @param positive-int|0      $reservedCpus
+     * @param non-zero-int|null   $countLimit
+     * @param positive-int        $expected
      */
     public function __construct(
         array $finders,
-        array $environmentVariables,
+        CpuCoreFinder $countLimitFinder,
         int $reservedCpus,
         ?int $countLimit,
         ?float $loadLimit,
@@ -54,7 +54,7 @@ final class AvailableCpuCoresScenario
         int $expected
     ) {
         $this->finders = $finders;
-        $this->environmentVariables = $environmentVariables;
+        $this->countLimitFinder = $countLimitFinder;
         $this->reservedCpus = $reservedCpus;
         $this->countLimit = $countLimit;
         $this->loadLimit = $loadLimit;
@@ -63,17 +63,17 @@ final class AvailableCpuCoresScenario
     }
 
     /**
-     * @param positive-int|null              $coresCountFound
-     * @param array<string, string|int|null> $environmentVariables
-     * @param positive-int|0|null            $reservedCpus
-     * @param non-zero-int|null              $countLimit
-     * @param positive-int                   $expected
+     * @param positive-int|null   $coresCountFound
+     * @param positive-int|null   $countLimitFound
+     * @param positive-int|0|null $reservedCpus
+     * @param non-zero-int|null   $countLimit
+     * @param positive-int        $expected
      *
      * @return array{self}
      */
     public static function create(
         ?int $coresCountFound,
-        array $environmentVariables,
+        ?int $countLimitFound,
         ?int $reservedCpus,
         ?int $countLimit,
         ?float $loadLimit,
@@ -87,7 +87,9 @@ final class AvailableCpuCoresScenario
         return [
             new self(
                 $finders,
-                $environmentVariables,
+                null === $countLimitFound
+                    ? new NullCpuCoreFinder()
+                    : new DummyCpuCoreFinder($countLimitFound),
                 $reservedCpus ?? 0,
                 $countLimit,
                 $loadLimit,

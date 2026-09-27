@@ -77,6 +77,15 @@ final class FinderRegistry
         ];
     }
 
+    /**
+     * @return CpuCoreFinder Finds the count limit to use when none is given to
+     *                       CpuCoreCounter::getAvailableForParallelisation().
+     */
+    public static function getDefaultCountLimitFinder(): CpuCoreFinder
+    {
+        return new EnvVariableFinder('KUBERNETES_CPU_LIMIT');
+    }
+
     private function __construct()
     {
     }

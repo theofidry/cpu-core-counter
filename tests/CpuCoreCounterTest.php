@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test;
 
-use Closure;
 use Exception;
 use Fidry\CpuCoreCounter\CpuCoreCounter;
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
@@ -23,7 +22,7 @@ use Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
 use PHPUnit\Framework\TestCase;
 use function get_class;
 use function is_array;
-use function sprintf;
+use function putenv;
 
 /**
  * @covers \Fidry\CpuCoreCounter\CpuCoreCounter
@@ -32,19 +31,9 @@ use function sprintf;
  */
 final class CpuCoreCounterTest extends TestCase
 {
-    /**
-     * @var null|Closure(): void
-     */
-    private $cleanupEnvironmentVariables;
-
     protected function tearDown(): void
     {
-        $cleanupEnvironmentVariables = $this->cleanupEnvironmentVariables;
-
-        if (null !== $cleanupEnvironmentVariables) {
-            ($cleanupEnvironmentVariables)();
-            $this->cleanupEnvironmentVariables = null;
-        }
+        putenv('KUBERNETES_CPU_LIMIT');
     }
 
     public function test_it_can_get_the_number_of_cpu_cores(): void
@@ -173,9 +162,10 @@ final class CpuCoreCounterTest extends TestCase
      */
     public function test_it_can_get_the_number_of_available_cpu_cores_for_parallelisation(AvailableCpuCoresScenario $scenario): void
     {
-        $this->setUpEnvironmentVariables($scenario->environmentVariables);
-
-        $counter = new CpuCoreCounter($scenario->finders);
+        $counter = new CpuCoreCounter(
+            $scenario->finders,
+            $scenario->countLimitFinder
+        );
 
         $actual = $counter->getAvailableForParallelisation(
             $scenario->reservedCpus,
@@ -191,7 +181,7 @@ final class CpuCoreCounterTest extends TestCase
     {
         yield 'no finder' => AvailableCpuCoresScenario::create(
             null,
-            [],
+            null,
             1,
             null,
             null,
@@ -201,7 +191,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'no finder, multiple CPUs reserved' => AvailableCpuCoresScenario::create(
             null,
-            [],
+            null,
             3,
             null,
             null,
@@ -209,9 +199,9 @@ final class CpuCoreCounterTest extends TestCase
             1
         );
 
-        yield 'CPU count found: kubernetes limit set and lower than the count found' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found: count limit found and lower than the count found' => AvailableCpuCoresScenario::create(
             5,
-            ['KUBERNETES_CPU_LIMIT' => 2],
+            2,
             1,
             null,
             null,
@@ -219,9 +209,9 @@ final class CpuCoreCounterTest extends TestCase
             2
         );
 
-        yield 'CPU count found: kubernetes limit set and higher than the count found' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found: count limit found and higher than the count found' => AvailableCpuCoresScenario::create(
             5,
-            ['KUBERNETES_CPU_LIMIT' => 8],
+            8,
             1,
             null,
             null,
@@ -229,9 +219,9 @@ final class CpuCoreCounterTest extends TestCase
             4
         );
 
-        yield 'CPU count found: kubernetes limit set and equal to the count found' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found: count limit found and equal to the count found' => AvailableCpuCoresScenario::create(
             5,
-            ['KUBERNETES_CPU_LIMIT' => 5],
+            5,
             1,
             null,
             null,
@@ -239,19 +229,9 @@ final class CpuCoreCounterTest extends TestCase
             4
         );
 
-        yield 'CPU count found: Kubernetes limit set using millicores' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found: count limit found and equal to the count found after reserved CPUs' => AvailableCpuCoresScenario::create(
             5,
-            ['KUBERNETES_CPU_LIMIT' => '2500m'],
-            1,
-            null,
-            null,
-            null,
-            2
-        );
-
-        yield 'CPU count not found: Kubernetes limit set using millicores with trailing characters' => AvailableCpuCoresScenario::create(
-            5,
-            ['KUBERNETES_CPU_LIMIT' => '2500mA'],
+            4,
             1,
             null,
             null,
@@ -259,29 +239,9 @@ final class CpuCoreCounterTest extends TestCase
             4
         );
 
-        yield 'CPU count not found: Kubernetes limit set using millicores with leading characters' => AvailableCpuCoresScenario::create(
+        yield 'CPU count found: count limit found and count limit passed' => AvailableCpuCoresScenario::create(
             5,
-            ['KUBERNETES_CPU_LIMIT' => 'A2500m'],
-            1,
-            null,
-            null,
-            null,
-            4
-        );
-
-        yield 'CPU count found: kubernetes limit set and equal to the count found after reserved CPUs' => AvailableCpuCoresScenario::create(
-            5,
-            ['KUBERNETES_CPU_LIMIT' => 4],
-            1,
-            null,
-            null,
-            null,
-            4
-        );
-
-        yield 'CPU count found: kubernetes limit set and limit set' => AvailableCpuCoresScenario::create(
-            5,
-            ['KUBERNETES_CPU_LIMIT' => 2],
+            2,
             1,
             3,
             null,
@@ -291,7 +251,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found: by default it reserves no CPU' => AvailableCpuCoresScenario::create(
             5,
-            [],
+            null,
             null,
             null,
             null,
@@ -301,7 +261,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found higher than the count limit passed' => AvailableCpuCoresScenario::create(
             5,
-            [],
+            null,
             1,
             3,
             null,
@@ -311,7 +271,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, negative limit passed' => AvailableCpuCoresScenario::create(
             5,
-            [],
+            null,
             0,
             -2,
             null,
@@ -321,7 +281,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, negative limit beyond available resources' => AvailableCpuCoresScenario::create(
             5,
-            [],
+            null,
             0,
             -10,
             null,
@@ -331,7 +291,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, with reserved CPU, negative limit passed' => AvailableCpuCoresScenario::create(
             5,
-            [],
+            null,
             1,
             -2,
             null,
@@ -341,7 +301,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, multiple CPUs reserved' => AvailableCpuCoresScenario::create(
             5,
-            [],
+            null,
             2,
             null,
             null,
@@ -351,7 +311,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, all CPUs reserved' => AvailableCpuCoresScenario::create(
             5,
-            [],
+            null,
             5,
             null,
             null,
@@ -361,7 +321,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, over half the cores are used and no limit is set' => AvailableCpuCoresScenario::create(
             11,
-            [],
+            null,
             1,
             null,
             null,
@@ -371,7 +331,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, over half the cores are used and a limit is set' => AvailableCpuCoresScenario::create(
             11,
-            [],
+            null,
             1,
             null,
             1.,
@@ -381,7 +341,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, the CPUs are overloaded' => AvailableCpuCoresScenario::create(
             11,
-            [],
+            null,
             1,
             null,
             .9,
@@ -391,7 +351,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, the load limit is set, but there is several CPUs available still' => AvailableCpuCoresScenario::create(
             11,
-            [],
+            null,
             1,
             null,
             .5,
@@ -401,7 +361,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, the CPUs are at completely overloaded' => AvailableCpuCoresScenario::create(
             11,
-            [],
+            null,
             1,
             null,
             .5,
@@ -411,7 +371,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'CPU count found, the CPUs are overloaded but no load limit per CPU' => AvailableCpuCoresScenario::create(
             11,
-            [],
+            null,
             1,
             null,
             null,
@@ -421,7 +381,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'it rounds the available cores to the lower int (less than half)' => AvailableCpuCoresScenario::create(
             32,
-            [],
+            null,
             0,
             null,
             .1,
@@ -431,7 +391,7 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'it rounds the available cores to the lower int (perfect half)' => AvailableCpuCoresScenario::create(
             7,
-            [],
+            null,
             0,
             null,
             .5,
@@ -441,13 +401,40 @@ final class CpuCoreCounterTest extends TestCase
 
         yield 'it rounds the available cores to the lower int (more than half)' => AvailableCpuCoresScenario::create(
             36,
-            [],
+            null,
             0,
             null,
             .1,
             0.,
             3
         );
+    }
+
+    public function test_it_uses_the_kubernetes_limit_as_count_limit_by_default(): void
+    {
+        putenv('KUBERNETES_CPU_LIMIT=2');
+
+        $counter = new CpuCoreCounter([new DummyCpuCoreFinder(8)]);
+
+        $result = $counter->getAvailableForParallelisation();
+
+        self::assertSame(2, $result->correctedCountLimit);
+        self::assertSame(2, $result->availableCpus);
+    }
+
+    public function test_it_can_ignore_the_count_limit_found(): void
+    {
+        putenv('KUBERNETES_CPU_LIMIT=2');
+
+        $counter = new CpuCoreCounter(
+            [new DummyCpuCoreFinder(8)],
+            new NullCpuCoreFinder()
+        );
+
+        $result = $counter->getAvailableForParallelisation();
+
+        self::assertNull($result->correctedCountLimit);
+        self::assertSame(8, $result->availableCpus);
     }
 
     /**
@@ -584,33 +571,5 @@ final class CpuCoreCounterTest extends TestCase
             0.,
             null,
         ];
-    }
-
-    /**
-     * @param array<string, string|null> $environmentVariables
-     */
-    private function setUpEnvironmentVariables(array $environmentVariables): void
-    {
-        $cleanupCalls = [];
-
-        foreach ($environmentVariables as $environmentName => $environmentValue) {
-            putenv(
-                sprintf(
-                    '%s=%s',
-                    $environmentName,
-                    $environmentValue
-                )
-            );
-
-            $cleanupCalls[] = static function () use ($environmentName): void {
-                putenv($environmentName);
-            };
-        }
-
-        $this->cleanupEnvironmentVariables = static function () use ($cleanupCalls): void {
-            foreach ($cleanupCalls as $cleanupCall) {
-                $cleanupCall();
-            }
-        };
     }
 }

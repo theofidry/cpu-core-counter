@@ -31,16 +31,26 @@ final class CpuCoreCounter
     private $finders;
 
     /**
+     * @var CpuCoreFinder
+     */
+    private $countLimitFinder;
+
+    /**
      * @var positive-int|null
      */
     private $count;
 
     /**
      * @param list<CpuCoreFinder>|null $finders
+     * @param CpuCoreFinder|null       $countLimitFinder Finds the count limit to use when none is given
+     *                                                   to getAvailableForParallelisation().
      */
-    public function __construct(?array $finders = null)
-    {
+    public function __construct(
+        ?array $finders = null,
+        ?CpuCoreFinder $countLimitFinder = null
+    ) {
         $this->finders = $finders ?? FinderRegistry::getDefaultLogicalFinders();
+        $this->countLimitFinder = $countLimitFinder ?? FinderRegistry::getDefaultCountLimitFinder();
     }
 
     /**
@@ -49,8 +59,8 @@ final class CpuCoreCounter
      *                                             process is going to be busy still, you may want to set
      *                                             this value to 1.
      * @param non-zero-int|null $countLimit        The maximum number of CPUs to return. If not provided, it
-     *                                             may look for a limit in the environment variables, e.g.
-     *                                             KUBERNETES_CPU_LIMIT. If negative, the limit will be
+     *                                             uses the limit found by the count limit finder, by
+     *                                             default KUBERNETES_CPU_LIMIT. If negative, the limit will be
      *                                             the total number of cores found minus the absolute value.
      *                                             For instance if the system has 10 cores and countLimit=-2,
      *                                             then the effective limit considered will be 8.
@@ -105,7 +115,7 @@ final class CpuCoreCounter
         }
 
         if (null === $countLimit) {
-            $correctedCountLimit = self::getKubernetesLimit();
+            $correctedCountLimit = $this->countLimitFinder->find();
         } else {
             $correctedCountLimit = $countLimit > 0
                 ? $countLimit
