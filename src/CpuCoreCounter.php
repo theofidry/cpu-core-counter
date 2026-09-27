@@ -85,7 +85,9 @@ final class CpuCoreCounter
      *                                             `null`, it will use `sys_getloadavg()` to check the
      *                                             load of the system in the past minute. You can
      *                                             otherwise pass an arbitrary value. Should be a
-     *                                             positive float.
+     *                                             positive float. Inside a virtual machine, the
+     *                                             load average excludes the host's load. Inside
+     *                                             a container, it may be the host's load.
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */

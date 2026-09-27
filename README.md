@@ -83,6 +83,47 @@ By default, `CpuCoreCounter` uses the logical finders, since this is usually
 what you need and is also what the PHP source uses when building the PHP binary.
 
 
+### Virtual machines
+
+Inside a virtual machine (VM), such as a VMware or Parallels Desktop VM, a
+micro-VM, a CI runner or a cloud instance, the library sees only the VM's CPUs,
+not the host's. As a result:
+
+- The count is the number of virtual CPUs (vCPUs) assigned to the VM. If the
+  host assigns more vCPUs than it has cores, the count overstates what can
+  actually run in parallel. This cannot be detected from inside the VM, so
+  assign at most as many vCPUs as the host has cores.
+- `NProcFinder` with `$all = true` (`nproc --all`) may also count CPUs that the
+  hypervisor reserves for hot-adding: a 6-vCPU VMware VM can report 128. The
+  default finders count only online CPUs. The `execute` and `diagnose` scripts
+  still run this finder, so disregard its result there.
+- A CPU limit set by the host on the VM is not visible. The cgroup CPU quota
+  check (see `getAvailableForParallelisation()`) covers only cgroups within the
+  VM, e.g. `docker run --cpus=2`. Use the `$countLimit` parameter of
+  `getAvailableForParallelisation()` instead.
+- The physical count reflects the CPU topology presented by the hypervisor, not
+  the host's physical cores. It does not show whether vCPUs share a core (SMT)
+  or run on slower cores.
+- The load average covers only the processes inside the VM. A busy host can
+  therefore report a low load, and `$loadLimit` will not reduce the result.
+
+
+### Containers
+
+A container, such as Docker or LXC, shares the host's kernel, so the library
+sees the host's CPUs. As a result:
+
+- Only `NProcFinder` restricts the count to the CPUs the container may use,
+  e.g. with `docker run --cpuset-cpus`. Other finders, including all physical
+  ones, may count every CPU of the host. On Linux, `NProcFinder` is the first
+  default logical finder, so the default count is affected only when `nproc`
+  is unavailable or when you use other finders.
+- A CPU quota set outside the container's cgroup namespace is not detected,
+  e.g. with Proxmox VE LXC containers. Use `$countLimit` instead.
+- The load average may be the host's, unless the container virtualises it
+  (e.g. with LXCFS). Use `$systemLoadAverage` instead.
+
+
 ### Inspecting what the finders find on your system
 
 Three scripts provide insight into what the finders find:
