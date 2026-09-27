@@ -49,72 +49,82 @@ final class CpuInfoFinderTest extends TestCase
         );
     }
 
-    public function test_it_finds_the_number_of_cpu_cores_from_the_cpuinfo_file(): void
-    {
-        $finder = new CpuInfoFinder(
-            new DummyFileReader([
-                '/proc/cpuinfo' => "processor\t: 0\nprocessor\t: 1\n",
-            ])
-        );
+    /**
+     * @dataProvider cpuInfoFileProvider
+     *
+     * @param array<string, string> $files
+     */
+    public function test_it_finds_the_number_of_cpu_cores(
+        array $files,
+        ?int $expected
+    ): void {
+        $finder = new CpuInfoFinder(new DummyFileReader($files));
 
-        self::assertSame(2, $finder->find());
+        self::assertSame($expected, $finder->find());
     }
 
-    public function test_it_cannot_find_the_number_of_cpu_cores_without_the_cpuinfo_file(): void
+    public static function cpuInfoFileProvider(): iterable
     {
-        $finder = new CpuInfoFinder(new DummyFileReader([]));
+        yield 'no cpuinfo file' => [
+            [],
+            null,
+        ];
 
-        self::assertNull($finder->find());
+        yield 'cpuinfo file without processor lines' => [
+            ['/proc/cpuinfo' => 'foo'],
+            null,
+        ];
+
+        yield 'cpuinfo file with processor lines' => [
+            ['/proc/cpuinfo' => "processor\t: 0\nprocessor\t: 1\n"],
+            2,
+        ];
     }
 
-    public function test_it_can_diagnose_the_cpu_cores_found(): void
-    {
-        $finder = new CpuInfoFinder(
-            new DummyFileReader([
-                '/proc/cpuinfo' => "processor\t: 0\nprocessor\t: 1",
-            ])
-        );
-
-        $expected = implode(
-            PHP_EOL,
-            [
-                'Found the file "/proc/cpuinfo" with the content:',
-                "processor\t: 0\nprocessor\t: 1",
-                'Will return "2".',
-            ]
-        );
+    /**
+     * @dataProvider diagnosisProvider
+     *
+     * @param array<string, string> $files
+     */
+    public function test_it_can_diagnose_the_cpu_cores_found(
+        array $files,
+        string $expected
+    ): void {
+        $finder = new CpuInfoFinder(new DummyFileReader($files));
 
         self::assertSame($expected, $finder->diagnose());
     }
 
-    public function test_it_can_diagnose_the_absence_of_cpu_cores(): void
+    public static function diagnosisProvider(): iterable
     {
-        $finder = new CpuInfoFinder(
-            new DummyFileReader([
-                '/proc/cpuinfo' => 'foo',
-            ])
-        );
-
-        $expected = implode(
-            PHP_EOL,
-            [
-                'Found the file "/proc/cpuinfo" with the content:',
-                'foo',
-                'Will return "null".',
-            ]
-        );
-
-        self::assertSame($expected, $finder->diagnose());
-    }
-
-    public function test_it_can_diagnose_the_absence_of_the_cpuinfo_file(): void
-    {
-        $finder = new CpuInfoFinder(new DummyFileReader([]));
-
-        self::assertSame(
+        yield 'no cpuinfo file' => [
+            [],
             'Could not read the file "/proc/cpuinfo".',
-            $finder->diagnose()
-        );
+        ];
+
+        yield 'cpuinfo file without processor lines' => [
+            ['/proc/cpuinfo' => 'foo'],
+            implode(
+                PHP_EOL,
+                [
+                    'Found the file "/proc/cpuinfo" with the content:',
+                    'foo',
+                    'Will return "null".',
+                ]
+            ),
+        ];
+
+        yield 'cpuinfo file with processor lines' => [
+            ['/proc/cpuinfo' => "processor\t: 0\nprocessor\t: 1"],
+            implode(
+                PHP_EOL,
+                [
+                    'Found the file "/proc/cpuinfo" with the content:',
+                    "processor\t: 0\nprocessor\t: 1",
+                    'Will return "2".',
+                ]
+            ),
+        ];
     }
 
     /**
