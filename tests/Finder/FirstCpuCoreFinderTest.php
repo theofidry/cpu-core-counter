@@ -15,28 +15,28 @@ namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\DummyCpuCoreFinder;
-use Fidry\CpuCoreCounter\Finder\LowestCpuCoreFinder;
+use Fidry\CpuCoreCounter\Finder\FirstCpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\NullCpuCoreFinder;
 use PHPUnit\Framework\TestCase;
 use function implode;
 use const PHP_EOL;
 
 /**
- * @covers \Fidry\CpuCoreCounter\Finder\LowestCpuCoreFinder
+ * @covers \Fidry\CpuCoreCounter\Finder\FirstCpuCoreFinder
  *
  * @internal
  */
-final class LowestCpuCoreFinderTest extends TestCase
+final class FirstCpuCoreFinderTest extends TestCase
 {
     public function test_it_can_describe_itself(): void
     {
-        $finder = new LowestCpuCoreFinder(
+        $finder = new FirstCpuCoreFinder(
             new DummyCpuCoreFinder(2),
             new NullCpuCoreFinder()
         );
 
         self::assertSame(
-            'LowestCpuCoreFinder(DummyCpuCoreFinder(value=2),NullCpuCoreFinder)',
+            'FirstCpuCoreFinder(DummyCpuCoreFinder(value=2),NullCpuCoreFinder)',
             $finder->toString()
         );
     }
@@ -46,9 +46,9 @@ final class LowestCpuCoreFinderTest extends TestCase
      *
      * @param list<CpuCoreFinder> $finders
      */
-    public function test_it_finds_the_lowest_result(array $finders, ?int $expected): void
+    public function test_it_finds_the_first_result(array $finders, ?int $expected): void
     {
-        $finder = new LowestCpuCoreFinder(...$finders);
+        $finder = new FirstCpuCoreFinder(...$finders);
 
         self::assertSame($expected, $finder->find());
     }
@@ -78,18 +78,17 @@ final class LowestCpuCoreFinderTest extends TestCase
 
         yield 'several finders find a result' => [
             [
-                new DummyCpuCoreFinder(4),
                 new NullCpuCoreFinder(),
+                new DummyCpuCoreFinder(4),
                 new DummyCpuCoreFinder(2),
-                new DummyCpuCoreFinder(3),
             ],
-            2,
+            4,
         ];
     }
 
     public function test_it_can_diagnose_its_finders(): void
     {
-        $finder = new LowestCpuCoreFinder(
+        $finder = new FirstCpuCoreFinder(
             new DummyCpuCoreFinder(4),
             new DummyCpuCoreFinder(2)
         );
@@ -101,7 +100,7 @@ final class LowestCpuCoreFinderTest extends TestCase
                 (new DummyCpuCoreFinder(4))->diagnose(),
                 'DummyCpuCoreFinder(value=2):',
                 (new DummyCpuCoreFinder(2))->diagnose(),
-                'Will return "2".',
+                'Will return "4".',
             ]
         );
 

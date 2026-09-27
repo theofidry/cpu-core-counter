@@ -85,7 +85,7 @@ final class FinderRegistry
      */
     public static function getDefaultCountLimitFinder(): CpuCoreFinder
     {
-        return new LowestCpuCoreFinder(
+        return new FirstCpuCoreFinder(
             new CgroupCpuQuotaFinder(),
             new EnvVariableFinder('KUBERNETES_CPU_LIMIT')
         );
