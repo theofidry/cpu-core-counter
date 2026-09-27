@@ -75,13 +75,32 @@ final class CgroupCpuQuotaFinderTest extends TestCase
         ];
 
         // See https://docs.kernel.org/admin-guide/cgroup-v2.html#limits
-        yield 'v2: the lowest quota wins' => [
+        yield 'v2: the lowest quota is on a parent cgroup' => [
             [
                 '/proc/self/cgroup' => "0::/foo/bar\n",
                 '/sys/fs/cgroup/foo/cpu.max' => "100000 100000\n",
                 '/sys/fs/cgroup/foo/bar/cpu.max' => "400000 100000\n",
             ],
             1,
+        ];
+
+        // See https://docs.kernel.org/admin-guide/cgroup-v2.html#limits
+        yield 'v2: the lowest quota is on the process cgroup' => [
+            [
+                '/proc/self/cgroup' => "0::/foo/bar\n",
+                '/sys/fs/cgroup/foo/cpu.max' => "400000 100000\n",
+                '/sys/fs/cgroup/foo/bar/cpu.max' => "100000 100000\n",
+            ],
+            1,
+        ];
+
+        // A cgroup is a directory, so its name may contain a colon.
+        yield 'v2: cgroup path with a colon' => [
+            [
+                '/proc/self/cgroup' => "0::/foo:bar\n",
+                '/sys/fs/cgroup/foo:bar/cpu.max' => "200000 100000\n",
+            ],
+            2,
         ];
 
         // See https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu-interface-files
@@ -189,6 +208,27 @@ final class CgroupCpuQuotaFinderTest extends TestCase
                 '/proc/self/cgroup' => "4:cpu,cpuacct:/foo\n",
                 '/sys/fs/cgroup/cpu,cpuacct/foo/cpu.cfs_quota_us' => "-1\n",
                 '/sys/fs/cgroup/cpu,cpuacct/foo/cpu.cfs_period_us' => "100000\n",
+            ],
+            null,
+        ];
+
+        // See https://docs.kernel.org/scheduler/sched-bwc.html#hierarchical-considerations
+        yield 'v1: the lowest quota is on the process cgroup' => [
+            [
+                '/proc/self/cgroup' => "4:cpu,cpuacct:/pod/container\n",
+                '/sys/fs/cgroup/cpu,cpuacct/pod/cpu.cfs_quota_us' => "400000\n",
+                '/sys/fs/cgroup/cpu,cpuacct/pod/cpu.cfs_period_us' => "100000\n",
+                '/sys/fs/cgroup/cpu,cpuacct/pod/container/cpu.cfs_quota_us' => "200000\n",
+                '/sys/fs/cgroup/cpu,cpuacct/pod/container/cpu.cfs_period_us' => "100000\n",
+            ],
+            2,
+        ];
+
+        yield 'v1: period of zero' => [
+            [
+                '/proc/self/cgroup' => "4:cpu,cpuacct:/foo\n",
+                '/sys/fs/cgroup/cpu,cpuacct/foo/cpu.cfs_quota_us' => "200000\n",
+                '/sys/fs/cgroup/cpu,cpuacct/foo/cpu.cfs_period_us' => "0\n",
             ],
             null,
         ];

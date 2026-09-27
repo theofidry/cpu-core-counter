@@ -128,7 +128,7 @@ final class CgroupCpuQuotaFinder implements CpuCoreFinder
 
         foreach (explode("\n", $cgroup) as $line) {
             // hierarchy-ID:controller-list:cgroup-path
-            $parts = explode(':', trim($line), 3);
+            $parts = explode(':', $line, 3);
 
             if (3 !== count($parts)) {
                 continue;
@@ -136,7 +136,7 @@ final class CgroupCpuQuotaFinder implements CpuCoreFinder
 
             [$hierarchyId, $controllers, $cgroupPath] = $parts;
 
-            if ('0' === $hierarchyId && '' === $controllers) {
+            if ('0' === $hierarchyId) {
                 $quotas += $this->findV2Quotas($cgroupPath);
             } elseif (in_array('cpu', explode(',', $controllers), true)) {
                 $quotas += $this->findV1Quotas($cgroupPath);
@@ -159,8 +159,7 @@ final class CgroupCpuQuotaFinder implements CpuCoreFinder
 
             // An unlimited cgroup contains "max <period>".
             if (null !== $cpuMax
-                && 1 === preg_match('/^(\d+) (\d+)$/', trim($cpuMax), $matches)
-                && $matches[1] > 0
+                && 1 === preg_match('/(\d+) (\d+)/', $cpuMax, $matches)
                 && $matches[2] > 0
             ) {
                 $quotas[$file] = $matches[1] / $matches[2];
@@ -235,16 +234,7 @@ final class CgroupCpuQuotaFinder implements CpuCoreFinder
 
     private function readPositiveInt(string $path): ?int
     {
-        $contents = $this->fileReader->read($path);
-
-        if (
-            null === $contents
-            || 1 !== preg_match('/^\d+$/', trim($contents))
-        ) {
-            return null;
-        }
-
-        $value = (int) trim($contents);
+        $value = (int) $this->fileReader->read($path);
 
         return $value > 0 ? $value : null;
     }
