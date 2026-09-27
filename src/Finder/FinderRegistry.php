@@ -24,6 +24,7 @@ final class FinderRegistry
             new CgroupCpuQuotaFinder(),
             new CpuAffinityFinder(),
             new CpuInfoFinder(),
+            new CpuInfoPhysicalFinder(),
             new DummyCpuCoreFinder(1),
             new EnvVariableFinder('NUMBER_OF_PROCESSORS'),
             new HwLogicalFinder(),
@@ -90,6 +91,7 @@ final class FinderRegistry
             OnlyOnOSFamilyFinder::forWindows(new WmicPhysicalFinder()),
             new HwPhysicalFinder(),
             new LscpuPhysicalFinder(),
+            new CpuInfoPhysicalFinder(),
         ];
     }
 
