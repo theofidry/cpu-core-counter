@@ -69,19 +69,19 @@ final class CpuCoreCounter
      * @param float|null        $loadLimit         Element of [0., 1.]. Percentage representing the
      *                                             amount of cores that should be used among the available
      *                                             resources. For instance, if set to 0.7, it will use 70%
-     *                                             of the available cores, i.e. if 1 core is reserved, 11
-     *                                             cores are available and 5 are busy, it will use 70%
-     *                                             of (11-1-5)=5 cores, so 3 cores. Set this parameter to null
-     *                                             to skip this check. Beware that 1 does not mean "no limit",
-     *                                             but 100% of the _available_ resources, i.e. with the
-     *                                             previous example, it will return 5 cores. How busy is
-     *                                             the system is determined by the system load average
-     *                                             (see $systemLoadAverage).
-     * @param float|null        $systemLoadAverage The system load average. If passed, it will use
-     *                                             this information to limit the available cores based
-     *                                             on the _available_ resources. For instance, if there
-     *                                             is 10 cores but 3 are busy, then only 7 cores will
-     *                                             be considered for further calculation. If set to
+     *                                             of the available cores, i.e. if the system has 11 cores,
+     *                                             1 core is reserved and 5 are busy, it will use 70%
+     *                                             of (11-1-5)=5 cores, so 3 cores (3.5 rounded down).
+     *                                             Set this parameter to null to skip this check. Beware
+     *                                             that 1 does not mean "no limit", but 100% of the
+     *                                             _available_ resources, i.e. with the previous example,
+     *                                             it will return 5 cores. The system load average
+     *                                             tells how busy the system is (see $systemLoadAverage).
+     * @param float|null        $systemLoadAverage The system load average. It is only used when
+     *                                             $loadLimit is not null, to limit the available cores
+     *                                             based on the _available_ resources. For instance, if
+     *                                             there are 10 cores but 3 are busy, then only 7 cores
+     *                                             will be considered for further calculation. If set to
      *                                             `null`, it will use `sys_getloadavg()` to check the
      *                                             load of the system in the past minute. You can
      *                                             otherwise pass an arbitrary value. Should be a
