@@ -22,11 +22,18 @@ use function rewind;
 use function stream_get_contents;
 use function tmpfile;
 
-final class ProcOpenExecutor implements ProcessExecutor
+final class ProcOpenExecutor implements DiagnosableProcessExecutor
 {
+    public function getUnavailabilityReason(): ?string
+    {
+        return function_exists('proc_open')
+            ? null
+            : 'The function "proc_open" is not available.';
+    }
+
     public function execute(string $command): ?array
     {
-        if (!function_exists('proc_open')) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -73,5 +80,10 @@ final class ProcOpenExecutor implements ProcessExecutor
         }
 
         return [$stdout, $stderr];
+    }
+
+    private function isAvailable(): bool
+    {
+        return null === $this->getUnavailabilityReason();
     }
 }

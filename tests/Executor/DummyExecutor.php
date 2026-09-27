@@ -13,10 +13,15 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Executor;
 
-use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
+use Fidry\CpuCoreCounter\Executor\DiagnosableProcessExecutor;
 
-final class DummyExecutor implements ProcessExecutor
+final class DummyExecutor implements DiagnosableProcessExecutor
 {
+    /**
+     * @var string|null
+     */
+    private $unavailabilityReason;
+
     /**
      * @var array{string, string}|null
      */
@@ -33,6 +38,16 @@ final class DummyExecutor implements ProcessExecutor
     public function setOutput(?array $output): void
     {
         $this->output = $output;
+    }
+
+    public function setUnavailabilityReason(?string $unavailabilityReason): void
+    {
+        $this->unavailabilityReason = $unavailabilityReason;
+    }
+
+    public function getUnavailabilityReason(): ?string
+    {
+        return $this->unavailabilityReason;
     }
 
     public function execute(string $command): ?array

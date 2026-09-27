@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
+use Fidry\CpuCoreCounter\Executor\DiagnosableProcessExecutor;
 use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Executor\ProcOpenExecutor;
 use function explode;
 use function filter_var;
-use function function_exists;
 use function is_int;
 use function sprintf;
 use function trim;
@@ -38,8 +38,12 @@ abstract class ProcOpenBasedFinder implements CpuCoreFinder
 
     public function diagnose(): string
     {
-        if (!function_exists('proc_open')) {
-            return 'The function "proc_open" is not available.';
+        if ($this->executor instanceof DiagnosableProcessExecutor) {
+            $unavailabilityReason = $this->executor->getUnavailabilityReason();
+
+            if (null !== $unavailabilityReason) {
+                return $unavailabilityReason;
+            }
         }
 
         $command = $this->getCommand();

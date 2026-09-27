@@ -17,6 +17,7 @@ use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 use Fidry\CpuCoreCounter\Finder\CpuCoreFinder;
 use Fidry\CpuCoreCounter\Finder\ProcOpenBasedFinder;
 use Fidry\CpuCoreCounter\Test\Executor\DummyExecutor;
+use Fidry\CpuCoreCounter\Test\Executor\NonDiagnosableExecutor;
 use PHPUnit\Framework\TestCase;
 use const PHP_VERSION_ID;
 
@@ -91,6 +92,27 @@ abstract class ProcOpenBasedFinderTestCase extends TestCase
             ['smth in stdout', ' '],
             $stdoutResultRegex,
         ];
+    }
+
+    public function test_it_reports_why_the_executor_cannot_be_used_in_the_diagnosis(): void
+    {
+        $this->executor->setUnavailabilityReason('The executor is not available.');
+        $this->executor->setOutput(['3', '']);
+
+        $actual = $this->finder->diagnose();
+
+        self::assertSame('The executor is not available.', $actual);
+        self::assertNull($this->executor->getLastCommand());
+    }
+
+    public function test_it_can_do_a_diagnosis_with_an_executor_that_cannot_tell_whether_it_can_be_used(): void
+    {
+        $executor = new NonDiagnosableExecutor(['3', '']);
+        $finder = $this->createFinder($executor);
+
+        $actual = $finder->diagnose();
+
+        self::assertStringStartsWith('Executed the command "', $actual);
     }
 
     /**
