@@ -64,7 +64,7 @@ final class LowestCpuCoreFinderTest extends TestCase
             [
                 new NullCpuCoreFinder(),
                 new NullCpuCoreFinder(),
-                ],
+            ],
             null,
         ];
 

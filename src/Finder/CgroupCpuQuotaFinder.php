@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Finder;
 
+use Fidry\CpuCoreCounter\FileReader\FileReader;
+use Fidry\CpuCoreCounter\FileReader\NativeFileReader;
 use function array_slice;
 use function count;
 use function explode;
-use function file_get_contents;
 use function floor;
 use function implode;
 use function in_array;
-use function is_file;
 use function max;
 use function min;
 use function preg_match;
@@ -38,8 +38,10 @@ use const PHP_EOL;
  *
  * Supports cgroup v1 and v2. A quota set on a parent cgroup applies too, so
  * the lowest quota found from the root down to the process' cgroup wins. A
- * fractional quota is rounded down, like KUBERNETES_CPU_LIMIT, with a minimum
- * of one core.
+ * fractional quota is rounded down.
+ *
+ * @author Anders Jenbo <anders@jenbo.dk> (@AJenbo)
+ * @author Ondřej Mirtes <ondrej@mirtes.cz> (@ondrejmirtes)
  *
  * @see https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu-interface-files
  * @see https://docs.kernel.org/scheduler/sched-bwc.html
@@ -55,21 +57,18 @@ final class CgroupCpuQuotaFinder implements CpuCoreFinder
     ];
 
     /**
-     * @var string
+     * @var FileReader
      */
-    private $filesystemRoot;
+    private $fileReader;
 
-    /**
-     * @param string $filesystemRoot Prefix of every path read. Only meant for tests.
-     */
-    public function __construct(string $filesystemRoot = '')
+    public function __construct(?FileReader $fileReader = null)
     {
-        $this->filesystemRoot = $filesystemRoot;
+        $this->fileReader = $fileReader ?? new NativeFileReader();
     }
 
     public function diagnose(): string
     {
-        $cgroup = $this->readFile(self::CGROUP_PATH);
+        $cgroup = $this->fileReader->read(self::CGROUP_PATH);
 
         if (null === $cgroup) {
             return sprintf(
@@ -108,7 +107,7 @@ final class CgroupCpuQuotaFinder implements CpuCoreFinder
 
     public function find(): ?int
     {
-        $cgroup = $this->readFile(self::CGROUP_PATH);
+        $cgroup = $this->fileReader->read(self::CGROUP_PATH);
 
         return null === $cgroup
             ? null
@@ -156,7 +155,7 @@ final class CgroupCpuQuotaFinder implements CpuCoreFinder
 
         foreach (self::getSelfAndAncestors($cgroupPath) as $path) {
             $file = '/sys/fs/cgroup'.$path.'/cpu.max';
-            $cpuMax = $this->readFile($file);
+            $cpuMax = $this->fileReader->read($file);
 
             // An unlimited cgroup contains "max <period>".
             if (null !== $cpuMax
@@ -236,28 +235,17 @@ final class CgroupCpuQuotaFinder implements CpuCoreFinder
 
     private function readPositiveInt(string $path): ?int
     {
-        $contents = $this->readFile($path);
+        $contents = $this->fileReader->read($path);
 
-        if (null === $contents || 1 !== preg_match('/^\d+$/', trim($contents))) {
+        if (
+            null === $contents
+            || 1 !== preg_match('/^\d+$/', trim($contents))
+        ) {
             return null;
         }
 
         $value = (int) trim($contents);
 
         return $value > 0 ? $value : null;
-    }
-
-    private function readFile(string $path): ?string
-    {
-        $path = $this->filesystemRoot.$path;
-
-        // The files may be missing or out of reach, e.g. with open_basedir.
-        if (!@is_file($path)) {
-            return null;
-        }
-
-        $contents = @file_get_contents($path);
-
-        return false === $contents ? null : $contents;
     }
 }
