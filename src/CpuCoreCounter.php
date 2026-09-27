@@ -59,8 +59,10 @@ final class CpuCoreCounter
      *                                             process is going to be busy still, you may want to set
      *                                             this value to 1.
      * @param non-zero-int|null $countLimit        The maximum number of CPUs to return. If not provided, it
-     *                                             uses the limit found by the count limit finder, by
-     *                                             default KUBERNETES_CPU_LIMIT. If negative, the limit will be
+     *                                             uses the limit found by the count limit finder: by
+     *                                             default the CPU quota of the cgroup, e.g. with
+     *                                             `docker run --cpus=2`, or KUBERNETES_CPU_LIMIT,
+     *                                             whichever is lower. If negative, the limit will be
      *                                             the total number of cores found minus the absolute value.
      *                                             For instance if the system has 10 cores and countLimit=-2,
      *                                             then the effective limit considered will be 8.

@@ -21,6 +21,7 @@ final class FinderRegistry
     public static function getAllVariants(): array
     {
         return [
+            new CgroupCpuQuotaFinder(),
             new CpuInfoFinder(),
             new DummyCpuCoreFinder(1),
             new HwLogicalFinder(),
@@ -84,7 +85,10 @@ final class FinderRegistry
      */
     public static function getDefaultCountLimitFinder(): CpuCoreFinder
     {
-        return new EnvVariableFinder('KUBERNETES_CPU_LIMIT');
+        return new LowestCpuCoreFinder(
+            new CgroupCpuQuotaFinder(),
+            new EnvVariableFinder('KUBERNETES_CPU_LIMIT')
+        );
     }
 
     private function __construct()

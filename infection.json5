@@ -23,6 +23,13 @@
                 "Fidry\\CpuCoreCounter\\CpuCoreCounter::getDefaultFinders"
             ]
         },
+        "Assignment": {
+            "ignore": [
+                // False positive: a controller is bound to a single hierarchy,
+                // so the quotas can only come from either v1 or v2.
+                "Fidry\\CpuCoreCounter\\Finder\\CgroupCpuQuotaFinder::findQuotas"
+            ]
+        },
         "CastString": {
             "ignore": [
                 // I can't find a case in practice where this would happen.
@@ -84,6 +91,12 @@
             "ignore": [
                 // This is a case where the value does not matter.
                 "Fidry\\CpuCoreCounter\\Finder\\LscpuPhysicalFinder::countCpuCores"
+            ]
+        },
+        "UnwrapArrayValues": {
+            "ignore": [
+                // False positive: the keys are never used, it is only to get a list.
+                "Fidry\\CpuCoreCounter\\Finder\\LowestCpuCoreFinder::__construct"
             ]
         }
     }

@@ -412,14 +412,16 @@ final class CpuCoreCounterTest extends TestCase
 
     public function test_it_uses_the_kubernetes_limit_as_count_limit_by_default(): void
     {
-        putenv('KUBERNETES_CPU_LIMIT=2');
+        // One core is the lowest possible CPU quota, so the quota of the
+        // machine running the tests cannot win.
+        putenv('KUBERNETES_CPU_LIMIT=1');
 
         $counter = new CpuCoreCounter([new DummyCpuCoreFinder(8)]);
 
         $result = $counter->getAvailableForParallelisation();
 
-        self::assertSame(2, $result->correctedCountLimit);
-        self::assertSame(2, $result->availableCpus);
+        self::assertSame(1, $result->correctedCountLimit);
+        self::assertSame(1, $result->availableCpus);
     }
 
     public function test_it_can_ignore_the_count_limit_found(): void

@@ -1,3 +1,4 @@
+CgroupCpuQuotaFinder: F
 CpuInfoFinder: F
 DummyCpuCoreFinder(value=1): .
 HwLogicalFinder: F
