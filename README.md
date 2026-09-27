@@ -85,17 +85,24 @@ what you need and is also what the PHP source uses when building the PHP binary.
 
 ### Virtual machines
 
-Inside a virtual machine (VM), for example a micro-VM such as a Docker Sandbox,
-a CI runner or a cloud instance, the library only sees the CPUs of the VM, not
-the CPUs of the host. This has a few consequences:
+Inside a virtual machine (VM), for example VMware, Parallels Desktop, a
+micro-VM such as a Docker Sandbox, a CI runner or a cloud instance, the library
+only sees the CPUs of the VM, not the CPUs of the host. This has a few
+consequences:
 
 - The count is the number of virtual CPUs (vCPUs) given to the VM. If the host
   gives the VM more vCPUs than it has cores, the count is higher than what can
   really run in parallel. Nothing inside the VM shows this, so the fix is to
   give the VM at most as many vCPUs as the host has cores.
+- Some hypervisors, e.g. VMware with CPU hot-add enabled, make the kernel
+  reserve room for CPUs that can be added later. `NProcFinder` with
+  `$all = true` (`nproc --all`) counts those too: a 6-vCPU VM can report 128.
+  The default finders only count the CPUs that are online. The `execute` and
+  `diagnose` scripts run it anyway, so ignore its result there.
 - A CPU limit that the host puts on the VM is not visible. The cgroup CPU quota
   check (see `getAvailableForParallelisation()`) only sees the cgroups of the
-  VM's own kernel, e.g. a `docker run --cpus=2` inside the VM.
+  VM's own kernel, e.g. a `docker run --cpus=2` inside the VM. Pass
+  `$countLimit` to `getAvailableForParallelisation()` instead.
 - The physical count comes from the CPU layout the hypervisor shows the VM,
   which it can choose freely. It does not tell you how many physical cores the
   host has, or whether two vCPUs share a core (SMT) or run on slower cores.
@@ -106,10 +113,14 @@ the CPUs of the host. This has a few consequences:
 
 ### Containers
 
-A container, e.g. Docker or LXC, shares the kernel of the host. The library
-sees the host's CPUs, restricted to the ones the container may use, with two
-caveats:
+A container, e.g. Docker or LXC, shares the kernel of the host, so the library
+sees the host's CPUs. This has a few consequences:
 
+- Only `NProcFinder` restricts the count to the CPUs the container may use,
+  e.g. with `docker run --cpuset-cpus`. The other finders, including all the
+  physical ones, may count all the host's CPUs. On Linux, `NProcFinder` is the
+  first default logical finder, so the default count is only affected when
+  `nproc` is not available or when you use other finders.
 - A CPU quota set on a cgroup outside of the container's cgroup namespace is
   not found. For example, Proxmox VE applies the `cpulimit` of an LXC
   container to a parent cgroup the container cannot see. Pass `$countLimit`
