@@ -87,7 +87,11 @@
             "ignore": [
                 // False positive: the mutant only differs when exactly one
                 // stream_get_contents() call fails, which cannot be reproduced.
-                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute"
+                "Fidry\\CpuCoreCounter\\Executor\\ProcOpenExecutor::execute",
+                // Cannot test this case: it requires exactly one of the
+                // functions to be disabled, which is only covered by
+                // RestrictedEnvironmentTest.
+                "Fidry\\CpuCoreCounter\\FileReader\\NativeFileReader::read"
             ]
         },
         "OneZeroFloat": {
