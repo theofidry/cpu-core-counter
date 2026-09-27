@@ -22,6 +22,7 @@ final class FinderRegistry
     {
         return [
             new CgroupCpuQuotaFinder(),
+            new CpuAffinityFinder(),
             new CpuInfoFinder(),
             new DummyCpuCoreFinder(1),
             new HwLogicalFinder(),
@@ -56,6 +57,8 @@ final class FinderRegistry
             OnlyOnOSFamilyFinder::forWindows(new WindowsRegistryLogicalFinder()),
             OnlyOnOSFamilyFinder::forWindows(new CmiCmdletLogicalFinder()),
             OnlyOnOSFamilyFinder::forWindows(new WmicLogicalFinder()),
+            // Keep before the finders that ignore pinned CPUs, e.g. getconf with glibc.
+            new CpuAffinityFinder(),
             new NProcFinder(),
             new HwLogicalFinder(),
             new _NProcessorFinder(),
