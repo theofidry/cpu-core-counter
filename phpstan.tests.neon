@@ -14,3 +14,8 @@ parameters:
 		# This is a sanity check
 		- path: tests/CpuCoreCounterTest.php
 		  message: '#assertInstanceOf\(\) with .Exception. and Exception will always evaluate to true.#'
+
+		# Only reported when analysing for PHP 8.4+.
+		- identifier: unset.possiblyHookedProperty
+		  path: tests/Finder/ProcOpenBasedFinderTestCase.php
+		  reportUnmatched: false
