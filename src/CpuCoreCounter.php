@@ -86,9 +86,8 @@ final class CpuCoreCounter
      *                                             load of the system in the past minute. You can
      *                                             otherwise pass an arbitrary value. Should be a
      *                                             positive float. Inside a virtual machine, the
-     *                                             load average does not include the load of the
-     *                                             host. Inside a container, it may be the load
-     *                                             of the host.
+     *                                             load average excludes the host's load. Inside
+     *                                             a container, it may be the host's load.
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */

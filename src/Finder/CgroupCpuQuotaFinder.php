@@ -40,10 +40,10 @@ use const PHP_EOL;
  * the lowest quota found from the root down to the process' cgroup wins. A
  * fractional quota is rounded down.
  *
- * Inside a virtual machine, only the cgroups of the VM's own kernel are
- * visible: a CPU limit the host puts on the VM is not found. Likewise, inside
- * a container, a quota set outside of the container's cgroup namespace is not
- * found, e.g. the `cpulimit` of a Proxmox VE LXC container.
+ * Inside a virtual machine, only the VM's own cgroups are visible, so a CPU
+ * limit set by the host is not detected. Likewise, inside a container, a quota
+ * set outside the container's cgroup namespace is not detected, e.g. with
+ * Proxmox VE LXC containers.
  *
  * @author Anders Jenbo <anders@jenbo.dk> (@AJenbo)
  * @author Ondřej Mirtes <ondrej@mirtes.cz> (@ondrejmirtes)

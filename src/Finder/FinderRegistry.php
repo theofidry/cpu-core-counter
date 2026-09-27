@@ -66,12 +66,12 @@ final class FinderRegistry
     }
 
     /**
-     * Inside a virtual machine, these finders count the cores of the CPU layout
-     * the hypervisor shows the VM, not the physical cores of the host. There is
-     * no reliable way to detect a VM on every platform, so the library does not
-     * try: it is up to you to decide whether to trust this count in a VM.
-     * Inside a container, they count the physical cores of the host, including
-     * the ones the container may not use.
+     * Inside a virtual machine, these finders count the cores of the CPU
+     * topology presented by the hypervisor, not the host's physical cores. As a
+     * VM cannot be reliably detected on every platform, the library does not
+     * attempt to: it is up to you whether to trust this count in a VM.
+     * Inside a container, they count all of the host's physical cores,
+     * including those the container may not use.
      *
      * @return list<CpuCoreFinder>
      */
