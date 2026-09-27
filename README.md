@@ -104,6 +104,20 @@ the CPUs of the host. This has a few consequences:
   `getAvailableForParallelisation()` will not reduce the result.
 
 
+### Containers
+
+A container, e.g. Docker or LXC, shares the kernel of the host. The library
+sees the host's CPUs, restricted to the ones the container may use, with two
+caveats:
+
+- A CPU quota set on a cgroup outside of the container's cgroup namespace is
+  not found. For example, Proxmox VE applies the `cpulimit` of an LXC
+  container to a parent cgroup the container cannot see. Pass `$countLimit`
+  to `getAvailableForParallelisation()` instead.
+- The load average may be the one of the host, unless the container
+  virtualises it, e.g. with LXCFS. Pass `$systemLoadAverage` instead.
+
+
 ### Inspecting what the finders find on your system
 
 Three scripts provide insight into what the finders find:

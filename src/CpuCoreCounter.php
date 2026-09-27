@@ -87,7 +87,8 @@ final class CpuCoreCounter
      *                                             otherwise pass an arbitrary value. Should be a
      *                                             positive float. Inside a virtual machine, the
      *                                             load average does not include the load of the
-     *                                             host.
+     *                                             host. Inside a container, it may be the load
+     *                                             of the host.
      *
      * @see https://php.net/manual/en/function.sys-getloadavg.php
      */
