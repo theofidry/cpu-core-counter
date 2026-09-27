@@ -31,8 +31,9 @@ use const PHP_EOL;
  * only unique within a physical package, and the logical processors of a core
  * with SMT share the same pair.
  *
- * Only some architectures print these lines, e.g. x86, but not ARM or s390x.
- * If a processor lacks either line, the count is unknown.
+ * x86 prints these lines in each "processor" block, but ARM, RISC-V,
+ * PowerPC or s390x, for example, do not. If a processor lacks either line,
+ * the count is unknown.
  *
  * @see https://github.com/torvalds/linux/blob/v6.10/arch/x86/kernel/cpu/proc.c#L17-L29
  * @see https://docs.kernel.org/admin-guide/cputopology.html

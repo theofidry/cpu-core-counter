@@ -193,6 +193,14 @@ final class CpuInfoPhysicalFinderTest extends TestCase
             32,
         ];
 
+        // AMD EPYC 7451: 2 sockets, 24 cores each, 2 threads per core. The
+        // core IDs have gaps (0-2, 4-6, ..., 28-30).
+        // Source: https://github.com/util-linux/util-linux/blob/53cd4fb62b027bc25437c06a1e3a002574c00972/tests/ts/lscpu/dumps/x86_64-epyc_7451.tar.gz
+        yield 'example from a 2-socket AMD EPYC with non-contiguous core IDs' => [
+            self::readFixture('x86_64-epyc_7451'),
+            48,
+        ];
+
         yield 'blocks without a processor line are ignored' => [
             <<<'EOF'
 foo		: bar
