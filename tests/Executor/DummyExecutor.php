@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Fidry\CpuCoreCounter\Test\Executor;
 
-use Fidry\CpuCoreCounter\Executor\DiagnosableProcessExecutor;
+use Fidry\CpuCoreCounter\Executor\ProcessExecutor;
 
-final class DummyExecutor implements DiagnosableProcessExecutor
+final class DummyExecutor implements ProcessExecutor
 {
     /**
      * @var string|null

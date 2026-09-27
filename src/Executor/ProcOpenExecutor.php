@@ -22,7 +22,7 @@ use function rewind;
 use function stream_get_contents;
 use function tmpfile;
 
-final class ProcOpenExecutor implements DiagnosableProcessExecutor
+final class ProcOpenExecutor implements ProcessExecutor
 {
     public function getUnavailabilityReason(): ?string
     {
