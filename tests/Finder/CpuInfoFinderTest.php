@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Test\Finder;
 
 use Fidry\CpuCoreCounter\Finder\CpuInfoFinder;
+use Fidry\CpuCoreCounter\Test\FileReader\DummyFileReader;
 use PHPUnit\Framework\TestCase;
+use function implode;
+use const PHP_EOL;
 
 /**
  * @covers \Fidry\CpuCoreCounter\Finder\CpuInfoFinder
@@ -44,6 +47,84 @@ final class CpuInfoFinderTest extends TestCase
             FinderShortClassName::get($this->finder),
             $this->finder->toString()
         );
+    }
+
+    /**
+     * @dataProvider cpuInfoFileProvider
+     *
+     * @param array<string, string> $files
+     */
+    public function test_it_finds_the_number_of_cpu_cores(
+        array $files,
+        ?int $expected
+    ): void {
+        $finder = new CpuInfoFinder(new DummyFileReader($files));
+
+        self::assertSame($expected, $finder->find());
+    }
+
+    public static function cpuInfoFileProvider(): iterable
+    {
+        yield 'no cpuinfo file' => [
+            [],
+            null,
+        ];
+
+        yield 'cpuinfo file without processor lines' => [
+            ['/proc/cpuinfo' => 'foo'],
+            null,
+        ];
+
+        yield 'cpuinfo file with processor lines' => [
+            ['/proc/cpuinfo' => "processor\t: 0\nprocessor\t: 1\n"],
+            2,
+        ];
+    }
+
+    /**
+     * @dataProvider diagnosisProvider
+     *
+     * @param array<string, string> $files
+     */
+    public function test_it_can_diagnose_the_cpu_cores_found(
+        array $files,
+        string $expected
+    ): void {
+        $finder = new CpuInfoFinder(new DummyFileReader($files));
+
+        self::assertSame($expected, $finder->diagnose());
+    }
+
+    public static function diagnosisProvider(): iterable
+    {
+        yield 'no cpuinfo file' => [
+            [],
+            'Could not read the file "/proc/cpuinfo".',
+        ];
+
+        yield 'cpuinfo file without processor lines' => [
+            ['/proc/cpuinfo' => 'foo'],
+            implode(
+                PHP_EOL,
+                [
+                    'Found the file "/proc/cpuinfo" with the content:',
+                    'foo',
+                    'Will return "null".',
+                ]
+            ),
+        ];
+
+        yield 'cpuinfo file with processor lines' => [
+            ['/proc/cpuinfo' => "processor\t: 0\nprocessor\t: 1"],
+            implode(
+                PHP_EOL,
+                [
+                    'Found the file "/proc/cpuinfo" with the content:',
+                    "processor\t: 0\nprocessor\t: 1",
+                    'Will return "2".',
+                ]
+            ),
+        ];
     }
 
     /**
