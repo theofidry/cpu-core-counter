@@ -77,6 +77,16 @@ final class FinderRegistry
         ];
     }
 
+    /**
+     * @return CpuCoreFinder Finds the maximum number of cores to use, rather than the
+     *                       number of cores. CpuCoreCounter uses it when no count
+     *                       limit is given to getAvailableForParallelisation().
+     */
+    public static function getDefaultCountLimitFinder(): CpuCoreFinder
+    {
+        return new EnvVariableFinder('KUBERNETES_CPU_LIMIT');
+    }
+
     private function __construct()
     {
     }
