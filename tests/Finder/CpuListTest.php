@@ -28,7 +28,9 @@ final class CpuListTest extends TestCase
      */
     public function test_it_counts_the_cpus(string $cpuList, ?int $expected): void
     {
-        self::assertSame($expected, CpuList::count($cpuList));
+        $actual = CpuList::count($cpuList);
+
+        self::assertSame($expected, $actual);
     }
 
     public static function cpuListProvider(): iterable
@@ -86,8 +88,11 @@ final class CpuListTest extends TestCase
         string $otherCpuList,
         ?int $expected
     ): void {
-        self::assertSame($expected, CpuList::countIntersection($cpuList, $otherCpuList));
-        self::assertSame($expected, CpuList::countIntersection($otherCpuList, $cpuList));
+        $actual = CpuList::countIntersection($cpuList, $otherCpuList);
+        $reversedActual = CpuList::countIntersection($otherCpuList, $cpuList);
+
+        self::assertSame($expected, $actual);
+        self::assertSame($expected, $reversedActual);
     }
 
     public static function cpuListsProvider(): iterable
