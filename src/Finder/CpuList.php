@@ -25,7 +25,7 @@ use function preg_match;
  */
 final class CpuList
 {
-    private const CPU_RANGE_REGEX = '/^(?<first>\d+)(?:-(?<last>\d+))?$/';
+    private const CPU_RANGE_REGEX = '/^(?<first>\d+)(?:-(?<last>\d+))?$/D';
 
     /**
      * @param string $cpuList E.g. "0-1,4" for the CPUs 0, 1 and 4.
@@ -67,7 +67,13 @@ final class CpuList
 
         foreach ($ranges as [$first, $last]) {
             foreach ($otherRanges as [$otherFirst, $otherLast]) {
-                $count += max(0, min($last, $otherLast) - max($first, $otherFirst) + 1);
+                $lastMin = min($last, $otherLast);
+                $maxFirst = max($first, $otherFirst);
+
+                $count += max(
+                    0,
+                    $lastMin - $maxFirst + 1
+                );
             }
         }
 

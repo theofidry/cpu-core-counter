@@ -97,16 +97,18 @@ final class CpuAffinityFinder implements CpuCoreFinder
             return null;
         }
 
-        $online = $this->fileReader->read(self::ONLINE_PATH);
+        $online = trim((string) $this->fileReader->read(self::ONLINE_PATH));
 
         if (
-            null === $online
+            '' === $online
             || 1 !== preg_match(self::CPUS_ALLOWED_LIST_REGEX, $status, $matches)
         ) {
             return null;
         }
 
-        return CpuList::countIntersection($matches[1], trim($online));
+        $cpuAllowedList = $matches[1];
+
+        return CpuList::countIntersection($cpuAllowedList, $online);
     }
 
     public function toString(): string

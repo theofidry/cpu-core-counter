@@ -34,7 +34,7 @@
             "ignore": [
                 // False positive: PHP handles the numeric strings the same way,
                 // the cast is for PHPStan.
-                "Fidry\\CpuCoreCounter\\Finder\\CpuList::count"
+                "Fidry\\CpuCoreCounter\\Finder\\CpuList::parse"
             ]
         },
         "CastString": {
