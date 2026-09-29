@@ -80,7 +80,7 @@ final class CpuAffinityFinder implements CpuCoreFinder
 
         $lines[] = sprintf(
             'Will return "%s".',
-                $this->find() ?? 'null'
+            $this->find() ?? 'null'
         );
 
         return implode(PHP_EOL, $lines);

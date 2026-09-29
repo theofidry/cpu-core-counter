@@ -275,8 +275,7 @@ EOF
     {
         $finder = new CpuAffinityFinder(
             new DummyFileReader([
-                '/proc/self/status' =>
-                    <<<EOF
+                '/proc/self/status' => <<<EOF
 Name:\tphp
 Cpus_allowed_list:\t0-1,4
 
@@ -305,8 +304,7 @@ EOF
     {
         $finder = new CpuAffinityFinder(
             new DummyFileReader([
-                '/proc/self/status' =>
-                    <<<EOF
+                '/proc/self/status' => <<<EOF
 Name:\tphp
 
 EOF
@@ -351,8 +349,7 @@ EOF
     private static function createFiles(
         string $status,
         string $online = "0-255\n"
-    ): array
-    {
+    ): array {
         return [
             '/proc/self/status' => $status,
             '/sys/devices/system/cpu/online' => $online,
