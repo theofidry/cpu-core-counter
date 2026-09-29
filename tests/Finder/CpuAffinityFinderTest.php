@@ -340,7 +340,9 @@ EOF
             ]
         );
 
-        self::assertSame($expected, $finder->diagnose());
+        $actual = $finder->diagnose();
+
+        self::assertSame($expected, $actual);
     }
 
     /**
