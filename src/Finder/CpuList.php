@@ -32,7 +32,27 @@ final class CpuList
      */
     public static function count(string $cpuList): ?int
     {
+        $ranges = self::parse($cpuList);
+
+        if (null === $ranges) {
+            return null;
+        }
+
         $count = 0;
+
+        foreach ($ranges as [$first, $last]) {
+            $count += $last - $first + 1;
+        }
+
+        return $count > 0 ? $count : null;
+    }
+
+    /**
+     * @return list<array{int, int}>|null The first and last CPU of each range.
+     */
+    private static function parse(string $cpuList): ?array
+    {
+        $ranges = [];
 
         foreach (explode(',', $cpuList) as $item) {
             if (1 !== preg_match(self::CPU_RANGE_REGEX, $item, $range)) {
@@ -46,10 +66,10 @@ final class CpuList
                 return null;
             }
 
-            $count += $last - $first + 1;
+            $ranges[] = [$first, $last];
         }
 
-        return $count > 0 ? $count : null;
+        return $ranges;
     }
 
     private function __construct()
