@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Fidry\CpuCoreCounter\Finder;
 
 use function explode;
+use function max;
+use function min;
 use function preg_match;
 
 /**
@@ -42,6 +44,37 @@ final class CpuList
 
         foreach ($ranges as [$first, $last]) {
             $count += $last - $first + 1;
+        }
+
+        return $count > 0 ? $count : null;
+    }
+
+    /**
+     * Counts the CPUs present in both lists.
+     *
+     * @return positive-int|null
+     */
+    public static function countIntersection(string $cpuList, string $otherCpuList): ?int
+    {
+        $ranges = self::parse($cpuList);
+        $otherRanges = self::parse($otherCpuList);
+
+        if (null === $ranges || null === $otherRanges) {
+            return null;
+        }
+
+        $count = 0;
+
+        foreach ($ranges as [$first, $last]) {
+            foreach ($otherRanges as [$otherFirst, $otherLast]) {
+                $lastMin = min($last, $otherLast);
+                $maxFirst = max($first, $otherFirst);
+
+                $count += max(
+                    0,
+                    $lastMin - $maxFirst + 1
+                );
+            }
         }
 
         return $count > 0 ? $count : null;

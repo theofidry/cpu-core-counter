@@ -79,4 +79,57 @@ final class CpuListTest extends TestCase
 
         yield 'trailing new line' => ["0-1\n", null];
     }
+
+    /**
+     * @dataProvider cpuListsProvider
+     */
+    public function test_it_counts_the_cpus_present_in_both_lists(
+        string $cpuList,
+        string $otherCpuList,
+        ?int $expected
+    ): void {
+        $actual = CpuList::countIntersection($cpuList, $otherCpuList);
+        $reversedActual = CpuList::countIntersection($otherCpuList, $cpuList);
+
+        self::assertSame($expected, $actual);
+        self::assertSame($expected, $reversedActual);
+    }
+
+    public static function cpuListsProvider(): iterable
+    {
+        yield 'same single CPU' => ['3', '3', 1];
+
+        yield 'different single CPUs' => ['3', '4', null];
+
+        yield 'same range' => ['0-3', '0-3', 4];
+
+        yield 'single CPU inside a range' => ['2', '0-3', 1];
+
+        yield 'range inside a range' => ['1-2', '0-3', 2];
+
+        yield 'partially overlapping ranges' => ['0-3', '2-5', 2];
+
+        yield 'ranges sharing a single CPU' => ['0-2', '2-4', 1];
+
+        yield 'adjacent ranges' => ['0-1', '2-3', null];
+
+        yield 'disjoint ranges' => ['0-1', '10-11', null];
+
+        yield 'disjoint and overlapping ranges' => ['0-1,10-11', '10-11', 2];
+
+        yield 'several ranges on both sides' => ['0-1,4,6-9', '1-6,9', 4];
+
+        // Hyper-V VM with 4 CPUs and room to hot-add CPUs up to 240.
+        yield 'possible and online CPUs' => ['0-239', '0-3', 4];
+
+        yield 'large ranges' => ['0-4294967295', '4294967290-4294967299', 6];
+
+        yield 'invalid list' => ['0-1,a', '0-3', null];
+
+        yield 'empty list' => ['', '0-3', null];
+
+        yield 'both lists are empty' => ['', '', null];
+
+        yield 'reversed range' => ['1-0', '0-3', null];
+    }
 }

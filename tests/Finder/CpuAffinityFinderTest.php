@@ -202,6 +202,73 @@ EOF
             ),
             null,
         ];
+
+        yield 'no status file but an online file' => [
+            ['/sys/devices/system/cpu/online' => "0-3\n"],
+            null,
+        ];
+
+        yield 'no online file' => [
+            ['/proc/self/status' => self::createStatus('3', '0-1')],
+            null,
+        ];
+
+        // Hyper-V VM with 4 CPUs and room to hot-add CPUs up to 240.
+        yield 'offline CPUs are allowed' => [
+            self::createFiles(
+                self::createStatus('ff,ffffffff,ffffffff', '0-239'),
+                "0-3\n"
+            ),
+            4,
+        ];
+
+        yield 'allowed CPUs are a subset of the online CPUs' => [
+            self::createFiles(
+                self::createStatus('3', '0-1'),
+                "0-7\n"
+            ),
+            2,
+        ];
+
+        yield 'allowed and online CPUs partially overlap' => [
+            self::createFiles(
+                self::createStatus('3d3', '0-1,4,6-9'),
+                "1-6,9\n"
+            ),
+            4,
+        ];
+
+        yield 'no allowed CPU is online' => [
+            self::createFiles(
+                self::createStatus('3', '0-1'),
+                "2-3\n"
+            ),
+            null,
+        ];
+
+        yield 'online file without a trailing new line' => [
+            self::createFiles(
+                self::createStatus('f', '0-3'),
+                '0-1'
+            ),
+            2,
+        ];
+
+        yield 'invalid online file' => [
+            self::createFiles(
+                self::createStatus('3', '0-1'),
+                "a\n"
+            ),
+            null,
+        ];
+
+        yield 'empty online file' => [
+            self::createFiles(
+                self::createStatus('3', '0-1'),
+                "\n"
+            ),
+            null,
+        ];
     }
 
     public function test_it_can_diagnose_the_allowed_cpus(): void
@@ -214,6 +281,7 @@ Cpus_allowed_list:\t0-1,4
 
 EOF
                 ,
+                '/sys/devices/system/cpu/online' => "0-3\n",
             ])
         );
 
@@ -223,7 +291,9 @@ EOF
                 'Found the file "/proc/self/status" with the content:',
                 "Name:\tphp",
                 "Cpus_allowed_list:\t0-1,4",
-                'Will return "3".',
+                'Found the file "/sys/devices/system/cpu/online" with the content:',
+                '0-3',
+                'Will return "2".',
             ]
         );
 
@@ -239,6 +309,7 @@ Name:\tphp
 
 EOF
                 ,
+                '/sys/devices/system/cpu/online' => "0-3\n",
             ])
         );
 
@@ -247,6 +318,8 @@ EOF
             [
                 'Found the file "/proc/self/status" with the content:',
                 "Name:\tphp",
+                'Found the file "/sys/devices/system/cpu/online" with the content:',
+                '0-3',
                 'Will return "null".',
             ]
         );
@@ -254,23 +327,34 @@ EOF
         self::assertSame($expected, $finder->diagnose());
     }
 
-    public function test_it_can_diagnose_the_absence_of_status_file(): void
+    public function test_it_can_diagnose_the_absence_of_files(): void
     {
         $finder = new CpuAffinityFinder(new DummyFileReader([]));
 
-        self::assertSame(
-            'Could not read the file "/proc/self/status".',
-            $finder->diagnose()
+        $expected = implode(
+            PHP_EOL,
+            [
+                'Could not read the file "/proc/self/status".',
+                'Could not read the file "/sys/devices/system/cpu/online".',
+                'Will return "null".',
+            ]
         );
+
+        $actual = $finder->diagnose();
+
+        self::assertSame($expected, $actual);
     }
 
     /**
      * @return array<string, string>
      */
-    private static function createFiles(string $status): array
-    {
+    private static function createFiles(
+        string $status,
+        string $online = "0-255\n"
+    ): array {
         return [
             '/proc/self/status' => $status,
+            '/sys/devices/system/cpu/online' => $online,
         ];
     }
 
