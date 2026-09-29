@@ -71,9 +71,10 @@ final class FinderRegistry
             new HwLogicalFinder(),
             new _NProcessorFinder(),
             new NProcessorFinder(),
+            // Keep before the lscpu finders: it counts the same CPUs without proc_open.
+            new CpuInfoFinder(),
             new LscpuLogicalFinder(),
             new LscpuRawLogicalFinder(),
-            new CpuInfoFinder(),
         ];
     }
 
@@ -92,10 +93,14 @@ final class FinderRegistry
         return [
             OnlyOnOSFamilyFinder::forWindows(new CmiCmdletPhysicalFinder()),
             OnlyOnOSFamilyFinder::forWindows(new WmicPhysicalFinder()),
-            new HwPhysicalFinder(),
-            new LscpuPhysicalFinder(),
-            new LscpuRawPhysicalFinder(),
+            // Keep before the lscpu finders: it does not need proc_open, and on
+            // CPUs other than x86 it finds no count rather than a wrong one.
             new CpuInfoPhysicalFinder(),
+            new HwPhysicalFinder(),
+            // Keep before LscpuPhysicalFinder, which undercounts the CPUs that
+            // mix several core types.
+            new LscpuRawPhysicalFinder(),
+            new LscpuPhysicalFinder(),
         ];
     }
 
