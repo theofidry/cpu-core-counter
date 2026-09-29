@@ -23,7 +23,7 @@ use function preg_match;
  */
 final class CpuList
 {
-    private const CPU_RANGE_REGEX = '/^(?<first>\d+)(?:-(?<last>\d+))?$/';
+    private const CPU_RANGE_REGEX = '/^(?<first>\d+)(?:-(?<last>\d+))?$/D';
 
     /**
      * @param string $cpuList E.g. "0-1,4" for the CPUs 0, 1 and 4.
