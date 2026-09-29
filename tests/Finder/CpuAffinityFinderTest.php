@@ -56,94 +56,150 @@ final class CpuAffinityFinderTest extends TestCase
         ];
 
         yield 'no Cpus_allowed_list line' => [
-            ['/proc/self/status' => "Name:\tphp\nPid:\t1\n"],
+            self::createFiles(
+                <<<EOF
+Name:\tphp
+Pid:\t1
+
+EOF
+            ),
             null,
         ];
 
         yield 'no pinning' => [
-            ['/proc/self/status' => self::createStatus('7ff', '0-10')],
+            self::createFiles(
+                self::createStatus('7ff', '0-10')
+            ),
             11,
         ];
 
         // docker run --cpuset-cpus=0-1
         yield 'range' => [
-            ['/proc/self/status' => self::createStatus('3', '0-1')],
+            self::createFiles(
+                self::createStatus('3', '0-1')
+            ),
             2,
         ];
 
         // taskset -c 3
         yield 'single CPU' => [
-            ['/proc/self/status' => self::createStatus('8', '3')],
+            self::createFiles(
+                self::createStatus('8', '3')
+            ),
             1,
         ];
 
         yield 'ranges and single CPUs' => [
-            ['/proc/self/status' => self::createStatus('3d3', '0-1,4,6-9')],
+            self::createFiles(
+                self::createStatus('3d3', '0-1,4,6-9')
+            ),
             7,
         ];
 
         yield 'range of a single CPU' => [
-            ['/proc/self/status' => self::createStatus('4', '2-2')],
+            self::createFiles(
+                self::createStatus('4', '2-2')
+            ),
             1,
         ];
 
         yield 'multi-digit CPU numbers' => [
-            ['/proc/self/status' => self::createStatus('0', '10-19,128')],
+            self::createFiles(
+                self::createStatus('0', '10-19,128')
+            ),
             11,
         ];
 
         yield 'last line without a trailing new line' => [
-            ['/proc/self/status' => "Name:\tphp\nCpus_allowed_list:\t0-3"],
+            self::createFiles(
+                <<<EOF
+Name:\tphp
+Cpus_allowed_list:\t0-3
+EOF
+            ),
             4,
         ];
 
         yield 'Cpus_allowed_list is not the first line' => [
-            ['/proc/self/status' => "Cpus_allowed:\t3\nMems_allowed_list:\t0-5\nCpus_allowed_list:\t0-1\n"],
+            self::createFiles(
+                <<<EOF
+Cpus_allowed:\t3
+Mems_allowed_list:\t0-5
+Cpus_allowed_list:\t0-1
+
+EOF
+            ),
             2,
         ];
 
         yield 'empty list' => [
-            ['/proc/self/status' => "Cpus_allowed_list:\t\nMems_allowed_list:\t0\n"],
+            self::createFiles(
+                <<<EOF
+Cpus_allowed_list:\t
+Mems_allowed_list:\t0
+
+EOF
+            ),
             null,
         ];
 
         yield 'reversed range' => [
-            ['/proc/self/status' => self::createStatus('3', '1-0')],
+            self::createFiles(
+                self::createStatus('3', '1-0')
+            ),
             null,
         ];
 
         yield 'reversed range after a valid range' => [
-            ['/proc/self/status' => self::createStatus('f', '0-3,2-1')],
+            self::createFiles(
+                self::createStatus('f', '0-3,2-1')
+            ),
             null,
         ];
 
         yield 'trailing comma' => [
-            ['/proc/self/status' => self::createStatus('3', '0-1,')],
+            self::createFiles(
+                self::createStatus('3', '0-1,')
+            ),
             null,
         ];
 
         yield 'invalid item' => [
-            ['/proc/self/status' => self::createStatus('3', '0-1,a')],
+            self::createFiles(
+                self::createStatus('3', '0-1,a')
+            ),
             null,
         ];
 
         yield 'item with extra characters' => [
-            ['/proc/self/status' => self::createStatus('3', '0-1x,2')],
+            self::createFiles(
+                self::createStatus('3', '0-1x,2')
+            ),
             null,
         ];
 
         yield 'item with a leading character' => [
-            ['/proc/self/status' => self::createStatus('3', 'x0-1')],
+            self::createFiles(
+                self::createStatus('3', 'x0-1')
+            ),
             null,
         ];
 
         yield 'open range' => [
-            ['/proc/self/status' => self::createStatus('3', '0-')],
+            self::createFiles(
+                self::createStatus('3', '0-')
+            ),
             null,
         ];
 
         yield 'line prefix is not at the start of the line' => [
-            ['/proc/self/status' => "Name:\tphp\nX_Cpus_allowed_list:\t0-1\n"],
+            self::createFiles(
+                <<<EOF
+Name:\tphp
+X_Cpus_allowed_list:\t0-1
+
+EOF
+            ),
             null,
         ];
     }
@@ -152,7 +208,12 @@ final class CpuAffinityFinderTest extends TestCase
     {
         $finder = new CpuAffinityFinder(
             new DummyFileReader([
-                '/proc/self/status' => "Name:\tphp\nCpus_allowed_list:\t0-1,4\n",
+                '/proc/self/status' => <<<EOF
+Name:\tphp
+Cpus_allowed_list:\t0-1,4
+
+EOF
+                ,
             ])
         );
 
@@ -173,7 +234,11 @@ final class CpuAffinityFinderTest extends TestCase
     {
         $finder = new CpuAffinityFinder(
             new DummyFileReader([
-                '/proc/self/status' => "Name:\tphp\n",
+                '/proc/self/status' => <<<EOF
+Name:\tphp
+
+EOF
+                ,
             ])
         );
 
@@ -199,19 +264,26 @@ final class CpuAffinityFinderTest extends TestCase
         );
     }
 
+    /**
+     * @return array<string, string>
+     */
+    private static function createFiles(string $status): array
+    {
+        return [
+            '/proc/self/status' => $status,
+        ];
+    }
+
     private static function createStatus(string $mask, string $list): string
     {
-        return implode(
-            "\n",
-            [
-                "Name:\tphp",
-                "Pid:\t1",
-                "Cpus_allowed:\t{$mask}",
-                "Cpus_allowed_list:\t{$list}",
-                "Mems_allowed:\t00000000,00000001",
-                "Mems_allowed_list:\t0",
-                '',
-            ]
-        );
+        return <<<EOF
+Name:\tphp
+Pid:\t1
+Cpus_allowed:\t{$mask}
+Cpus_allowed_list:\t{$list}
+Mems_allowed:\t00000000,00000001
+Mems_allowed_list:\t0
+
+EOF;
     }
 }
