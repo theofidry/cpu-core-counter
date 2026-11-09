@@ -11,7 +11,7 @@ LscpuPhysicalFinder: .
 LscpuRawLogicalFinder: .
 LscpuRawPhysicalFinder: .
 _NProcessorFinder: .
-NProcessorFinder: F
+NProcessorFinder: .
 NProcFinder(all=true): .
 NProcFinder(all=false): .
 NullCpuCoreFinder: F
