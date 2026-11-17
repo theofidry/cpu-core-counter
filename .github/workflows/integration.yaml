@@ -18,7 +18,7 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - "8.5"
+                    - "8.6"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
@@ -56,7 +56,7 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - "8.5"
+                    - "8.6"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
@@ -89,6 +89,7 @@ jobs:
                     - "8.3"
                     - "8.4"
                     - "8.5"
+                    - "8.6"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
@@ -146,7 +147,7 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - "8.5"
+                    - "8.6"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
@@ -184,7 +185,7 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - "8.5"
+                    - "8.6"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
@@ -213,7 +214,7 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - "8.5"
+                    - "8.6"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
@@ -242,7 +243,7 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - "8.5"
+                    - "8.6"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
@@ -271,7 +272,7 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - "8.5"
+                    - "8.6"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
