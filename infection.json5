@@ -98,7 +98,10 @@
                 // Cannot test this case: it requires exactly one of the
                 // functions to be disabled, which is only covered by
                 // RestrictedEnvironmentTest.
-                "Fidry\\CpuCoreCounter\\FileReader\\NativeFileReader::read"
+                "Fidry\\CpuCoreCounter\\FileReader\\NativeFileReader::read",
+                // Cannot test this case: it requires posix_sysconf() to exist
+                // without its constant.
+                "Fidry\\CpuCoreCounter\\Finder\\PosixSysconfFinder::getOnlineProcessorCount"
             ]
         },
         "OneZeroFloat": {
@@ -111,7 +114,11 @@
         "ReturnRemoval": {
             "ignore": [
                 // This is a perf improvement
-                "Fidry\\CpuCoreCounter\\CpuCoreCounter::checkLoadLimit"
+                "Fidry\\CpuCoreCounter\\CpuCoreCounter::checkLoadLimit",
+                // Cannot test this case: it requires posix_sysconf() to be
+                // unavailable, which depends on the PHP version and is
+                // otherwise only covered by RestrictedEnvironmentTest.
+                "Fidry\\CpuCoreCounter\\Finder\\PosixSysconfFinder::getOnlineProcessorCount"
             ]
         },
         "TrueValue": {

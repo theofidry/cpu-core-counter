@@ -117,10 +117,13 @@ sees the host's CPUs. As a result:
 
 - Only `NProcFinder` and `CpuAffinityFinder` restrict the count to the CPUs the
   container may use, e.g. with `docker run --cpuset-cpus`. Other finders,
-  including all physical ones, may count every CPU of the host. On Linux, they
-  are the first default logical finders, so the default count is affected only
-  when `nproc` is not available and neither is `/proc/self/status` or
-  `/sys/devices/system/cpu/online`, or when you use other finders.
+  including all physical ones, may count every CPU of the host. On Linux,
+  `CpuAffinityFinder` is the first default logical finder, so the default count
+  is affected only when `/proc/self/status` or `/sys/devices/system/cpu/online`
+  cannot be read, e.g. because of `open_basedir`, or when you use other
+  finders. In that case, on PHP 8.3+ with the posix extension,
+  `PosixSysconfFinder` answers before `NProcFinder` and may count every CPU of
+  the host.
 - A CPU quota set outside the container's cgroup namespace is not detected,
   e.g. with Proxmox VE LXC containers. Use `$countLimit` instead.
 - The load average may be the host's, unless the container virtualises it

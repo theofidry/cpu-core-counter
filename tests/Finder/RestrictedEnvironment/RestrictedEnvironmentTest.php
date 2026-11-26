@@ -57,6 +57,7 @@ final class RestrictedEnvironmentTest extends TestCase
             'file_get_contents',
             'getenv',
             'is_file',
+            'posix_sysconf',
             'proc_close',
             'proc_open',
             'rewind',
