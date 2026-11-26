@@ -15,6 +15,7 @@ NProcessorFinder: F
 NProcFinder(all=true): F
 NProcFinder(all=false): F
 NullCpuCoreFinder: F
+PosixSysconfFinder: F
 SkipOnOSFamilyFinder(skip=(Windows),DummyCpuCoreFinder(value=1)): F
 OnlyOnOSFamilyFinder(only=(Windows),DummyCpuCoreFinder(value=1)): .
 CmiCmdletLogicalFinder: .

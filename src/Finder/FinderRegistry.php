@@ -38,6 +38,7 @@ final class FinderRegistry
             new NProcFinder(true),
             new NProcFinder(false),
             new NullCpuCoreFinder(),
+            new PosixSysconfFinder(),
             SkipOnOSFamilyFinder::forWindows(
                 new DummyCpuCoreFinder(1)
             ),
@@ -67,6 +68,7 @@ final class FinderRegistry
             OnlyOnOSFamilyFinder::forWindows(new EnvVariableFinder('NUMBER_OF_PROCESSORS')),
             // Keep before the finders that ignore pinned CPUs, e.g. getconf with glibc.
             new CpuAffinityFinder(),
+            OnlyOnOSFamilyFinder::forDarwin(new PosixSysconfFinder()),
             new NProcFinder(),
             new HwLogicalFinder(),
             new _NProcessorFinder(),
